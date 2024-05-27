@@ -9,8 +9,7 @@
         "host": "localhost",
         "port": 62814,
         "user": "root",
-        "password": "root",
-        "enableLog": false
+        "password": "root"
     },
     "assets": {
         "enableMods": false,
