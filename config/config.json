@@ -1,0 +1,26 @@
+{
+    "server": {
+        "host": "192.168.123.150",
+        "port": 9444,
+        "enableServer": true,
+        "maintenanceMsg": "Server is currently under maintenance!"
+    },
+    "database": {
+        "host": "localhost",
+        "port": 62814,
+        "user": "root",
+        "password": "root",
+        "enableLog": false
+    },
+    "assets": {
+        "enableMods": false,
+        "syncOfficialServerConfig": false
+    },
+    "developer": {
+        "debugMode": true,
+        "timestamp": 1698828611
+    },
+    "crisisConfig": {
+        "selectedCrisis": "cc2_legacy"
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "networkConfig": {
+        "sign": "Dororthinights",
+        "content": {
+            "configVer": "5",
+            "funcVer": "V050",
+            "configs": {
+                "V050": {
+                    "override": true,
+                    "network": {
+                        "gs": "{server}",
+                        "as": "{server}",
+                        "u8": "{server}/u8",
+                        "hu": "{server}/assetbundle/official",
+                        "hv": "{server}/config/prod/official/{0}/version",
+                        "rc": "{server}/config/prod/official/remote_config",
+                        "an": "{server}/config/prod/announce_meta/{0}/announcement.meta.json",
+                        "prean": "{server}/config/prod/announce_meta/{0}/preannouncement.meta.json",
+                        "sl": "{server}/protocol/service",
+                        "of": "{server}/index.html",
+                        "pkgAd": "{server}/download",
+                        "pkgIOS": "https://apps.apple.com/cn/app/id1454663939",
+                        "secure": false
+                    }
+                }
+            }
+        }
+    }
+}

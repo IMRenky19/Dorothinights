@@ -1,0 +1,18 @@
+{
+    "enable": true,
+    "charConfig": {
+        "favorPoint": 25570,
+        "potentialRank": 5,
+        "mainSkillLvl": 7,
+        "level": -1,
+        "evolvePhase": -1,
+        "skillsSpecializeLevel": 3,
+        "customUnitInfo": {},
+        "duplicateUnits": [],
+        "assistUnit": {
+            "charId": "char_1028_texas2",
+            "skinId": "char_1028_texas2#2",
+            "skillIndex": 1
+        }
+    }
+}
