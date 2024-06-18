@@ -1,0 +1,10 @@
+{
+    "remoteConfig":{
+        "enableGameBI": true,
+        "HGDownload_1": 10000,
+        "HGDownload_2": 10000,
+        "fapv2": 1,
+        "enableNativeLicense": true,
+        "enableMarquee": false
+    }
+}
