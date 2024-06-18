@@ -2,8 +2,8 @@ from litestar import post, Request, Response
 from json import load
 
 @post("/grant")
-async def grant(request: Request, response: Response) -> Response:
-    request_data = load(request)
+async def grant(request: Request) -> Response:
+    request_data = await request.json()
     return Response(
         content = {
             "data":{

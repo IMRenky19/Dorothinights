@@ -4,7 +4,8 @@ from server.core.database.function.userData import getAccountBySecret
 
 @get("/basic")
 async def basic(token: str) -> Response:
-    if phone := getAccountBySecret(token).phone:
+    account = await getAccountBySecret(token)
+    if phone := account.phone:
         return Response(    
             content = {
                 "data":{

@@ -28,5 +28,6 @@ async def initDatabase() -> None:
         await conn.execute(
             text("create database if not exists arknights;use arknights"))
         await conn.close()
-    AccountBase.metadata.create_all(sqlalchemy_config.get_engine())
-    engine.dispose()
+    await engine.dispose()
+    async with sqlalchemy_config.get_engine().begin() as conn:
+        await conn.run_sync(AccountBase.metadata.create_all)

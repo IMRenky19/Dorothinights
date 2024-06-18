@@ -1,1 +1,1 @@
-uvicorn server.app:app --reload
+uvicorn server.main:app --reload --port 9444 --host 0.0.0.0

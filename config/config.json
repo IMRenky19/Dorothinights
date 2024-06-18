@@ -1,6 +1,6 @@
 {
     "server": {
-        "host": "192.168.123.150",
+        "host": "192.168.1.168",
         "port": 9444,
         "enableServer": true,
         "maintenanceMsg": "Server is currently under maintenance!"

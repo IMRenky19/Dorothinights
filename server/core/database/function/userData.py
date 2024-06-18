@@ -20,54 +20,56 @@ db_password = database_config["password"]
 db_host = database_config["host"]
 db_port = database_config["port"]
 
-async def get_engine():
-    engine = SQLAlchemyAsyncConfig(
-                connection_string=f"mysql+asyncmy://{db_user}:{db_password}@{db_host}:{db_port}", 
+async def get_sqlalchemy_config() -> SQLAlchemyAsyncConfig:
+    sqlalchemy_config = SQLAlchemyAsyncConfig(
+                connection_string=f"mysql+asyncmy://{db_user}:{db_password}@{db_host}:{db_port}/arknights", 
                 session_config=session_config,
-                encoding='utf8'
-            ).get_engine()
-    return engine
+            )
+    return sqlalchemy_config
 
-async def generateUsers(phone: int, password: int) -> Account:
-    engine = get_engine()
+async def generateUsers(phone: str, password: str) -> Account:
+    config = await get_sqlalchemy_config()
     secret: str = hashlib.md5((phone + decrypt_user_key(USER_TOKEN_KEY, int(time()))).encode()).hexdigest()
-    async with Session(engine) as session:
+    async with config.get_session() as session:
         new_user = Account(
             uid=rd(10000000,1000000000),
             phone=phone,
             password=password,
             secret=secret,
             user={},
-            mails=[],
+            mails={},
             assist_char_list={},
             friend={
                 'list':[],
                 'request':[]
             },
             ban=0,
-            notes=[]
+            notes="",
         )
+        print(session)
         session.add(new_user)
-        session.commit()
+        await session.commit()
     return new_user
         
 async def getAccountBySecret(secret: str) -> Account:
-    session: Session
-    async with Session(get_engine()) as session:
+    config = await get_sqlalchemy_config()
+    async with config.get_session() as session:
         user_cmd = select(Account).where(Account.secret == secret)
-        result = session.execute(user_cmd)
-    return result.scalars[0]
+        result = await session.execute(user_cmd)
+    return result.scalar()
 
 async def getAccountByPhone(phone: str) -> Account:
     #session: Session
-    async with Session(get_engine()) as session:
+    config = await get_sqlalchemy_config()
+    async with config.get_session() as session:
         user_cmd = select(Account).where(Account.phone == phone)
-        result = session.execute(user_cmd)
-    return result.scalars[0]
+        result = await session.execute(user_cmd)
+    return result.scalar()
 
 async def getAccountByUid(uid: str) -> Account:
     #session: Session
-    async with Session(get_engine()) as session:
+    config = await get_sqlalchemy_config()
+    async with config.get_session() as session:
         user_cmd = select(Account).where(Account.uid == uid)
-        result = session.execute(user_cmd)
-    return result.scalars[0]
+        result = await session.execute(user_cmd)
+    return result.scalar()

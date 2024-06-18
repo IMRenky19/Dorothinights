@@ -1,9 +1,10 @@
 from litestar import Router, get, Response
-from time import time
+import time
 
 @get("/server_time")
 async def server_time() -> Response:
-    current_time: int = int(time)
+    time_tmp = time.time()
+    current_time: int = int(time_tmp)
     return Response(
         content = {
             "data": {

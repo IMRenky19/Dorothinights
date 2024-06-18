@@ -4,10 +4,14 @@ from server.core.database.function.userData import getAccountByPhone, generateUs
 
 
 @post("/token_by_phone_password")
-async def tokenByPhonePassword(request: Request, response: Response) -> Response:
-    phone = load(request)["phone"]
-    if account := getAccountByPhone(phone):
-        account = generateUsers(phone, load(request)["password"])
+async def tokenByPhonePassword(request: Request) -> Response:
+    request_data = await request.json()
+    phone = request_data["phone"]
+    tmp = await getAccountByPhone(phone)
+    print(tmp)
+    if account := tmp:
+        account = await generateUsers(phone, request_data["password"])
+    print(account)
     return Response(
         content = {
             "data":{
