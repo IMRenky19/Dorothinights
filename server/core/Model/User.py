@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, JSON, Null
 from sqlalchemy.orm import Mapped, DeclarativeBase, mapped_column
 
-class AccountBase(DeclarativeBase):
+class Base(DeclarativeBase):
     pass
 
-class Account(AccountBase):
+class Account(Base):
     
     __tablename__ = "account"
     __table_args__ = {
@@ -20,6 +20,11 @@ class Account(AccountBase):
     friend: Mapped[str] = mapped_column(JSON)
     ban: Mapped[int] = mapped_column(default=Null)
     notes: Mapped[str] = mapped_column(String(255))
+    
+    def show_secret(self):
+        print(self.user["status"])
+        self.notes = "fk"
+        
 
 #    def get_uid(self):
 #        return self.uid

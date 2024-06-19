@@ -1,6 +1,6 @@
 from server.constants import CONFIG_PATH
 from server.core.utils.json import read_json, write_json
-from server.core.Model.User import AccountBase
+from server.core.Model.User import Base
 
 from sqlalchemy import text
 
@@ -30,4 +30,4 @@ async def initDatabase() -> None:
         await conn.close()
     await engine.dispose()
     async with sqlalchemy_config.get_engine().begin() as conn:
-        await conn.run_sync(AccountBase.metadata.create_all)
+        await conn.run_sync(Base.metadata.create_all)

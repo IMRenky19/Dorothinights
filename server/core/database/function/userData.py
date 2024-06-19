@@ -1,6 +1,7 @@
 from server.core.database.function.init import sqlalchemy_config
 from server.core.utils.accounts import decrypt_user_key
 from server.core.Model.User import Account
+from server.core.Model.RogueBase import RogueBasicModel
 from litestar.contrib.sqlalchemy.plugins import AsyncSessionConfig, SQLAlchemyAsyncConfig, SQLAlchemyInitPlugin
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -50,6 +51,8 @@ async def generateUsers(phone: str, password: str) -> Account:
         session.add(new_user)
         await session.commit()
     return new_user
+
+
         
 async def getAccountBySecret(secret: str) -> Account:
     config = await get_sqlalchemy_config()
@@ -66,10 +69,30 @@ async def getAccountByPhone(phone: str) -> Account:
         result = await session.execute(user_cmd)
     return result.scalar()
 
-async def getAccountByUid(uid: str) -> Account:
+async def getAccountByUid(uid: str | int) -> Account:
     #session: Session
     config = await get_sqlalchemy_config()
     async with config.get_session() as session:
-        user_cmd = select(Account).where(Account.uid == uid)
+        user_cmd = select(Account).where(Account.uid == int(uid))
         result = await session.execute(user_cmd)
     return result.scalar()
+
+async def writeAccountSyncData(secret: str, syncdata: dict) -> None:
+    config = await get_sqlalchemy_config()
+    async with config.get_session() as session:
+        user_cmd = select(Account).where(Account.secret == secret)
+        result = await session.execute(user_cmd)
+        account = result.scalar()
+        account.user = syncdata["user"]
+        await session.commit()
+    
+#test
+async def show_secret(phone: str) -> None:
+    config = await get_sqlalchemy_config()
+    async with config.get_session() as session:
+        user_cmd = select(Account).where(Account.phone == phone)
+        result = await session.execute(user_cmd)
+        account = result.scalar()
+        account.show_secret()
+        await session.commit()
+#async def syncRougeData(rouge: RougeBase)
