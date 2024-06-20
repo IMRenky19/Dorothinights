@@ -1,22 +1,125 @@
-from sqlalchemy import Column, Integer, String, JSON, Null
-from sqlalchemy.orm import Mapped, DeclarativeBase, mapped_column
-from .RogueBase import RogueBasicModel
-from .User import Base
-from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH
-from random import choice, seed, randint, shuffle
+from .....Model.RogueBase import RogueBasicModel
 from server.core.utils.time import time
-from server.core.utils.json import read_json
+from random import shuffle, randint
 
 
-class Base(DeclarativeBase):
-    pass
+def createGameBase():
+        initial = {
+        "player": {
+            "state": "INIT",
+            "property": {
+                "exp": 0,
+                "level": 1,
+                "maxLevel": 10,
+                "hp": {
+                    "current": 8,
+                    "max": 8
+                },
+                "gold": 6,
+                "shield": 0,
+                "capacity": 6,
+                "population": {
+                    "cost": 0,
+                    "max": 6
+                },
+                "conPerfectBattle": 0
+            },
+            "cursor": {
+                "zone": 0,
+                "position": None
+            },
+            "trace": [],
+            "pending": [
+                {
+                    "index": "e_0",
+                    "type": "GAME_INIT_RELIC",
+                    "content": {
+                        "initRelic": {
+                            "step": [
+                                1,
+                                3
+                            ],
+                            "items": {}
+                        }
+                    }
+                },
+                {
+                    "index": "e_1",
+                    "type": "GAME_INIT_RECRUIT_SET",
+                    "content": {
+                        "initRecruitSet": {
+                            "step": [
+                                2,
+                                3
+                            ],
+                            "option": {}
+                        }
+                    }
+                },
+                {
+                    "index": "e_2",
+                    "type": "GAME_INIT_RECRUIT",
+                    "content": {
+                        "initRecruit": {
+                            "step": [
+                                3,
+                                3
+                            ],
+                            "tickets": [],
+                            "showChar": [],
+                            "team": None
+                        }
+                    }
+                }
+            ],
+            "status": {
+                "bankPut": 0
+            },
+            "toEnding": None,
+            "chgEnding": False
+        },
+        "record": {
+            "brief": None
+        },
+        "map": {
+            "zones": {}
+        },
+        "troop": {
+            "chars": {},
+            "expedition": [],
+            "expeditionReturn": None,
+            "hasExpeditionReturn": False
+        },
+        "inventory": {
+            "relic": {},
+            "recruit": {},
+            "trap": None,
+            "consumable": {},
+            "exploreTool": {}
+        },
+        "game": {
+            "mode": None,
+            "predefined": None,
+            "theme": None,
+            "outer": {
+                "support": False
+            },
+            "start": ts,
+            "modeGrade": None,
+            "equivalentGrade": None
+        },
+        "buff": {
+            "tmpHP": 0,
+            "capsule": None,
+            "squadBuff": []
+        },
+        "module":{}
+    }
+        return initial
 
-class RogueSami(RogueBasicModel, Base):
-    
-    @classmethod
-    def getOutBuffs(cls):
-        rlv2_tmp = cls.rlv2
-        print(rlv2_tmp)
+
+def getOutBuffs(rogueClass: RogueBasicModel):
+        rlv2_tmp = rogueClass.rlv2
         outer_buff = rlv2_tmp["outer"]["rogue_3"]["buff"]
         ex_buff_outer = {
             "extra_atk": 0,
@@ -134,10 +237,11 @@ class RogueSami(RogueBasicModel, Base):
                     case "rogue_3_outbuff_43":
                         ex_buff_outer["extra_atk"] += 0.06
         
-        cls.extension.update(ex_buff_outer)
-                
-    @classmethod
-    def getInnerBuffs(cls, hardLevel):
+        rogueClass.extension.update(ex_buff_outer)
+        
+        
+        
+def getInnerBuffs(rogueClass: RogueBasicModel, hardLevel: int):
         ex_buff_inner = {
             "hardLevel": hardLevel,
             "1_chaos_deeper": 0,             #1级buff：坍缩值12以上时坍缩值更容易加深
@@ -161,25 +265,25 @@ class RogueSami(RogueBasicModel, Base):
         if hardLevel >= 1:
             ex_buff_inner["1_chaos_deeper"] = 1
             if hardLevel >= 2:
-                cls.extension["extra_hp_limit"] -= 4
+                rogueClass.extension["extra_hp_limit"] -= 4
                 if hardLevel >= 3:
                     ex_buff_inner["stronger_relics"] = 1
-                    if cls.extension["difficulty_1_buff"]:
-                        cls.extension["extra_hp"] += 0.03
-                        cls.extension["extra_exp"] += 0.05
-                        cls.extension["extra_gold"] += 2
+                    if rogueClass.extension["difficulty_1_buff"]:
+                        rogueClass.extension["extra_hp"] += 0.03
+                        rogueClass.extension["extra_exp"] += 0.05
+                        rogueClass.extension["extra_gold"] += 2
                     if hardLevel >= 6:
                         ex_buff_inner["stronger_relics"] = 2
                         ex_buff_inner["6_more_population"] = 1
-                        if cls.extension["difficulty_2_buff"]:
-                            cls.extension["extra_atk"] += 0.03
+                        if rogueClass.extension["difficulty_2_buff"]:
+                            rogueClass.extension["extra_atk"] += 0.03
                             ex_buff_inner["scout_bring_gold"] = 1
                             ex_buff_inner["more_goods"] = 1
                         if hardLevel >= 9:
-                            cls.extension["extra_char_limit"] -= 1
+                            rogueClass.extension["extra_char_limit"] -= 1
                             ex_buff_inner["stronger_relics"] = 3
-                            if cls.extension["difficulty_2_buff"]:
-                                cls.extension["extra_def"] += 0.03
+                            if rogueClass.extension["difficulty_2_buff"]:
+                                rogueClass.extension["extra_def"] += 0.03
                                 ex_buff_inner["safe_house_add_hp"] = 1
                                 ex_buff_inner["add_shield"] = 1
                             if hardLevel >= 12:
@@ -222,149 +326,7 @@ class RogueSami(RogueBasicModel, Base):
             case 15:
                 ex_buff_inner["difficulty_multiplier"], ex_buff_inner["score_multiplier"], ex_buff_inner["totem_modify"] = [0.16, 1.5, 0.2]
                 
-        cls.extension.update(ex_buff_inner)
+        rogueClass.extension.update(ex_buff_inner)
             
 
-    def createGameExtra(self, hardLevel):
-        rlv2_table = read_json(ROGUELIKE_TOPIC_EXCEL_PATH)
-        bands = rlv2_table["details"]["rogue_3"]["init"][0]["initialBandRelic"]
-        initial = super().createGame()
-        have_init_support = 1
-        RogueSami.getOutBuffs()
-        RogueSami.getInnerBuffs()
-        initial["player"]["property"].update(
-            {
-                "gold": 6 + self.extension["extra_gold"],
-                "capacity": 6 + self.extension["extra_capacity"],
-                "hp": {
-                    "current": 8 + self.extension["extra_hp_limit"],
-                    "max": 8 + self.extension["extra_hp_limit"]
-                },
-                "hpShowState": "NORMAL"
-            }
-        )
-        initial["player"].update(
-            {
-                "pending": [
-                    
-                        {
-                            "index": "e_0",
-                            "type": "GAME_INIT_RELIC",
-                            "content": {
-                                "initRelic": {
-                                    "step": [
-                                        1,
-                                        3 + have_init_support
-                                    ],
-                                    "items": {
-                                        str(i): {
-                                            "id": band,
-                                            "count": 1
-                                        } for i, band in enumerate(bands)
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "index": f"e_{1 + have_init_support}",
-                            "type": "GAME_INIT_RECRUIT_SET",
-                            "content": {
-                                "initRecruitSet": {
-                                    "step": [
-                                        2 + have_init_support,
-                                        3 + have_init_support
-                                    ],
-                                    "option": {["recruit_group_1","recruit_group_2","recruit_group_3","recruit_group_random"]}
-                                }
-                            }
-                        },
-                        {
-                            "index": f"e_{2 + have_init_support}",
-                            "type": "GAME_INIT_RECRUIT",
-                            "content": {
-                                "initRecruit": {
-                                    "step": [
-                                        3 + have_init_support,
-                                        3 + have_init_support
-                                    ],
-                                    "tickets": [],
-                                    "showChar": [],
-                                    "team": None
-                                }
-                            }
-                        }
-                        
-                    
-                ],
-                "toEnding": "ro3_ending_1",
-                "chgEnding": False
-            }
-        )
-        if have_init_support:
-            choices = shuffle([
-                "choice_ro3_startbuff_1",
-                "choice_ro3_startbuff_2",
-                "choice_ro3_startbuff_3",
-                "choice_ro3_startbuff_4",
-                "choice_ro3_startbuff_5",
-                "choice_ro3_startbuff_6"
-            ])[0:3]
-            initial["player"]["pending"].insert(
-                {
-                    "index": "e_1",
-                    "type": "GAME_INIT_SUPPORT",
-                    "content": {
-                        "initSupport": {
-                            "step": [
-                                2,
-                                4
-                            ],
-                            "scene": {
-                                "id": "scene_ro3_startbuff_enter",
-                                "choices": {x:1 for x in choices}
-                            }
-                        }
-                    }
-                }, 1)
-        
-        ts = time()
-        
-        initial.update(
-            {
-                "game": {
-                    "mode": "NORMAL",
-                    "predefined": None,
-                    "theme": "rogue_3",
-                    "outer": {
-                        "support": True
-                    },
-                    "start": ts,
-                    "modeGrade": hardLevel,
-                    "equivalentGrade": hardLevel
-                },
-                "module": {
-                    "chaos": {
-                        "level": 0,
-                        "value": 0,
-                        "curMaxValue": 4,
-                        "chaosList": [],
-                        "deltaChaos": {
-                            "preLevel": 0,
-                            "afterLevel": 0,
-                            "dValue": 0,
-                            "dChaos": []
-                        },
-                        "lastBattleGain": 0
-                    },
-                    "totem": {
-                        "totemPiece": []
-                    },
-                    "vision": {
-                        "value": 0,
-                        "isMax": False
-                    }
-                }
-            },
-            
-        )
-        self.rlv2["current"] = initial
+    

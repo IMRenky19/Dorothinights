@@ -46,6 +46,7 @@ async def generateUsers(phone: str, password: str) -> Account:
             },
             ban=0,
             notes="",
+            currentRogue=""
         )
         print(session)
         session.add(new_user)
@@ -95,4 +96,23 @@ async def show_secret(phone: str) -> None:
         account = result.scalar()
         account.show_secret()
         await session.commit()
-#async def syncRougeData(rouge: RougeBase)
+
+async def syncRogueData(rogue: RogueBasicModel, secret: str) -> None:
+    config = await get_sqlalchemy_config()
+    async with config.get_session() as session:
+        user_cmd = select(Account).where(Account.secret == secret)
+        result = await session.execute(user_cmd)
+        account = result.scalar()
+        account.rlv2 = rogue.rlv2
+        account.currentRogue = rogue.rlv2["current"]["game"]["theme"]
+        await session.commit()
+        
+async def deleteRogueData(secret: str) -> None:
+    config = await get_sqlalchemy_config()
+    async with config.get_session() as session:
+        user_cmd = select(Account).where(Account.secret == secret)
+        result = await session.execute(user_cmd)
+        account = result.scalar()
+        account.user["rlv2"]["current"] = {}
+        account.currentRogue = ""
+        await session.commit()

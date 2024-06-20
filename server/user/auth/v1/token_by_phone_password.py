@@ -8,10 +8,11 @@ async def tokenByPhonePassword(request: Request) -> Response:
     request_data = await request.json()
     phone = request_data["phone"]
     tmp = await getAccountByPhone(phone)
-    print(tmp)
-    if account := tmp:
+    #print(tmp)
+    if not (account := tmp):
+        #print(111)
         account = await generateUsers(phone, request_data["password"])
-    print(account)
+    #print(account)
     return Response(
         content = {
             "data":{

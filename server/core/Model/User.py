@@ -20,10 +20,11 @@ class Account(Base):
     friend: Mapped[str] = mapped_column(JSON)
     ban: Mapped[int] = mapped_column(default=Null)
     notes: Mapped[str] = mapped_column(String(255))
+    currentRogue: Mapped[str] = mapped_column(String(255))
     
-    def show_secret(self):
+    """def show_secret(self):
         print(self.user["status"])
-        self.notes = "fk"
+        self.notes = "fk" """
         
 
 #    def get_uid(self):
