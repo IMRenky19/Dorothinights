@@ -1,8 +1,12 @@
+from server.core.database.function.userData import getAccountBySecret
 from .....Model.RogueBase import RogueBasicModel
 from server.core.utils.time import time
-from random import shuffle, randint
+from random import shuffle, randint, sample
+from copy import deepcopy
+from server.core.utils.json import read_json
 
 
+ts = time()
 def createGameBase():
         initial = {
         "player": {
@@ -237,6 +241,7 @@ def getOutBuffs(rogueClass: RogueBasicModel):
                     case "rogue_3_outbuff_43":
                         ex_buff_outer["extra_atk"] += 0.06
         
+        ex_buff_outer["extra_exp"] = round(ex_buff_outer["extra_exp"], 2)
         rogueClass.extension.update(ex_buff_outer)
         
         
@@ -257,7 +262,10 @@ def getInnerBuffs(rogueClass: RogueBasicModel, hardLevel: int):
             "add_shield": 0,                 #文化比较N9buff：目标生命高于10时，完美作战后获得1护盾值
             "difficulty_multiplier": 0,      #敌人数值乘区
             "score_multiplier": 1,           #分数乘区
-            "totem_modify": 0                #密文修饰概率
+            "band_direct_upgrade":0,         #职业队直升，0禁用，1近锋，2重辅，3狙医，4术特
+            "no_upgrade_population":0,       #升级是否不消耗希望
+            "totem_modify": 0,               #密文修饰概率
+            "band_13_another_vision_set": 0  #科学主义分队效果：每层+2抗干扰
             
         }
         
@@ -327,6 +335,296 @@ def getInnerBuffs(rogueClass: RogueBasicModel, hardLevel: int):
                 ex_buff_inner["difficulty_multiplier"], ex_buff_inner["score_multiplier"], ex_buff_inner["totem_modify"] = [0.16, 1.5, 0.2]
                 
         rogueClass.extension.update(ex_buff_inner)
-            
+          
+def getRogueData(rogueClass: RogueBasicModel) -> dict:
+    return deepcopy(rogueClass.rlv2)
 
+def getRogueExtensionData(rogueClass: RogueBasicModel) -> dict:
+    return deepcopy(rogueClass.extension)
+          
+  
+def addHpLimit(rlv2_data: dict, add: int):
+    rlv2_data["current"]["player"]["property"]["hp"]["current"] += add
+    rlv2_data["current"]["player"]["property"]["hp"]["max"] += add
+    
+def setHpLimit(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["player"]["property"]["hp"]["max"] = sets
+    
+def setHp(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["player"]["property"]["hp"]["current"] = sets
+    
+def addHp(rlv2_data: dict, add: int):
+    rlv2_data["current"]["player"]["property"]["hp"]["current"] += add
+    
+def setShield(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["player"]["property"]["shield"] = sets
+    
+def addShield(rlv2_data: dict, add: int):
+    rlv2_data["current"]["player"]["property"]["shield"] += add
+    
+def setGold(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["player"]["property"]["gold"] = sets
+    
+def addGold(rlv2_data: dict, add: int):
+    rlv2_data["current"]["player"]["property"]["gold"] += add
+    
+def addCharLimit(extension: dict, add: int):
+    extension["extra_char_limit"] += add
+    
+def setPopulation(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["player"]["property"]["population"]["max"] = sets
+    
+def addPopulation(rlv2_data: dict, add: int):
+    rlv2_data["current"]["player"]["property"]["population"]["max"] += add
+    
+def setCapacity(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["player"]["property"]["capacity"] = sets
+    
+def addCapacity(rlv2_data: dict, add: int):
+    rlv2_data["current"]["player"]["property"]["capacity"] += add
+    
+def getCurrentState(rlv2_data: dict):
+    return rlv2_data["current"]["player"]["state"]
+
+def setCurrentState(rlv2_data: dict, sets: str):
+    rlv2_data["current"]["player"]["state"] = sets
+    
+def setPending(rlv2_data: dict, pending: list):
+    rlv2["player"]["pending"] = pending
+    
+def setVision(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["module"]["vision"]["value"] = sets
+    
+def addVision(rlv2_data: dict, add: int):
+    rlv2_data["current"]["module"]["vision"]["value"] += add
+    
+
+def getBand(rlv2_data: dict):
+    return rlv2_data["current"]['inventory']['relic']['r_0']['id']
+
+def getNextTicketIndex(rlv2_data: dict):
+    d = set()
+    for e in rlv2_data["current"]["inventory"]["recruit"]:
+        d.add(int(e[2:]))
+    i = 0
+    while i in d:
+        i += 1
+    return f"t_{i}"
+
+def getNextPendingIndex(rlv2_data: dict):
+    d = set()
+    for e in rlv2_data["current"]["player"]["pending"]:
+        d.add(int(e["index"][2:]))
+    i = 0
+    while i in d:
+        i += 1
+    return f"e_{i}"
+
+def getNextCharId(rlv2):
+    i = 0
+    while str(i) in rlv2["current"]["troop"]["chars"]:
+        i += 1
+    return str(i)
+
+def getNextZoneId(rlv2):
+    i = 1
+    while str(i) in rlv2["current"]["map"]["zones"].keys():
+        i += 1
+    return int(i)
+
+
+def addTicket(rlv2_data: dict, ticket_id: str, init: bool, profession: str = 'all'):
+    theme = rlv2_data["game"]["theme"]
+    theme_id = theme.split('_')[-1]
+    ticket = f"rogue_{theme_id}_recruit_ticket_{profession}"
+    rlv2_data["inventory"]["recruit"][ticket_id] = {
+        "index": ticket_id,
+        "id": ticket,
+        "state": 0,
+        "list": [],
+        "result": None,
+        "ts": ts,
+        "from": "initial",
+        "mustExtra": 0,
+        "needAssist": init
+    }
+    rlv2_data["player"]["pending"][0]["content"]["initRecruit"]["tickets"].append(
+        ticket_id
+    )
+    
+    
+async def getChars(rlv2_data: RogueBasicModel, professions: list, secret: str):
+    extra_recruit = 0
+    extra_upgrade = 0
+    direct_upgrade: int = rlv2_data.extension["band_direct_upgrade"]
+    no_upgrade_population: int = rlv2_data.extension["no_upgrade_population"]
+    user = await getAccountBySecret(secret)
+    is_n6 = rlv2_data.extension["6_more_population"]
+    
+    rarity4, rarity5, rarity6, chars_upgrade, chars_new, chars_2 = [],[],[],[],[],[]
+    for profession in professions:
+        profession_direct_upgrade=0
+        if (profession in ["warrior","pioneer"] and direct_upgrade == 1) \
+        or (profession in ["tank","support"] and direct_upgrade == 2) \
+        or (profession in ["sniper","medic"] and direct_upgrade == 3) \
+        or (profession in ["caster","special"] and direct_upgrade == 4):
+            profession_direct_upgrade=True
+            extra_recruit -= 2
+            extra_upgrade -= 1
+        if no_upgrade_population == 1:
+            free_upgrade = True
+        user_data = user.user
+        
+        chars = [
+            user_data["troop"]["chars"][i] for i in user_data["troop"]["chars"]
+        ]
+        if is_n6:
+            extra_recruit += 1
+        else:
+            extra_recruit += 0
+
+        for char in chars:
+            clone_man = False
+            if char["charId"] in ["char_504_rguard","char_514_rdfend","char_505_rcast","char_506_rmedic","char_507_rsnipe"]:
+                clone_man = True
+
+            if char["profession"] != profession.upper():
+                if (profession in ["warrior","pioneer","special"] and char["charId"] == "char_504_rguard") \
+                or (profession in ["tank"] and char["charId"] == "char_514_rdfend") \
+                or (profession in ["support","caster"] and char["charId"] == "char_505_rcast") \
+                or (profession in ["medic"] and char["charId"] == "char_506_rmedic") \
+                or (profession in ["sniper"] and char["charId"] == "char_507_rsnipe"):
+                    clone_man = True
+                else:    
+                    continue
+            if int(char["rarity"]) < 4:
+                rarity = 0
+            elif int(char["rarity"]) == 4:
+                rarity = 2 + extra_recruit
+            elif int(char["rarity"]) == 5:
+                rarity = 3 + extra_recruit
+            elif int(char["rarity"]) == 6:
+                rarity = 6 + extra_recruit
+            if clone_man:
+                current_type = "THIRD_LOW"
+            else:
+                current_type = "NORMAL"
+            char.update(
+                {
+                    "type": current_type,
+                    "upgradeLimited": False,
+                    "upgradePhase": 1,
+                    "isUpgrade": False,
+                    "isCure": False,
+                    "population": rarity,
+                    "charBuff": [],
+                    "troopInstId": "0"
+                }
+            )
+            chars_2.append(char)
+            if int(char["rarity"]) == 4:
+                rarity4.append(char)
+            if int(char["rarity"]) == 5:
+                rarity5.append(char)
+            if int(char["rarity"]) == 6:
+                rarity6.append(char)
+        chars = deepcopy(chars_2)
+        if profession_direct_upgrade:
+            upgrade4 = sample(rarity4, 2)
+            upgrade5 = sample(rarity5, 3)
+            upgrade6 = sample(rarity6, 6)
+            for i in upgrade4:
+                rand = randint(1,100)
+                if rand <= 80:
+                    chars.remove(i)
+                    i.update({"type": "UPGRADE_BONUS"})
+                    chars_upgrade.append(i)
+            for i in upgrade5:
+                rand = randint(1,100)
+                if rand <= 80:
+                    chars.remove(i)
+                    i.update({"type": "UPGRADE_BONUS"})
+                    chars_upgrade.append(i)
+            rand = randint(1,100)
+            if rand <= 35:
+                for i in upgrade6:
+                    chars.remove(i)
+                    i.update({"type": "UPGRADE_BONUS"})
+                    chars_upgrade.append(i)
+        """if current_population < 7:            
+            for char in chars:
+                if char["population"] >= current_population:
+                    chars.insert(0,char)
+                    chars.remove(char)"""
+
+        """
+        1,降级（new list）
+        2，直升（同）
+        3，1-2步list拼合，排序（可抓在前）
+        4，加instid
+        5，输出
+
+
+
+        """
+        for i in range(len(chars)):
+            char = chars[i]
+            if char["evolvePhase"] == 2:
+                char_alt = deepcopy(char)
+                char_alt["evolvePhase"] = 1
+                match int(len(char_alt["skills"])):
+                    case 0:
+                        tmp_level = 55
+                    case 1:
+                        tmp_level = 60
+                    case 2:
+                        tmp_level = 70
+                    case 3:
+                        tmp_level = 80
+                char_alt["level"] = tmp_level
+                if len(char_alt["skills"]) == 3:
+                    char_alt["defaultSkillIndex"] = 1
+                    char_alt["skills"][-1]["unlock"] = 0
+                for skill in char_alt["skills"]:
+                    skill["specializeLevel"] = 0
+                char_alt["currentEquip"] = None
+
+                #阿米娅暂缓
+                """if char["charId"] == "char_002_amiya":
+                    tmpls = list(char_alt["tmpl"].keys())
+                    print(tmpls)
+                    for j in tmpls:
+                        if len(char_alt["tmpl"][j]["skills"]) == 3:
+                            char_alt["tmpl"][j]["defaultSkillIndex"] = 1
+                            char_alt["tmpl"][j]["skills"][-1]["unlock"] = 0
+                        for skill in char_alt["tmpl"][j]["skills"]:
+                            skill["specializeLevel"] = 0
+                        char_alt["tmpl"][j]["currentEquip"] = None
+                    char["currentTmpl"] = tmpls[0]
+                    char_alt["currentTmpl"] = tmpls[0]
+                    for j in range(0, len(tmpls)):
+                        for k in [char, char_alt]:
+                            char_alt_alt = deepcopy(k)
+                            if char_alt_alt["evolvePhase"] == 2:
+                                continue
+                            char_alt_alt["currentTmpl"] = tmpls[j]
+                            chars_new.append(char_alt_alt)
+                            #print(char_alt_alt)
+                    continue"""
+
+                chars_new.append(char_alt)
+            else:
+                chars_new.append(char)
+    for i in chars_new:
+        chars_new.remove(i)
+        i.update({"type": "NORMAL"})
+        chars_new.append(i)
+    chars_final = chars_new + chars_upgrade
+    for i in range(len(chars_final)):
+        if chars_final[i]["evolvePhase"] < 2:
+            chars_final[i]["upgradeLimited"] = True
+            chars_final[i]["upgradePhase"] = 0
+        chars_final[i].update({"instId": str(i)})
+    return chars_final
+    
     

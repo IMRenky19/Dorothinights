@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from server.core.utils.json import read_json, write_json
 from random import randint as rd
+from copy import deepcopy
 from server.constants import CONFIG_PATH
 import hashlib
 from time import time
@@ -103,16 +104,24 @@ async def syncRogueData(rogue: RogueBasicModel, secret: str) -> None:
         user_cmd = select(Account).where(Account.secret == secret)
         result = await session.execute(user_cmd)
         account = result.scalar()
-        account.rlv2 = rogue.rlv2
-        account.currentRogue = rogue.rlv2["current"]["game"]["theme"]
+        tmp_1 = deepcopy(account.user)
+        if not(rogue):
+            tmp_1["rlv2"]["current"] = {}
+            account.currentRogue = ""
+        else:
+            tmp_1["rlv2"] = rogue.rlv2
+            account.currentRogue = rogue.rlv2["current"]["game"]["theme"]
+        account.user = tmp_1
+        #print(account.user["rlv2"])
+        #print(account.user["rlv2"]["current"])
         await session.commit()
         
 async def deleteRogueData(secret: str) -> None:
     config = await get_sqlalchemy_config()
     async with config.get_session() as session:
         user_cmd = select(Account).where(Account.secret == secret)
-        result = await session.execute(user_cmd)
-        account = result.scalar()
+        result = await session.scalars(user_cmd)
+        account = result.one()
         account.user["rlv2"]["current"] = {}
         account.currentRogue = ""
         await session.commit()

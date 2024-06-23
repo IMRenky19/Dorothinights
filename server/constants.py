@@ -4,6 +4,7 @@ import os
 PATH = str(os.getcwd()).replace('\\server', '')
 CONFIG_PATH = PATH + "\\config\\config.json"
 DEFAULT_USER_CONFIG_PATH = PATH + "\\config\\defaultUserConfig.json"
+ROGUE_ROUTE_PATH = PATH + "\\config\\rlv2RouteSets.json"
 
 
 RLV2_INITIAL_PATH = PATH + "\\config\\rlv2initial.json"

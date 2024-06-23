@@ -354,7 +354,7 @@ async def generateNewSyncData(uid: str | int) -> dict:
         if char_list[int(cntInstId)]["charId"] in equip_keys:
 
             for equip in equip_table["charEquip"][char_list[int(cntInstId)]["charId"]]:
-                level = 1
+                level = 3
                 if equip in list(equip_table.keys()):
                     level = len(equip_table[equip]["phases"])
                 char_list[int(cntInstId)]["equip"].update({

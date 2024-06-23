@@ -8,14 +8,15 @@ from server.core.Model.RogueBase import RogueBasicModel
 from server.core.Model.RogueSami import RogueSami
 
 from litestar.contrib.sqlalchemy.plugins import AsyncSessionConfig, SQLAlchemyAsyncConfig, SQLAlchemyInitPlugin
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.orm import Session
 from .userData import get_sqlalchemy_config
 from server.core.utils.json import read_json, write_json
 from random import randint as rd
 from server.constants import CONFIG_PATH
 from time import time
-from ...utils.rogueHandler.rogue_3 import createGame
+from ...utils.rogueHandler.rogue_3 import createGame, chooseInitialRelic, chooseInitialRecruitSet, \
+    selectChoice, activeRecruitTicket, recruitChar, finishEvent
 
 
 session_config = AsyncSessionConfig(expire_on_commit=False)
@@ -28,10 +29,9 @@ async def generateRogueData(theme: str, hardLevel: int, secret: str) -> RogueBas
     phone = account.phone
     uid = account.uid
     rlv2_data = account.user["rlv2"]
+    #print(1)
+    await giveUpRogue(secret)
     async with config.get_session() as session:
-        now_rogue = await getRogueBySecret(secret)
-        if not(now_rogue):
-            await giveUpRogue(secret)
         match theme:
             case "rogue_1":
                 pass
@@ -47,9 +47,8 @@ async def generateRogueData(theme: str, hardLevel: int, secret: str) -> RogueBas
                     extension = {}
                 )
         session.add(new_rogue)
-        createGame.createGameExtra(new_rogue, hardLevel)
+        await createGame.createGameExtra(new_rogue, hardLevel)
         await session.commit()
-    await syncRogueData(new_rogue, secret)
     return new_rogue
 
 
@@ -57,18 +56,13 @@ async def generateRogueData(theme: str, hardLevel: int, secret: str) -> RogueBas
 
         
 async def giveUpRogue(secret: str) -> None:
+    #print(2)
     config = await get_sqlalchemy_config()
-    account = await getAccountBySecret(secret)
+    #print(3)
     async with config.get_session() as session:
-        match account.currentRogue:
-            case "rogue_1":
-                pass
-            case "rogue_2":
-                pass
-            case "rogue_3":
-                user_cmd = select(RogueBasicModel).where(RogueBasicModel.secret == secret)
-                rogue_data = await session.execute(user_cmd)
-                await session.delete(rogue_data)
+        user_cmd = delete(RogueBasicModel).where(RogueBasicModel.secret == secret)
+        await session.execute(user_cmd)
+        await session.commit()
                 
     await deleteRogueData(secret)
                 
@@ -79,4 +73,57 @@ async def getRogueBySecret(secret: str) -> RogueBasicModel:
         result = await session.execute(user_cmd)
     return result.scalar()
 
-#async def syncrogueData(rogue: rogueBase
+
+async def rogueChooseInitialRelic(secret: str, num: int) -> RogueBasicModel:
+    config = await get_sqlalchemy_config()
+    new_rogue = await getRogueBySecret(secret)
+    async with config.get_session() as session:
+        await chooseInitialRelic.chooseInitialRelic(new_rogue, num)
+        session.add(new_rogue)
+        await session.commit()
+    return new_rogue
+
+async def rogueChooseInitialRecruitSet(secret: str, select: str) -> RogueBasicModel:
+    config = await get_sqlalchemy_config()
+    new_rogue = await getRogueBySecret(secret)
+    async with config.get_session() as session:
+        await chooseInitialRecruitSet.chooseInitialRecruitSet(new_rogue, select)
+        session.add(new_rogue)
+        await session.commit()
+    return new_rogue
+
+async def rogueSelectChoice(secret: str, choice: str) -> RogueBasicModel:
+    config = await get_sqlalchemy_config()
+    new_rogue = await getRogueBySecret(secret)
+    async with config.get_session() as session:
+        await selectChoice.selectChoice(new_rogue, choice)
+        session.add(new_rogue)
+        await session.commit()
+    return new_rogue
+
+async def rogueActiveRecruitTicket(secret: str, choice: str) -> RogueBasicModel:
+    config = await get_sqlalchemy_config()
+    new_rogue = await getRogueBySecret(secret)
+    async with config.get_session() as session:
+        await activeRecruitTicket.activeRecruitTicket(new_rogue, choice)
+        session.add(new_rogue)
+        await session.commit()
+    return new_rogue
+
+async def rogueRecruitChar(secret: str, ticketId: str, choice: str):
+    config = await get_sqlalchemy_config()
+    new_rogue = await getRogueBySecret(secret)
+    async with config.get_session() as session:
+        await recruitChar.recruitChar(new_rogue, ticketId, choice)
+        session.add(new_rogue)
+        await session.commit()
+    return new_rogue
+
+async def rogueFinishEvent(secret: str):
+    config = await get_sqlalchemy_config()
+    new_rogue = await getRogueBySecret(secret)
+    async with config.get_session() as session:
+        await finishEvent.rlv2FinishEvent(new_rogue)
+        session.add(new_rogue)
+        await session.commit()
+    return new_rogue

@@ -8,7 +8,6 @@ async def createGame(request: Request) -> Response:
     secret = request.headers["Secret"]
     
     theme = request_data["theme"]
-    print(theme)
     hardLevel = request_data["modeGrade"]
     rogue = await generateRogueData(theme, hardLevel, secret)
     return Response(

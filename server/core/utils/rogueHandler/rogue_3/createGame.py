@@ -126,25 +126,25 @@ def createGame(hardLevel: int, rogueClass: RogueBasicModel):
     base_data = createGameBase()
     return base_data
     
-def createGameExtra(rogueClass: RogueBasicModel, hardLevel: int):
-        rlv2_table = read_json(ROGUELIKE_TOPIC_EXCEL_PATH)
-        bands = rlv2_table["details"]["rogue_3"]["init"][0]["initialBandRelic"]
-        initial = createGame(hardLevel, rogueClass)
-        have_init_support = 1
-        getOutBuffs(rogueClass)
-        getInnerBuffs(rogueClass, hardLevel)
-        initial["player"]["property"].update(
-            {
-                "gold": 6 + rogueClass.extension["extra_gold"],
-                "capacity": 6 + rogueClass.extension["extra_capacity"],
-                "hp": {
-                    "current": 8 + rogueClass.extension["extra_hp_limit"],
-                    "max": 8 + rogueClass.extension["extra_hp_limit"]
-                },
-                "hpShowState": "NORMAL"
-            }
-        )
-        initial["player"].update(
+async def createGameExtra(rogueClass: RogueBasicModel, hardLevel: int):
+    rlv2_table = read_json(ROGUELIKE_TOPIC_EXCEL_PATH)
+    bands = rlv2_table["details"]["rogue_3"]["init"][0]["initialBandRelic"]
+    initial = createGame(hardLevel, rogueClass)
+    have_init_support = 1
+    getOutBuffs(rogueClass)
+    getInnerBuffs(rogueClass, hardLevel)
+    initial["player"]["property"].update(
+        {
+            "gold": 6 + rogueClass.extension["extra_gold"],
+            "capacity": 6 + rogueClass.extension["extra_capacity"],
+            "hp": {
+                "current": 8 + rogueClass.extension["extra_hp_limit"],
+                "max": 8 + rogueClass.extension["extra_hp_limit"]
+            },
+            "hpShowState": "NORMAL"
+        }
+    )
+    initial["player"].update(
             {
                 "pending": [
                     
@@ -200,73 +200,72 @@ def createGameExtra(rogueClass: RogueBasicModel, hardLevel: int):
                 "toEnding": "ro3_ending_1",
                 "chgEnding": False
             }
-        )
-        if have_init_support:
-            choiceList = [
-                "choice_ro3_startbuff_1",
-                "choice_ro3_startbuff_2",
-                "choice_ro3_startbuff_3",
-                "choice_ro3_startbuff_4",
-                "choice_ro3_startbuff_5",
-                "choice_ro3_startbuff_6"
-            ]
-            shuffle(choiceList)
-            initial["player"]["pending"]: insert(1,
-                {
-                    "index": "e_1",
-                    "type": "GAME_INIT_SUPPORT",
-                    "content": {
-                        "initSupport": {
-                            "step": [
-                                2,
-                                4
-                            ],
-                            "scene": {
-                                "id": "scene_ro3_startbuff_enter",
-                                "choices": {x:1 for x in choiceList[0:3]}
-                            }
+    )
+    print(1)
+    if have_init_support:
+        print(114)
+        choiceList = [
+            "choice_ro3_startbuff_1",
+            "choice_ro3_startbuff_2",
+            "choice_ro3_startbuff_3"
+        ]
+        shuffle(choiceList)
+        initial["player"]["pending"].insert(1,
+            {
+                "index": "e_1",
+                "type": "GAME_INIT_SUPPORT",
+                "content": {
+                    "initSupport": {
+                        "step": [
+                            2,
+                            4
+                        ],
+                        "scene": {
+                            "id": "scene_ro3_startbuff_enter",
+                            "choices": {x:1 for x in choiceList}
                         }
                     }
-                })
-        
-        ts = time()
-        
-        initial.update(
-            {
-                "game": {
-                    "mode": "NORMAL",
-                    "predefined": None,
-                    "theme": "rogue_3",
-                    "outer": {
-                        "support": True
-                    },
-                    "start": ts,
-                    "modeGrade": hardLevel,
-                    "equivalentGrade": hardLevel
-                },
-                "module": {
-                    "chaos": {
-                        "level": 0,
-                        "value": 0,
-                        "curMaxValue": 4,
-                        "chaosList": [],
-                        "deltaChaos": {
-                            "preLevel": 0,
-                            "afterLevel": 0,
-                            "dValue": 0,
-                            "dChaos": []
-                        },
-                        "lastBattleGain": 0
-                    },
-                    "totem": {
-                        "totemPiece": []
-                    },
-                    "vision": {
-                        "value": 0,
-                        "isMax": False
-                    }
                 }
+            })
+    
+    ts = time()
+    
+    initial.update(
+        {
+            "game": {
+                "mode": "NORMAL",
+                "predefined": None,
+                "theme": "rogue_3",
+                "outer": {
+                    "support": True
+                },
+                "start": ts,
+                "modeGrade": hardLevel,
+                "equivalentGrade": hardLevel
             },
-            
-        )
-        rogueClass.rlv2["current"] = initial
+            "module": {
+                "chaos": {
+                    "level": 0,
+                    "value": 0,
+                    "curMaxValue": 4,
+                    "chaosList": [],
+                    "deltaChaos": {
+                        "preLevel": 0,
+                        "afterLevel": 0,
+                        "dValue": 0,
+                        "dChaos": []
+                    },
+                    "lastBattleGain": 0
+                },
+                "totem": {
+                    "totemPiece": []
+                },
+                "vision": {
+                    "value": 0,
+                    "isMax": False
+                }
+            }
+        },
+        
+    )
+    rogueClass.rlv2["current"] = initial
