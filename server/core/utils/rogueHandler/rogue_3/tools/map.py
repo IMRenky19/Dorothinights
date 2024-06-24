@@ -151,14 +151,13 @@ def randomizePutNode(total: int, column_amount: int, column_min_and_max_node: li
         return before_first_try
     
     
-def generateRoute(nodeList: list):                  #todo
+def generateRoute(nodeList: list, five = False):                  #todo
     for x_cursor in range(len(nodeList) - 1):
-        print(list(range(len(nodeList) - 1)))
         key_front = True
         key_back = True
-        if (x_cursor == 0):
+        if (x_cursor == 0) or ((x_cursor == 4) and five):
             key_front = False
-        if (x_cursor == (len(nodeList) - 2)):
+        if (x_cursor == (len(nodeList) - 2)) or ((x_cursor == 3) and five):
             key_back = False
         tryGenerateRouteBetweenColumn(nodeList[x_cursor], nodeList[x_cursor + 1], key_front, key_back)
         
@@ -174,12 +173,12 @@ def tryGenerateRouteBetweenColumn(front_column: list, back_column: list, key_fro
             front_column[front_y_column - 1].connectToOtherNode(back_column[back_y_column - 1])
     if key_front:
         for i, x_column in zip(front_column, range(len(front_column) - 1)):
-            if choice([0,0,0,0,1]) and (x_column + 1 <= len(front_column) - 1):
+            if choice([0,0,0,1]) and (x_column + 1 <= len(front_column) - 1):
                 front_column[x_column].connectToOtherNode(front_column[x_column + 1], key_front)
                 front_column[x_column + 1].connectToOtherNode(front_column[x_column], key_front)
     if key_back:
         for i, x_column in zip(back_column, range(len(back_column) - 1)):
-            if choice([0,0,0,0,1]) and (x_column + 1 <= len(back_column) - 1):
+            if choice([0,0,0,1]) and (x_column + 1 <= len(back_column) - 1):
                 back_column[x_column].connectToOtherNode(back_column[x_column + 1], key_back)
                 back_column[x_column + 1].connectToOtherNode(back_column[x_column], key_back)
                     
@@ -196,8 +195,12 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
     tmpNodeList = []
     eliteBattleTotal = 0
     
+    
+    
     match zone:
-        case 1:
+        case 1:                    #1
+            wish_gen = True
+            entertainment_gen = True
             new_map = Map(zone, index)
             eliteBattleTotal = 1
             if random() >= 0.55:
@@ -209,7 +212,17 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
                 if random() >= 0.5:
                     battleNodeTotal += 1
             for i in range(total_node - battleNodeTotal):
-                nonBattlePool.append(choice([NodeType.ENTERTAINMENT]))            #todo
+                if random() <= 0.17 and entertainment_gen:
+                    nonBattlePool.append(choice([NodeType.ENTERTAINMENT]))
+                    entertainment_gen = False
+                    continue
+                entertainment_gen = False
+                if random() <= 0.02 and wish_gen:
+                    nonBattlePool.append(choice([NodeType.WISH]))
+                    wish_gen = False
+                    continue
+                wish_gen = False
+                nonBattlePool.append(choice([NodeType.ENCOUNTER]))            #todo
             for i, x_tmp in zip(mapMode, range(len(mapMode))):
                 tmpNodeList.append([])
                 for y_tmp in range(i):
@@ -222,25 +235,131 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
             ]
             
             for i in tmpNodeList:
+                if i[0].x == 0:
+                    random_chance = 0.5
+                else:
+                    random_chance = 0.5
                 for j in i:
-                    if nonBattlePool:
-                        if random() >= 0.5 and (not battleNodeTotal):
-                            j.setNodeType(choice([NodeType.ENCOUNTER]))
+                    if (random() >= random_chance or (not nonBattlePool)) and battleNodeTotal:
+                        if eliteBattleTotal and random() >= 0.5:
+                            j.setNodeType(NodeType.ELITE_BATTLE)
+                            j.setStage(choice(ZONE_1_EMERGENCY_BATTLE_POOL))
+                            eliteBattleTotal -= 1
+                            battleNodeTotal -= 1
                             continue
-                    if eliteBattleTotal and random() >= 0.5:
-                        j.setNodeType(NodeType.ELITE_BATTLE)
-                        j.setStage(choice(ZONE_1_EMERGENCY_BATTLE_POOL))
-                        eliteBattleTotal -= 1
-                    else:
-                        j.setNodeType(NodeType.NORMAL_BATTLE)
-                        j.setStage(choice(ZONE_1_NORMAL_BATTLE_POOL))
-                        battleNodeTotal -= 1
+                        else:
+                            j.setNodeType(NodeType.NORMAL_BATTLE)
+                            j.setStage(choice(ZONE_1_NORMAL_BATTLE_POOL))
+                            battleNodeTotal -= 1
+                            continue
+                    
+                    if nonBattlePool or (not battleNodeTotal):
+                         j.setNodeType(choice([nonBattlePool.pop()]))
             nodeList += tmpNodeList
             nodeList.append([
                 Node(3, 0, 0, nodeType = NodeType.SHOP),
                 Node(3, 1, 0, nodeType = NodeType.SHOP)
             ]
-        )
+            )
+            generateRoute(nodeList)
+            for i in nodeList:
+                for j in i:
+                    new_map.addNode(j)
+            return new_map.exportMap()
+            
+        case 2:
+            safe_house_gen = True
+            entertainment_gen = True
+            wish_gen = True
+            shop_gen = True
+            lost_and_found_gen = True
+            scout_gen = True
+            passage_gen = True
+            new_map = Map(zone, index)
+            eliteBattleTotal = choice([0,1])
+            if random() >= 0.65:
+                total_node = 6
+            else:
+                total_node = 5
+            mapMode = randomizePutNode(total_node, 2 ,[[2,3],[2,3]])
+            for i in range(total_node):
+                if random() >= 0.6:
+                    battleNodeTotal += 1
+            for i in range(total_node - battleNodeTotal):
+                if random() <= 0.15 and safe_house_gen:
+                    nonBattlePool.append(choice([NodeType.SAFE_HOUSE]))
+                    safe_house_gen = False
+                    continue
+                safe_house_gen = False
+                if random() <= 0.11 and entertainment_gen:
+                    nonBattlePool.append(choice([NodeType.ENTERTAINMENT]))
+                    entertainment_gen = False
+                    continue
+                entertainment_gen = False
+                if random() <= 0.18 and wish_gen:
+                    nonBattlePool.append(choice([NodeType.WISH]))
+                    wish_gen = False
+                    continue
+                wish_gen = False
+                if random() <= 0.07 and shop_gen:
+                    nonBattlePool.append(choice([NodeType.SHOP]))
+                    shop_gen = False
+                    continue
+                shop_gen = False
+                if random() <= 0.18 and lost_and_found_gen:
+                    nonBattlePool.append(choice([NodeType.LOST_AND_FOUND]))
+                    lost_and_found_gen = False
+                    continue
+                lost_and_found_gen = False
+                if scout_gen:
+                    nonBattlePool.append(choice([NodeType.SCOUT]))
+                    scout_gen = False
+                    continue
+                scout_gen = False
+                if random() <= 0.25 and passage_gen:
+                    nonBattlePool.append(choice([NodeType.PASSAGE]))
+                    passage_gen = False
+                    continue
+                passage_gen = False
+                nonBattlePool.append(choice([NodeType.ENCOUNTER]))            #todo
+            for i, x_tmp in zip(mapMode, range(len(mapMode))):
+                tmpNodeList.append([])
+                for y_tmp in range(i):
+                    tmpNodeList[x_tmp].append(Node(x=x_tmp + 1, y=y_tmp))
+            nodeList = [
+                [
+                    Node(0, 0, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL)),
+                    Node(0, 1, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL))
+                ]
+            ]
+            
+            for i in tmpNodeList:
+                if i[0].x == 0:
+                    random_chance = 0.5
+                if i[0].x == 1:
+                    random_chance = 0.6
+                for j in i:
+                    if (random() >= random_chance or (not nonBattlePool)) and battleNodeTotal:
+                        if eliteBattleTotal and random() >= 0.5:
+                            j.setNodeType(NodeType.ELITE_BATTLE)
+                            j.setStage(choice(ZONE_1_EMERGENCY_BATTLE_POOL))
+                            eliteBattleTotal -= 1
+                            battleNodeTotal -= 1
+                            continue
+                        else:
+                            j.setNodeType(NodeType.NORMAL_BATTLE)
+                            j.setStage(choice(ZONE_1_NORMAL_BATTLE_POOL))
+                            battleNodeTotal -= 1
+                            continue
+                    
+                    if nonBattlePool or (not battleNodeTotal):
+                         j.setNodeType(choice([nonBattlePool.pop()]))
+            nodeList += tmpNodeList
+            nodeList.append([
+                Node(3, 0, 0, nodeType = NodeType.WISH),
+                Node(3, 1, 0, nodeType = NodeType.WISH)
+            ]
+            )
             
             
             generateRoute(nodeList)
@@ -250,6 +369,340 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
             return new_map.exportMap()
             
             
+        case 3:
+            safe_house_gen = True
+            entertainment_gen = True
+            wish_gen = True
+            shop_gen = True
+            lost_and_found_gen = True
+            scout_gen = True
+            passage_gen = True
+            rd = random()
+            new_map = Map(zone, index)
+            eliteBattleTotal = choice([0,1,2])
+            if rd <= 0.02:
+                total_node = 9
+            elif rd <= 0.2:
+                total_node = 10
+            elif rd <= 0.8:
+                total_node = 11
+            else:
+                total_node = 12
+            mapMode = randomizePutNode(total_node, 3 ,[[3,4],[3,4],[2,4]])
+            for i in range(total_node):
+                if random() >= 0.5:
+                    battleNodeTotal += 1
+            for i in range(total_node - battleNodeTotal):
+                if random() <= 0.34 and safe_house_gen:
+                    nonBattlePool.append(choice([NodeType.SAFE_HOUSE]))
+                    safe_house_gen = False
+                    continue
+                safe_house_gen = False
+                if random() <= 0.32 and entertainment_gen:
+                    nonBattlePool.append(choice([NodeType.ENTERTAINMENT]))
+                    entertainment_gen = False
+                    continue
+                entertainment_gen = False
+                if random() <= 0.25 and wish_gen:
+                    nonBattlePool.append(choice([NodeType.WISH]))
+                    wish_gen = False
+                    continue
+                wish_gen = False
+                if random() <= 0.46 and shop_gen:
+                    nonBattlePool.append(choice([NodeType.SHOP]))
+                    shop_gen = False
+                    continue
+                shop_gen = False
+                if lost_and_found_gen:
+                    nonBattlePool.append(choice([NodeType.LOST_AND_FOUND]))
+                    lost_and_found_gen = False
+                    continue
+                lost_and_found_gen = False
+                if random() <= 0.46 and scout_gen:
+                    nonBattlePool.append(choice([NodeType.SCOUT]))
+                    scout_gen = False
+                    continue
+                scout_gen = False
+                if random() <= 0.25 and passage_gen:
+                    nonBattlePool.append(choice([NodeType.PASSAGE]))
+                    passage_gen = False
+                    continue
+                passage_gen = False
+                nonBattlePool.append(choice([NodeType.ENCOUNTER]))            #todo
+            for i, x_tmp in zip(mapMode, range(len(mapMode))):
+                tmpNodeList.append([])
+                for y_tmp in range(i):
+                    tmpNodeList[x_tmp].append(Node(x=x_tmp + 1, y=y_tmp))
+            nodeList = [
+                [
+                    Node(0, 0, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL)),
+                    Node(0, 1, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL)),
+                    Node(0, 2, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL))
+                ]
+            ]
+            
+            for i in tmpNodeList:
+                if i[0].x == 0:
+                    random_chance = 0.33
+                if i[0].x == 1:
+                    random_chance = 0.33
+                if i[0].x == 2:
+                    random_chance = 0.33
+                for j in i:
+                    if (random() >= random_chance or (not nonBattlePool)) and battleNodeTotal:
+                        if eliteBattleTotal and random() >= 0.5:
+                            j.setNodeType(NodeType.ELITE_BATTLE)
+                            j.setStage(choice(ZONE_1_EMERGENCY_BATTLE_POOL))
+                            eliteBattleTotal -= 1
+                            battleNodeTotal -= 1
+                            continue
+                        else:
+                            j.setNodeType(NodeType.NORMAL_BATTLE)
+                            j.setStage(choice(ZONE_1_NORMAL_BATTLE_POOL))
+                            battleNodeTotal -= 1
+                            continue
+                    
+                    if nonBattlePool or (not battleNodeTotal):
+                         j.setNodeType(choice([nonBattlePool.pop()]))
+            nodeList += tmpNodeList
+            nodeList.append([
+                Node(4, 0, 0, nodeType = NodeType.BOSS, stage = choice(ZONE_1_NORMAL_BATTLE_POOL))
+            ]
+            )
+            
+            
+            generateRoute(nodeList)
+            for i in nodeList:
+                for j in i:
+                    new_map.addNode(j)
+            return new_map.exportMap()
+        
+        case 4:
+            safe_house_gen = True
+            entertainment_gen = True
+            wish_gen = True
+            shop_gen = True
+            lost_and_found_gen = True
+            scout_gen = True
+            passage_gen = True
+            passage_gen_2 = True
+            rd = random()
+            new_map = Map(zone, index)
+            eliteBattleTotal = choice([0,1,2])
+            if rd <= 0.02:
+                total_node = 9
+            elif rd <= 0.5:
+                total_node = 10
+            else:
+                total_node = 11
+            mapMode = randomizePutNode(total_node, 3 ,[[2,4],[2,4],[2,4]])
+            for i in range(total_node):
+                if random() >= 0.6:
+                    battleNodeTotal += 1
+            for i in range(total_node - battleNodeTotal):
+                if random() <= 0.42 and safe_house_gen:
+                    nonBattlePool.append(choice([NodeType.SAFE_HOUSE]))
+                    safe_house_gen = False
+                    continue
+                safe_house_gen = False
+                if random() <= 0.31 and entertainment_gen:
+                    nonBattlePool.append(choice([NodeType.ENTERTAINMENT]))
+                    entertainment_gen = False
+                    continue
+                entertainment_gen = False
+                if random() <= 0.11 and wish_gen:
+                    nonBattlePool.append(choice([NodeType.WISH]))
+                    wish_gen = False
+                    continue
+                wish_gen = False
+                if random() <= 0.35 and shop_gen:
+                    nonBattlePool.append(choice([NodeType.SHOP]))
+                    shop_gen = False
+                    continue
+                shop_gen = False
+                if random() <= 0.53 and lost_and_found_gen:
+                    nonBattlePool.append(choice([NodeType.LOST_AND_FOUND]))
+                    lost_and_found_gen = False
+                    continue
+                lost_and_found_gen = False
+                if scout_gen:
+                    nonBattlePool.append(choice([NodeType.SCOUT]))
+                    scout_gen = False
+                    continue
+                scout_gen = False
+                if random() <= 0.25 and passage_gen:
+                    nonBattlePool.append(choice([NodeType.PASSAGE]))
+                    passage_gen = False
+                    continue
+                passage_gen = False
+                if random() <= 0.25 and passage_gen_2:
+                    nonBattlePool.append(choice([NodeType.PASSAGE]))
+                    passage_gen_2 = False
+                    continue
+                passage_gen_2 = False
+                nonBattlePool.append(choice([NodeType.ENCOUNTER]))            #todo
+            for i, x_tmp in zip(mapMode, range(len(mapMode))):
+                tmpNodeList.append([])
+                for y_tmp in range(i):
+                    tmpNodeList[x_tmp].append(Node(x=x_tmp + 1, y=y_tmp))
+            nodeList = [
+                [
+                    Node(0, 0, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL)),
+                    Node(0, 1, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL)),
+                    Node(0, 2, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL))
+                ]
+            ]
+            
+            for i in tmpNodeList:
+                if i[0].x == 0:
+                    random_chance = 0.2
+                if i[0].x == 1:
+                    random_chance = 0.3
+                if i[0].x == 2:
+                    random_chance = 0.5
+                for j in i:
+                    if (random() >= random_chance or (not nonBattlePool)) and battleNodeTotal:
+                        if eliteBattleTotal and random() >= 0.5:
+                            j.setNodeType(NodeType.ELITE_BATTLE)
+                            j.setStage(choice(ZONE_1_EMERGENCY_BATTLE_POOL))
+                            eliteBattleTotal -= 1
+                            battleNodeTotal -= 1
+                            continue
+                        else:
+                            j.setNodeType(NodeType.NORMAL_BATTLE)
+                            j.setStage(choice(ZONE_1_NORMAL_BATTLE_POOL))
+                            battleNodeTotal -= 1
+                            continue
+                    
+                    if nonBattlePool or (not battleNodeTotal):
+                         j.setNodeType(choice([nonBattlePool.pop()]))
+            nodeList += tmpNodeList
+            nodeList.append([
+                Node(4, 0, 0, nodeType = NodeType.WISH),
+                Node(4, 1, 0, nodeType = NodeType.WISH),
+                Node(4, 2, 0, nodeType = NodeType.WISH)]
+            )
+            
+            
+            generateRoute(nodeList)
+            for i in nodeList:
+                for j in i:
+                    new_map.addNode(j)
+            return new_map.exportMap()
+        
+        case 5:
+            safe_house_gen = True
+            entertainment_gen = True
+            wish_gen = True
+            shop_gen = True
+            lost_and_found_gen = True
+            passage_gen = True
+            passage_gen_2 = True
+            rd = random()
+            new_map = Map(zone, index)
+            eliteBattleTotal = choice([0,1,2])
+            if rd <= 0.1:
+                total_node = 9
+            elif rd <= 0.4:
+                total_node = 10
+            elif rd <= 0.8:
+                total_node = 11
+            else:
+                total_node = 12
+            mapMode = randomizePutNode(total_node, 3 ,[[2,4],[2,4],[2,4]])
+            for i in range(total_node):
+                if random() >= 0.5:
+                    battleNodeTotal += 1
+            for i in range(total_node - battleNodeTotal):
+                if random() <= 0.56 and safe_house_gen:
+                    nonBattlePool.append(choice([NodeType.SAFE_HOUSE]))
+                    safe_house_gen = False
+                    continue
+                safe_house_gen = False
+                if random() <= 0.56 and entertainment_gen:
+                    nonBattlePool.append(choice([NodeType.ENTERTAINMENT]))
+                    entertainment_gen = False
+                    continue
+                entertainment_gen = False
+                if random() <= 0.24 and wish_gen:
+                    nonBattlePool.append(choice([NodeType.WISH]))
+                    wish_gen = False
+                    continue
+                wish_gen = False
+                if random() <= 0.52 and shop_gen:
+                    nonBattlePool.append(choice([NodeType.SHOP]))
+                    shop_gen = False
+                    continue
+                shop_gen = False
+                if lost_and_found_gen:
+                    nonBattlePool.append(choice([NodeType.LOST_AND_FOUND]))
+                    lost_and_found_gen = False
+                    continue
+                lost_and_found_gen = False
+                if random() <= 0.25 and passage_gen:
+                    nonBattlePool.append(choice([NodeType.PASSAGE]))
+                    passage_gen = False
+                    continue
+                passage_gen = False
+                if random() <= 0.25 and passage_gen_2:
+                    nonBattlePool.append(choice([NodeType.PASSAGE]))
+                    passage_gen_2 = False
+                    continue
+                passage_gen_2 = False
+                nonBattlePool.append(choice([NodeType.ENCOUNTER]))            #todo
+            for i, x_tmp in zip(mapMode, range(len(mapMode))):
+                tmpNodeList.append([])
+                for y_tmp in range(i):
+                    tmpNodeList[x_tmp].append(Node(x=x_tmp + 1, y=y_tmp))
+            nodeList = [
+                [
+                    Node(0, 0, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL)),
+                    Node(0, 1, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL)),
+                    Node(0, 2, 0, nodeType = choice([NodeType.NORMAL_BATTLE, NodeType.ENCOUNTER]), stage = choice(ZONE_1_NORMAL_BATTLE_POOL))
+                ]
+            ]
+            
+            for i in tmpNodeList:
+                if i[0].x == 0:
+                    random_chance = 0.33
+                if i[0].x == 1:
+                    random_chance = 0.33
+                if i[0].x == 2:
+                    random_chance = 0.33
+                for j in i:
+                    if (random() >= random_chance or (not nonBattlePool)) and battleNodeTotal:
+                        if eliteBattleTotal and random() >= 0.5:
+                            j.setNodeType(NodeType.ELITE_BATTLE)
+                            j.setStage(choice(ZONE_1_EMERGENCY_BATTLE_POOL))
+                            eliteBattleTotal -= 1
+                            battleNodeTotal -= 1
+                            continue
+                        else:
+                            j.setNodeType(NodeType.NORMAL_BATTLE)
+                            j.setStage(choice(ZONE_1_NORMAL_BATTLE_POOL))
+                            battleNodeTotal -= 1
+                            continue
+                    
+                    if nonBattlePool or (not battleNodeTotal):
+                         j.setNodeType(choice([nonBattlePool.pop()]))
+            nodeList += tmpNodeList
+            nodeList.append(
+                [
+                    Node(4, x, 0, nodeType = NodeType.STORY) for x in range(choice([1,2,2,3,3,3,3,4,4,4,4,4,4,4,4]))
+                ]
+            )
+            nodeList.append([
+                Node(5, 0, 0, nodeType = NodeType.BOSS, stage = choice(ZONE_1_NORMAL_BATTLE_POOL))]
+            )
+            
+            
+            generateRoute(nodeList, True)
+            for i in nodeList:
+                for j in i:
+                    new_map.addNode(j)
+            return new_map.exportMap()
+        
+        
         case 6:   
             nonBattlePool = [
                     NodeType.SAFE_HOUSE,
