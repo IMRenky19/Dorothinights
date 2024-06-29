@@ -1,12 +1,15 @@
 from server.core.database.function.userData import getAccountBySecret
+from server.core.utils.rogueHandler.rogue_3.tools.map import visionGenerator
 from .....Model.RogueBase import RogueBasicModel
 from server.core.utils.time import time
 from random import shuffle, randint, sample
 from copy import deepcopy
 from server.core.utils.json import read_json
+from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH
 
 
 ts = time()
+rogueTable: dict = read_json(ROGUELIKE_TOPIC_EXCEL_PATH)
 def createGameBase():
         initial = {
         "player": {
@@ -148,7 +151,11 @@ def getOutBuffs(rogueClass: RogueBasicModel):
             "difficulty_1_buff": 0,          #3级及以上buff(仅判定解锁状态)
             "difficulty_2_buff": 0,          #6级及以上buff
             "difficulty_3_buff": 0,          #9级及以上buff
-            "seed": randint(-1000000000000,1000000000000)
+            "seed": randint(-1000000000000,1000000000000),
+            "battlePool": [],
+            "eventPool": [],
+            "battlePoolPassage": [],
+            "eventPoolPassage": []
         }
         
         for buff, status in outer_buff["unlocked"].items():
@@ -353,11 +360,37 @@ def setHpLimit(rlv2_data: dict, sets: int):
 def setHp(rlv2_data: dict, sets: int):
     rlv2_data["current"]["player"]["property"]["hp"]["current"] = sets
     
+def getHp(rlv2_data: dict):
+    return rlv2_data["current"]["player"]["property"]["hp"]["current"]
+    
 def addHp(rlv2_data: dict, add: int):
     rlv2_data["current"]["player"]["property"]["hp"]["current"] += add
     
+def setExp(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["player"]["property"]["exp"] = sets
+    
+def getExp(rlv2_data: dict):
+    return rlv2_data["current"]["player"]["property"]["exp"]
+    
+def addExp(rlv2_data: dict, add: int)-> dict:
+    rlv2_data["current"]["player"]["property"]["exp"] += add
+    return expChecker(rlv2_data)
+    
+def setExpLevel(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["player"]["property"]["level"] = sets
+    
+def getExpLevel(rlv2_data: dict):
+    return rlv2_data["current"]["player"]["property"]["level"]
+    
+def addExpLevel(rlv2_data: dict, add: int):
+    rlv2_data["current"]["player"]["property"]["level"] += add
+    
+    
 def setShield(rlv2_data: dict, sets: int):
     rlv2_data["current"]["player"]["property"]["shield"] = sets
+    
+def getShield(rlv2_data: dict):
+    return rlv2_data["current"]["player"]["property"]["shield"]
     
 def addShield(rlv2_data: dict, add: int):
     rlv2_data["current"]["player"]["property"]["shield"] += add
@@ -390,14 +423,76 @@ def setCurrentState(rlv2_data: dict, sets: str):
     rlv2_data["current"]["player"]["state"] = sets
     
 def setPending(rlv2_data: dict, pending: list):
-    rlv2["player"]["pending"] = pending
+    rlv2_data["current"]["player"]["pending"] = pending
     
+def addPending(rlv2_data: dict, pending: dict):
+    rlv2_data["current"]["player"]["pending"].append(pending)
+    
+def popPending(rlv2_data: dict):
+    rlv2_data["current"]["player"]["pending"].pop(0)
+    
+def getVision(rlv2_data: dict):
+    return rlv2_data["current"]["module"]["vision"]["value"]
+
 def setVision(rlv2_data: dict, sets: int):
     rlv2_data["current"]["module"]["vision"]["value"] = sets
     
 def addVision(rlv2_data: dict, add: int):
     rlv2_data["current"]["module"]["vision"]["value"] += add
+    visionChecker(rlv2_data)
+    visionGenerator(getCurrentZone(rlv2_data), getPosition(rlv2_data), getVision(rlv2_data), rlv2_data["current"]["map"]["zones"])
     
+def visionChecker(rogueData: dict):
+    currentVision = getVision(rogueData)
+    if currentVision > 6 and True:          #TODO:琥珀伤痕
+        setVision(rogueData, 6)
+        rogueData["current"]["module"]["vision"]["isMax"] = True
+    if currentVision < 6 and (rogueData["current"]["module"]["vision"]["isMax"]):
+        rogueData["current"]["module"]["vision"]["isMax"] = False
+        
+        
+def expChecker(rogueData: dict):
+    expTable = [0, 10, 24, 36, 40, 55, 65, 70, 75, 80]
+    
+    
+    currentLevel = getExpLevel(rogueData)
+    currentExp = getExp(rogueData)
+    
+    modifiedLevel = 1
+    
+    for i in expTable[0:currentLevel]:
+        currentExp += i
+    
+    for i in range(9):
+        match currentExp:
+            case currentExp if currentExp >= expTable[i + 1]:
+                currentExp -= expTable[i + 1]
+                modifiedLevel += 1
+                continue
+            
+    setExp(rogueData, currentExp)
+    setExpLevel(rogueData, modifiedLevel)
+    return levelUpgrade(currentLevel, modifiedLevel, rogueData)
+    
+def levelUpgrade(currentLevel: int, modifiedLevel: int, rogueData: dict) -> dict:
+    tmp = 1
+    population = 0
+    capacity = 0
+    hpLimit = 0
+    for i in range(modifiedLevel - currentLevel):
+        population += rogueTable["details"]["rogue_3"]["detailConst"]["playerLevelTable"][str(modifiedLevel + tmp)]["populationUp"]
+        capacity += rogueTable["details"]["rogue_3"]["detailConst"]["playerLevelTable"][str(modifiedLevel + tmp)]["squadCapacityUp"]
+        hpLimit += rogueTable["details"]["rogue_3"]["detailConst"]["playerLevelTable"][str(modifiedLevel + tmp)]["maxHpUp"]
+        tmp += 1
+    addPopulation(rogueData, population)
+    addCapacity(rogueData, capacity)
+    addHpLimit(rogueData, hpLimit)
+    return {
+        "population": population,
+        "capacity": capacity,
+        "hpLimit": hpLimit
+    }
+        
 
 def getBand(rlv2_data: dict):
     return rlv2_data["current"]['inventory']['relic']['r_0']['id']
@@ -431,6 +526,18 @@ def getNextZoneId(rlv2):
     while str(i) in rlv2["current"]["map"]["zones"].keys():
         i += 1
     return int(i)
+
+def getPosition(rlv2_data: dict):
+    return rlv2_data["current"]['player']['cursor']['position']
+
+def getCurrentZone(rlv2_data: dict):
+    return rlv2_data["current"]['player']['cursor']['zone']
+
+def getModeGrade(rlv2_data: dict):
+    return rlv2_data["current"]['game']['modeGrade']
+
+def positionToIndex(position: dict):
+    return f"{position["x"]}0{position["y"]}" if position["x"] != 0 else f"{position["y"]}"
 
 
 def addTicket(rlv2_data: dict, ticket_id: str, init: bool, profession: str = 'all'):

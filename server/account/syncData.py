@@ -1,5 +1,5 @@
 from litestar import Request, post, Response
-from server.core.database.function.userData import getAccountBySecret, writeAccountSyncData, syncRogueData
+from server.core.database.function.userData import getAccountBySecret, writeAccountSyncData, syncRogueData, updateAccount
 from server.core.database.function.rogueData import getRogueBySecret
 from server.core.utils.accounts import generateNewSyncData
 from server.core.utils.time import time
@@ -22,16 +22,11 @@ async def syncData(request: Request) -> Response:
     rogue_data = await getRogueBySecret(secret)
     await syncRogueData(rogue_data, secret)
     
+    await updateAccount(secret)
     account = await getAccountBySecret(secret)
     syncdata = account.user
-    ts = time()
+    ts = int(time())
     
-    syncdata["status"]["lastRefreshTs"] = ts
-    syncdata["status"]["lastApAddTime"] = ts
-    syncdata["status"]["registerTs"] = ts
-    syncdata["status"]["lastOnlineTs"] = ts
-    syncdata["crisis"]["lst"] = ts
-    syncdata["crisis"]["nst"] = ts + 3600
     return Response(
         content = {
             "result": 0,

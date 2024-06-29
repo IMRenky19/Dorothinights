@@ -1,17 +1,17 @@
 from .activeRecruitTicket import activeRecruitTicket
 #from .bankWithdraw import bankWithdraw
-#from .battleFinish import battleFinish
+from .battleFinish import battleFinish
 #from .buyGoods import buyGoods
 #from .chooseBattleReward import chooseBattleReward
 from .chooseInitialRecruitSet import chooseInitialRecruitSet
 from .chooseInitialRelic import chooseInitialRelic
 #from .confirmPredict import confirmPredict
-#from .finishBattleReward import finishBattleReward
+from .finishBattleReward import finishBattleReward
 from .finishEvent import finishEvent
 #from .gameSettle import gameSettle
 #from .getTicketAssistList import getTicketAssistList
 #from .leaveShop import leaveShop
-#from .moveAndBattleStart import moveAndBattleStart
+from .moveAndBattleStart import moveAndBattleStart
 #from .moveTo import moveTo
 #from .readEndingChange import readEndingChange
 from .recruitChar import recruitChar
@@ -29,18 +29,18 @@ router = Router(
     route_handlers = [
         activeRecruitTicket,
         #bankWithdraw,
-        #battleFinish,
+        battleFinish,
         #buyGoods,
         #chooseBattleReward,
         chooseInitialRecruitSet,
         chooseInitialRelic,
         #confirmPredict,
-        #finishBattleReward,
+        finishBattleReward,
         finishEvent,
         #gameSettle,
         #getTicketAssistList,
         #leaveShop,
-        #moveAndBattleStart,
+        moveAndBattleStart,
         #moveTo,
         #readEndingChange,
         recruitChar,

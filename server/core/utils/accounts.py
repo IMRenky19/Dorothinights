@@ -1,11 +1,15 @@
 from .time import time
 from .json import read_json
+import json
+import hashlib
 from server.constants import STAGE_EXCEL_PATH, STORY_EXCEL_PATH, CHAR_EXCEL_PATH, \
     SKIN_EXCEL_PATH, UNIEQUIP_EXCEL_PATH, HANDBOOK_INFO_EXCEL_PATH, \
         RETRO_EXCEL_PATH, DISPLAY_META_EXCEL_PATH,STORY_REVIEW_EXCEL_PATH, \
             STORY_REVIEW_META_EXCEL_PATH, ENEMY_HANDBOOK_EXCEL_PATH, ACTIVITY_EXCEL_PATH, \
                 MEDAL_EXCEL_PATH, RLV2_INITIAL_PATH
 from random import randint as rd
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
 
 
 def decrypt_user_key(key: str, login_time: int) -> str:
@@ -16,17 +20,26 @@ def decrypt_user_key(key: str, login_time: int) -> str:
            [y.replace("f", "") for y in [LOG_SECRET_KEY[z:z + 2] for z in range(0, len(LOG_SECRET_KEY), 2)]]]
     data_bin = "".join([format(ord(x), '08b') for x in key])
     format_data = [data_bin[i:i + 8] for i in range(0, len(data_bin), 8)]
-    try:
-        decrypt_buf = "".join(['{:08b}'.format(int(format_data[i], 2) - buf[i]) if i in (6, 15) else '{:08b}'.format(
-            int(format_data[i], 2) + buf[i]) for i in range(len(format_data))])
-        decrypt_data = "".join(map(lambda x: chr(int(str(x), 2)), [decrypt_buf[i:i + 8] for i in
-                                                                   range(0, len(decrypt_buf),
-                                                                         8)])) if login_time else None
-        return decrypt_data
 
-    except Exception as e:
-        return None
+    decrypt_buf = "".join(['{:08b}'.format(int(format_data[i], 2) - buf[i]) if i in (6, 15) else '{:08b}'.format(
+        int(format_data[i], 2) + buf[i]) for i in range(len(format_data))])
+    decrypt_data = "".join(map(lambda x: chr(int(str(x), 2)), [decrypt_buf[i:i + 8] for i in
+                                                               range(0, len(decrypt_buf),
+                                                                     8)])) if login_time else None
+    return decrypt_data
     
+def decrypt_battle_data(data: str, login_time: int) -> dict:
+    LOG_TOKEN_KEY = "pM6Umv*^hVQuB6t&"
+
+    battle_data = bytes.fromhex(data[:len(data) - 32])
+    src = LOG_TOKEN_KEY + str(login_time)
+    key = hashlib.md5(src.encode()).digest()
+    iv = bytes.fromhex(data[len(data) - 32:])
+    aes_obj = AES.new(key, AES.MODE_CBC, iv)
+
+    decrypt_data = unpad(aes_obj.decrypt(battle_data), AES.block_size)
+    return json.loads(decrypt_data)
+
 
 async def generateNewSyncData(uid: str | int) -> dict:
     ts = time()
@@ -45,7 +58,13 @@ async def generateNewSyncData(uid: str | int) -> dict:
             "status": {},
             "troop": {},
             "npcAudio": {},
-            "pushFlags": {},
+            "pushFlags": {
+                "hasGifts": 0,
+                "hasFriendRequest": 0,
+                "hasClues": 0,
+                "hasFreeLevelGP": 0,
+                "status": ts
+            },
             "equipment": {},
             "skin": {},
             "shop": {},

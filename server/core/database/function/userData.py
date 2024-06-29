@@ -25,7 +25,7 @@ db_port = database_config["port"]
 async def get_sqlalchemy_config() -> SQLAlchemyAsyncConfig:
     sqlalchemy_config = SQLAlchemyAsyncConfig(
                 connection_string=f"mysql+asyncmy://{db_user}:{db_password}@{db_host}:{db_port}/arknights", 
-                session_config=session_config,
+                session_config=session_config
             )
     return sqlalchemy_config
 
@@ -124,4 +124,21 @@ async def deleteRogueData(secret: str) -> None:
         account = result.one()
         account.user["rlv2"]["current"] = {}
         account.currentRogue = ""
+        await session.commit()
+        
+async def updateAccount(secret: str):
+    config = await get_sqlalchemy_config()
+    async with config.get_session() as session:
+        user_cmd = select(Account).where(Account.secret == secret)
+        result = await session.execute(user_cmd)
+        account = result.scalar()
+        syncdata = deepcopy(account.user)
+        ts = int(time())
+        syncdata["status"]["lastRefreshTs"] = ts
+        syncdata["status"]["lastApAddTime"] = ts
+        syncdata["status"]["lastOnlineTs"] = ts
+        syncdata["crisis"]["lst"] = ts
+        syncdata["crisis"]["nst"] = ts + 3600
+        syncdata["pushFlags"]["status"] = ts
+        account.user = syncdata
         await session.commit()

@@ -16,7 +16,8 @@ from random import randint as rd
 from server.constants import CONFIG_PATH
 from time import time
 from ...utils.rogueHandler.rogue_3 import createGame, chooseInitialRelic, chooseInitialRecruitSet, \
-    selectChoice, activeRecruitTicket, recruitChar, finishEvent
+    selectChoice, activeRecruitTicket, recruitChar, finishEvent, \
+        moveAndBattleStart, battleFinish, finishBattleReward
 
 
 session_config = AsyncSessionConfig(expire_on_commit=False)
@@ -124,6 +125,35 @@ async def rogueFinishEvent(secret: str):
     new_rogue = await getRogueBySecret(secret)
     async with config.get_session() as session:
         await finishEvent.rlv2FinishEvent(new_rogue)
+        session.add(new_rogue)
+        await session.commit()
+    return new_rogue
+
+async def rogueMoveAndBattleStart(secret: str, position: dict):
+    config = await get_sqlalchemy_config()
+    new_rogue = await getRogueBySecret(secret)
+    async with config.get_session() as session:
+        await moveAndBattleStart.moveAndBattleStart(new_rogue, position)
+        session.add(new_rogue)
+        await session.commit()
+    return new_rogue
+
+async def rogueBattleFinish(secret: str, battleData: str):
+    config = await get_sqlalchemy_config()
+    new_rogue = await getRogueBySecret(secret)
+    account = await getAccountBySecret(secret)
+    async with config.get_session() as session:
+        await battleFinish.battleFinish(new_rogue, battleData, account.user["pushFlags"]["status"])
+        session.add(new_rogue)
+        await session.commit()
+    return new_rogue
+
+async def rogueFinishBattleReward(secret: str):
+    config = await get_sqlalchemy_config()
+    new_rogue = await getRogueBySecret(secret)
+    account = await getAccountBySecret(secret)
+    async with config.get_session() as session:
+        await finishBattleReward.finishBattleReward(new_rogue)
         session.add(new_rogue)
         await session.commit()
     return new_rogue

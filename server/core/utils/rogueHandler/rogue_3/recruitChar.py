@@ -1,6 +1,6 @@
 from ....Model.RogueBase import RogueBasicModel
 from ....utils.json import read_json
-from .tools.tools import *
+from .tools.rlv2tools import *
 from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH
 from server.core.utils.time import time
 from random import shuffle, randint
