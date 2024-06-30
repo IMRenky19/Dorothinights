@@ -297,7 +297,7 @@ def getInnerBuffs(rogueClass: RogueBasicModel, hardLevel: int):
                         if hardLevel >= 9:
                             rogueClass.extension["extra_char_limit"] -= 1
                             ex_buff_inner["stronger_relics"] = 3
-                            if rogueClass.extension["difficulty_2_buff"]:
+                            if rogueClass.extension["difficulty_3_buff"]:
                                 rogueClass.extension["extra_def"] += 0.03
                                 ex_buff_inner["safe_house_add_hp"] = 1
                                 ex_buff_inner["add_shield"] = 1
@@ -436,6 +436,7 @@ def getVision(rlv2_data: dict):
 
 def setVision(rlv2_data: dict, sets: int):
     rlv2_data["current"]["module"]["vision"]["value"] = sets
+    visionGenerator(getCurrentZone(rlv2_data), getPosition(rlv2_data), sets, rlv2_data["current"]["map"]["zones"])
     
 def addVision(rlv2_data: dict, add: int):
     rlv2_data["current"]["module"]["vision"]["value"] += add
@@ -449,6 +450,8 @@ def visionChecker(rogueData: dict):
         rogueData["current"]["module"]["vision"]["isMax"] = True
     if currentVision < 6 and (rogueData["current"]["module"]["vision"]["isMax"]):
         rogueData["current"]["module"]["vision"]["isMax"] = False
+    if currentVision < 0:
+        setVision(rogueData, 0)
         
         
 def expChecker(rogueData: dict):
@@ -497,6 +500,47 @@ def levelUpgrade(currentLevel: int, modifiedLevel: int, rogueData: dict) -> dict
 def getBand(rlv2_data: dict):
     return rlv2_data["current"]['inventory']['relic']['r_0']['id']
 
+def addRecruitPending(rlv2_data: dict, choice: str):
+    pending_index = getNextPendingIndex(rlv2_data)
+    rlv2_data["current"]["player"]["pending"].insert(
+        0, {
+            "index": pending_index,
+            "type": "RECRUIT",
+            "content": {
+                    "recruit": {
+                        "ticket": choice
+                    }
+            }
+        }
+    )
+
+def addTotem(rlv2_data: dict, item: str, enchantment: str = None):
+    index = getNextTotemIndex(rlv2_data)
+    ts = time()
+    rlv2_data["current"]["module"]["totem"]["totemPiece"].append(
+        {
+            "id": item,
+            "index": index,
+            "used": False,
+            "ts": ts,
+            "affix": enchantment
+        }
+    )
+    
+def addRelic(rlv2_data: dict, item: str):
+    index = getNextRelicIndex(rlv2_data)
+    ts = time()
+    rlv2_data["current"]["inventory"]["relic"][index] = {
+            "id": item,
+            "index": index,
+            "count": 1,
+            "ts": ts
+    }
+
+def removeTotem(rlv2_data: dict, index: str):
+    rlv2_data["current"]["module"]["totem"]["totemPiece"][int(index[2:]) - 1]["used"] = True
+
+
 def getNextTicketIndex(rlv2_data: dict):
     d = set()
     for e in rlv2_data["current"]["inventory"]["recruit"]:
@@ -506,6 +550,9 @@ def getNextTicketIndex(rlv2_data: dict):
         i += 1
     return f"t_{i}"
 
+def getNextRelicIndex(rlv2_data: dict):
+    return f"r_{len(rlv2_data["current"]["inventory"]["relic"])}"
+
 def getNextPendingIndex(rlv2_data: dict):
     d = set()
     for e in rlv2_data["current"]["player"]["pending"]:
@@ -514,6 +561,15 @@ def getNextPendingIndex(rlv2_data: dict):
     while i in d:
         i += 1
     return f"e_{i}"
+
+def getNextTotemIndex(rlv2_data: dict):
+    d = set()
+    for e in rlv2_data["current"]["player"]["pending"]:
+        d.add(int(e["index"][2:]))
+    i = 0
+    while i in d:
+        i += 1
+    return f"t_{i}"
 
 def getNextCharId(rlv2):
     i = 0

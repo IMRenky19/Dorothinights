@@ -10,18 +10,7 @@ ts = time()
 
 async def activeRecruitTicket(rogueClass: RogueBasicModel, choice: str):
     rlv2_data = getRogueData(rogueClass)
-    pending_index = getNextPendingIndex(rlv2_data)
-    rlv2_data["current"]["player"]["pending"].insert(
-        0, {
-            "index": pending_index,
-            "type": "RECRUIT",
-            "content": {
-                    "recruit": {
-                        "ticket": choice
-                    }
-            }
-        }
-    )
+    addRecruitPending(rlv2_data, choice)
 
     chars = await getChars(rogueClass, [rlv2_data["current"]["inventory"]["recruit"][choice]["id"].split("_")[4]], rogueClass.secret)
     rlv2_data["current"]["inventory"]["recruit"][choice]["state"] = 1

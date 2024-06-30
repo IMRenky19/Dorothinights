@@ -17,7 +17,7 @@ from server.constants import CONFIG_PATH
 from time import time
 from ...utils.rogueHandler.rogue_3 import createGame, chooseInitialRelic, chooseInitialRecruitSet, \
     selectChoice, activeRecruitTicket, recruitChar, finishEvent, \
-        moveAndBattleStart, battleFinish, finishBattleReward
+        moveAndBattleStart, battleFinish, finishBattleReward, chooseBattleReward
 
 
 session_config = AsyncSessionConfig(expire_on_commit=False)
@@ -154,6 +154,15 @@ async def rogueFinishBattleReward(secret: str):
     account = await getAccountBySecret(secret)
     async with config.get_session() as session:
         await finishBattleReward.finishBattleReward(new_rogue)
+        session.add(new_rogue)
+        await session.commit()
+    return new_rogue
+
+async def rogueChooseBattleReward(secret: str, index: int, sub: int):
+    config = await get_sqlalchemy_config()
+    new_rogue = await getRogueBySecret(secret)
+    async with config.get_session() as session:
+        await chooseBattleReward.chooseBattleReward(new_rogue, index, sub)
         session.add(new_rogue)
         await session.commit()
     return new_rogue

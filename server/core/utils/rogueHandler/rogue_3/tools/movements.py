@@ -90,7 +90,10 @@ def moveTo(rlv2_data: dict, rlv2_extension: dict, position: dict, zone: int):
             "position": position
         }
     )
-    print(rlv2_extension["battlePool"])
+    posIndex = f"{position["x"]}0{position["y"]}" if position["x"] != 0 else f"{position["y"]}"
+    #print(rlv2_extension["battlePool"])
+    #rlv2_data["current"]["map"]["zones"][str(zone)]["nodes"][posIndex]["visibility"] = 0
+    #rlv2_data["current"]["map"]["zones"][str(zone)]["nodes"][posIndex]["type"] = rlv2_data["current"]["map"]["zones"][str(zone)]["nodes"][posIndex]["realNodeType"]
     rlv2_data["current"]["map"]["zones"].update(
         battleGenerator(
             visionGenerator(

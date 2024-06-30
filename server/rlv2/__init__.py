@@ -2,7 +2,7 @@ from .activeRecruitTicket import activeRecruitTicket
 #from .bankWithdraw import bankWithdraw
 from .battleFinish import battleFinish
 #from .buyGoods import buyGoods
-#from .chooseBattleReward import chooseBattleReward
+from .chooseBattleReward import chooseBattleReward
 from .chooseInitialRecruitSet import chooseInitialRecruitSet
 from .chooseInitialRelic import chooseInitialRelic
 #from .confirmPredict import confirmPredict
@@ -31,7 +31,7 @@ router = Router(
         #bankWithdraw,
         battleFinish,
         #buyGoods,
-        #chooseBattleReward,
+        chooseBattleReward,
         chooseInitialRecruitSet,
         chooseInitialRelic,
         #confirmPredict,

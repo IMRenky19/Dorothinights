@@ -1,5 +1,5 @@
 from sqlalchemy.pool import Pool
-from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_ROUTE_PATH
+from server.constants import ROGUE_RELIC_POOL_PATH, ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_ROUTE_PATH
 from random import shuffle, randint, sample, random, choice
 from server.core.utils.json import read_json
 
@@ -9,6 +9,7 @@ from server.core.utils.rogueHandler.rogue_3.tools.map import NodeType
 from ..tools.rlv2tools import *
 
 rogueTable: dict = read_json(ROGUELIKE_TOPIC_EXCEL_PATH)
+roguePoolTable = read_json(ROGUE_RELIC_POOL_PATH)
 
 
 ZONE_1_NORMAL_BATTLE_POOL = [
@@ -119,9 +120,11 @@ def battleGenerator(mapData: dict, zone: int, pool: list, currentPosition: dict 
         for node_position, node in mapData[str(zone)]["nodes"].items():
             if node["pos"]["x"] == 0 and (not node["stage"]):
                 if node["realNodeType"] == NodeType.NORMAL_BATTLE:
+                    node["type"] = NodeType.NORMAL_BATTLE
                     node["stage"] = pool.pop()
                     pool.insert(0, node["stage"])
                 elif node["realNodeType"] == NodeType.ELITE_BATTLE:
+                    node["type"] = NodeType.ELITE_BATTLE
                     node["stage"] = pool.pop().replace("ro3_n_", "ro3_e_")
                     pool.insert(0, node["stage"].replace("ro3_e_", "ro3_n_"))
         shuffle(pool)
@@ -141,6 +144,7 @@ def battleGenerator(mapData: dict, zone: int, pool: list, currentPosition: dict 
                 #print(int(node["realNodeType"]) == NodeType.ELITE_BATTLE)
                 #print(int(node["realNodeType"]) == NodeType.NORMAL_BATTLE)
                 if node["realNodeType"] == NodeType.NORMAL_BATTLE:
+                    node["type"] = NodeType.NORMAL_BATTLE
                     if (currentNode["realNodeType"] == NodeType.NORMAL_BATTLE) or (currentNode["realNodeType"] == NodeType.ELITE_BATTLE):
                         pool.insert(0,pool.pop(pool.index(currentNode["stage"].replace("ro3_e_", "ro3_n_"))))
                     #print(pool)
@@ -149,6 +153,7 @@ def battleGenerator(mapData: dict, zone: int, pool: list, currentPosition: dict 
                     #print(pool)
                     pool.insert(0, node["stage"])
                 elif node["realNodeType"] == NodeType.ELITE_BATTLE:
+                    node["type"] = NodeType.ELITE_BATTLE
                     if (currentNode["realNodeType"] == NodeType.NORMAL_BATTLE) or (currentNode["realNodeType"] == NodeType.ELITE_BATTLE):
                         pool.insert(0,pool.pop(pool.index(currentNode["stage"].replace("ro3_e_", "ro3_n_"))))
                     #print(pool)
@@ -497,17 +502,7 @@ def getBattleBuffs(rogueData: dict, rogueExtension: dict) -> dict:
             ),
             # 9
             (
-                [
-                    {
-                        "key": "level_char_limit_add",
-                        "blackboard": [
-                            {
-                                "key": "value",
-                                "value": -1
-                            }
-                        ]
-                    },
-                ], []
+                [], []
             ),
             # 10
             (
@@ -1213,17 +1208,22 @@ def generateBattleRewardPending(rogueData: dict, rogueExtension: dict, stageName
         pass
         #TODO:罗德岛战术电台
     
-    pending["content"]["battleReward"]["rewards"] = generateBattleRewards(stageName, isElite, isBoss, gainGold, chestInfo, ticketCount)
-    pending["content"]["battleReward"]["show"] = len(pending["content"]["battleReward"]["rewards"])
+    pending["content"]["battleReward"]["rewards"] = generateBattleRewards(stageName, isElite, isBoss, gainGold, chestInfo, ticketCount, rogueExtension, rogueData["current"]["inventory"]["relic"])
+    pending["content"]["battleReward"]["show"] = randint(0, len(rogueData["current"]["troop"]["chars"]) - 1)
     addShield(rogueData, gainShield)
     addHp(rogueData, -damageHp)
     return pending
 
 
 
-def generateBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int, chestInfo: dict, ticketCount = 1) -> list:
+def generateBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int, chestInfo: dict, ticketCount = 1, rogueExtension: dict = {}, hasRelicInfo: dict = {}) -> list:
     index = 0
     rewards = []
+    #TODO:根据是否在树洞更改部分资源掉落概率
+    lifeChance = 0.05
+    visionChance = 0.12
+    totemChance = 0.8 if isElite else 0.4
+    relicChance = 0.05 if isElite else 1.0
     #掉落顺序1：原石锭
     rewards.append(
         {
@@ -1292,7 +1292,25 @@ def generateBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int
             index += 1
             
     #TODO 掉落顺序2：藏品
-    #TODO 掉落顺序3：招募券
+    #TODO 根据难度不同进阶部分藏品，部分藏品的即时效果生效（chooseBattleReward）
+    if random() < relicChance:
+        hasRelic = [x["id"] for x in hasRelicInfo.values()]
+        relics = [i for i in roguePoolTable["rogue_3"]["battleRelicPool"] if not (i in hasRelic)]
+        rewards.append(
+            {
+                "index": index,
+                "items":[
+                    {
+                        "sub": 0,
+                        "id": relics.pop(randint(0,len(relics) - 1)),
+                        "count":1
+                    }
+                ],
+                "done": 0
+                }
+            )
+        index += 1
+    #掉落顺序3：招募券
     if isElite:
         upgradeChance = 0.5
     if isBoss:
@@ -1313,15 +1331,130 @@ def generateBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int
                 "count": 1
             }
         )
+    
     generateTickets(ticketBaseObject, upgradeChance)
     rewards.append(ticketBaseObject)
+    index += 1
     #TODO 掉落顺序4：生命值
-    #TODO 掉落顺序5：密文版
+    if random() < lifeChance:
+        rewards.append(
+            {
+                "index": index,
+                "items":[
+                    {
+                        "sub": 0,
+                        "id": "rogue_3_hp",
+                        "count":1
+                    }
+                ],
+                "done": 0
+                }
+            )
+        index += 1
+    #TODO 掉落顺序5：抗干扰指数
+    if random() < visionChance:
+        rewards.append(
+            {
+                "index": index,
+                "items":[
+                    {
+                        "sub": 0,
+                        "id": "rogue_3_vision",
+                        "count":1
+                    }
+                ],
+                "done": 0
+                }
+            )
+        index += 1
+    #TODO 掉落顺序6：密文版
+    #TODO 修辞
+    if random() < totemChance:
+        totemAmount = 2 if rogueExtension else 1
+        totemItems = []
+        totemPool = roguePoolTable["rogue_3"]["totemAll"]
+        for i in range(totemAmount):
+            shuffle(totemPool)
+            totemItems.append(
+                {
+                    "sub": i,
+                    "id": totemPool.pop(),
+                    "count": 1
+                }
+            )
+        rewards.append(
+            {
+                "index": index,
+                "items":totemItems,
+                "done": 0
+                }
+            )
+        index += 1
     return rewards
         
 
-def gainItems(rogueData: dict, index: int, subIndex: int):
-    pass
+def gainItemsAfterBattle(rogueData: dict, index: int, subIndex: int):
+    #TODO 招募券以及典训藏品的激活，部分加携带/生命值/护盾/希望等等的资源增加，部分藏品的特殊效果（密信系列的招募减希望/直升，和坍缩值/指挥经验相关机制，叠层藏品）
+    battleRewardsPending = rogueData["current"]["player"]["pending"]
+    itemType: str = battleRewardsPending[0]["content"]["battleReward"]["rewards"][index]["items"][subIndex]["id"]
+    itemCount = battleRewardsPending[0]["content"]["battleReward"]["rewards"][index]["items"][subIndex]["count"]
+    item = battleRewardsPending[0]["content"]["battleReward"]["rewards"][index]
+    match itemType:
+        case itemType if itemType.find("gold") != -1:
+            gainItem(rogueData, "gold", itemCount)
+            item["done"] = 1
+        case itemType if itemType.find("recruit_ticket") != -1:
+            gainItem(rogueData, "recruit_ticket", itemCount, itemType)
+            item["done"] = 1
+        case itemType if itemType.find("totem") != -1:
+            gainItem(rogueData, "totem", itemCount, itemType)
+            item["done"] = 1
+        case itemType if itemType.find("vision") != -1:
+            gainItem(rogueData, "vision", itemCount)
+            item["done"] = 1
+        case itemType if itemType.find("relic") != -1:
+            gainItem(rogueData, "relic", itemCount, itemType)
+            item["done"] = 1
+        case itemType if itemType.find("shield") != -1:
+            gainItem(rogueData, "shield", itemCount)
+            item["done"] = 1
+        case itemType if itemType.find("population") != -1:
+            gainItem(rogueData, "population", itemCount)
+            item["done"] = 1
+        case itemType if itemType.find("explore_tool") != -1:     #深入调查
+            gainItem(rogueData, "explore_tool", itemCount)
+            item["done"] = 1
+        case itemType if itemType.find("active_tool") != -1:        #支援装置       
+            gainItem(rogueData, "active_tool", itemCount)
+            item["done"] = 1
+        case itemType if itemType.find("rogue_3_hp") != -1:              
+            gainItem(rogueData, "hp", itemCount)
+            item["done"] = 1
+        
+def gainItem(rogueData: dict, itemType: str, amount: int, item = None):
+    match itemType:
+        case "gold":
+            addGold(rogueData, amount)
+        case "recruit_ticket":
+            #activeTicket(rogueData, item)
+            pass
+        case "totem":
+            addTotem(rogueData, item)
+        case "vision":
+            addVision(rogueData, amount)
+        case "relic":
+            addRelic(rogueData, item)
+        case "shield":
+            addShield(rogueData, amount)
+        case "population":
+            addPopulation(rogueData, amount)
+        case "hp":
+            addHp(rogueData, amount)
+        case "explore_tool":     #深入调查
+            pass
+        case "active_tool":        #支援装置       
+            pass
+            
     
 def generateTickets(ticketBaseObject: dict, upgradeChance: float):
     ticketPool = [

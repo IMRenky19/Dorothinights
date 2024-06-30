@@ -1,6 +1,7 @@
 
 
 ROGUELIKE_TOPIC_EXCEL_PATH = "D:\\Dorothinights\\excel\\roguelike_topic_table.json"
+ROGUELIKE_RELIC_POOL_PATH = "D:\\Dorothinights\\config\\rlv2RelicPools.json"
 import json
 
 def read_json(filepath: str, **args) -> dict:
@@ -15,6 +16,7 @@ def write_json(data: dict, filepath: str) -> None:
         
 
 rogueTable = read_json(ROGUELIKE_TOPIC_EXCEL_PATH)["details"]["rogue_3"]["items"]
+beforeProcessingRelicPool = read_json(ROGUELIKE_RELIC_POOL_PATH)
 
 legacyRelic = []
 resRelic = []
@@ -77,7 +79,22 @@ write_json(
         "4": relic_4,
         "8": relic_8,
         "12": relic_12,
-        "16": relic_16
+        "16": relic_16,
+        
     },
     "D:\\tmp.json"
 )
+
+relicAll = [name for name in rogueTable.keys() if name.find("relic") != -1 or name.find("active_tool") != -1]
+finals = {}
+for name,i in beforeProcessingRelicPool["rogue_3"].items():
+    finals[f"{name}"] = []
+    if i["mode"] == "blackList":
+        for item2 in relicAll:
+            if not(item2 in i["pool"]):
+                finals[f"{name}"].append(item2)
+    else:
+        finals[f"{name}"] = i["pool"]
+write_json({
+        "rogue_3": finals
+}, "D:\\finals.json")
