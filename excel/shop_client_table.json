@@ -18106,6 +18106,102 @@
       }
     },
     {
+      "tagId": "tag_523",
+      "displayType": "block_1",
+      "tagName": "伙伴留念组合包",
+      "itemTag": "DEADLINE",
+      "orderNum": 2001,
+      "startDatetime": 1718870400,
+      "endDatetime": 1720036799,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag523_a",
+              "slotIndex": 0,
+              "cmd": "GIFTPACKAGE",
+              "param1": "GP_Once_180",
+              "param2": null,
+              "skinId": ""
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_523",
+        "text": "博士，快来看看！干员们和三丽鸥伙伴们一起拍了好多大头贴，一看就很有收藏价值！"
+      },
+      "templateType": "DEFAULT",
+      "templateParam": null
+    },
+    {
+      "tagId": "tag_524",
+      "displayType": "block_1",
+      "tagName": "友谊纪念组合包",
+      "itemTag": "DEADLINE",
+      "orderNum": 2002,
+      "startDatetime": 1718870400,
+      "endDatetime": 1720036799,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag524_a",
+              "slotIndex": 0,
+              "cmd": "GIFTPACKAGE",
+              "param1": "GP_Once_181",
+              "param2": null,
+              "skinId": ""
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_524",
+        "text": "博士，快来看看！干员们和三丽鸥伙伴们一起拍了好多大头贴，一看就很有收藏价值！"
+      },
+      "templateType": "DEFAULT",
+      "templateParam": null
+    },
+    {
+      "tagId": "tag_525",
+      "displayType": "block_1",
+      "tagName": "甜蜜派对组合包",
+      "itemTag": "DEADLINE",
+      "orderNum": 2003,
+      "startDatetime": 1718870400,
+      "endDatetime": 1720036799,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag525_a",
+              "slotIndex": 0,
+              "cmd": "GIFTPACKAGE",
+              "param1": "GP_Once_182",
+              "param2": null,
+              "skinId": ""
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_525",
+        "text": "难得见到这样温馨可爱的装饰。博士，在大家冲进来胡闹之前，要不要先拍张照留个纪念？"
+      },
+      "templateType": "DEFAULT",
+      "templateParam": null
+    },
+    {
       "tagId": "tag_526",
       "displayType": "block_1_4",
       "tagName": "近卫芯片礼包",
@@ -18396,6 +18492,184 @@
       }
     },
     {
+      "tagId": "tag_527",
+      "displayType": "block_1",
+      "tagName": "三丽鸥家族",
+      "itemTag": "DEADLINE",
+      "orderNum": 1001,
+      "startDatetime": 1718870400,
+      "endDatetime": 1720036799,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag527_a",
+              "slotIndex": 0,
+              "cmd": "SKINSHOP",
+              "param1": null,
+              "param2": null,
+              "skinId": null
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_527",
+        "text": "这次与三丽鸥家族联动的衣服不仅非常可爱，还特别有生活气息，感觉穿上就可以忘记烦恼！可不能错过呀博士！"
+      },
+      "templateType": "DEFAULT",
+      "templateParam": null
+    },
+    {
+      "tagId": "tag_528",
+      "displayType": "block_1_1",
+      "tagName": "成就之星/II",
+      "itemTag": "DEADLINE",
+      "orderNum": 1012,
+      "startDatetime": 1718870400,
+      "endDatetime": 1720036799,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag528_a",
+              "slotIndex": 0,
+              "cmd": "SKINSHOP",
+              "param1": null,
+              "param2": null,
+              "skinId": null
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_528",
+        "text": "别处都是买典藏版游戏送衣服，我这里可是买衣服送典藏版游戏哦，至于价格嘛......是一样的。"
+      },
+      "templateType": "NORSKIN",
+      "templateParam": {
+        "normalGiftParam": null,
+        "normalSkinParam": {
+          "showStartTs": 1718870400,
+          "showEndTs": 1720036799,
+          "skinIds": [
+            "char_346_aosta@game#2",
+            "char_420_flamtl@game#2",
+            "char_478_kirara@game#2"
+          ],
+          "skinGroupName": "成就之星/II",
+          "brandIconId": "game",
+          "colorBack": "b3d7e8",
+          "colorText": "212121",
+          "text": "时装限时复刻"
+        },
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_529",
+      "displayType": "block_1_1",
+      "tagName": "生命之地/VIII",
+      "itemTag": "DEADLINE",
+      "orderNum": 1011,
+      "startDatetime": 1718870400,
+      "endDatetime": 1720036799,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag529_a",
+              "slotIndex": 0,
+              "cmd": "SKINSHOP",
+              "param1": null,
+              "param2": null,
+              "skinId": null
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_529",
+        "text": "车尔尼先生马上就要出远门了，这可是送他礼物的好机会，博士一定不会错过吧？"
+      },
+      "templateType": "NORSKIN",
+      "templateParam": {
+        "normalGiftParam": null,
+        "normalSkinParam": {
+          "showStartTs": 1718870400,
+          "showEndTs": 1720036799,
+          "skinIds": [
+            "char_4047_pianst@wild#8"
+          ],
+          "skinGroupName": "生命之地/VIII",
+          "brandIconId": "wild",
+          "colorBack": "dc7648",
+          "colorText": "212121",
+          "text": "时装限时复刻"
+        },
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_530",
+      "displayType": "block_1_1",
+      "tagName": "罗德厨房/II",
+      "itemTag": "DEADLINE",
+      "orderNum": 1002,
+      "startDatetime": 1719302400,
+      "endDatetime": 1720468799,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag530_a",
+              "slotIndex": 0,
+              "cmd": "SKINSHOP",
+              "param1": null,
+              "param2": null,
+              "skinId": null
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_530",
+        "text": "隐现要奉上在拉特兰甜品比赛中夺冠的甜点了，博士一定和我一样期待吧？"
+      },
+      "templateType": "NORSKIN",
+      "templateParam": {
+        "normalGiftParam": null,
+        "normalSkinParam": {
+          "showStartTs": 1719302400,
+          "showEndTs": 1720468799,
+          "skinIds": [
+            "char_498_inside@kitchen#2"
+          ],
+          "skinGroupName": "罗德厨房/II",
+          "brandIconId": "kitchen",
+          "colorBack": "f0afb0",
+          "colorText": "212121",
+          "text": "时装限时上架"
+        },
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
       "tagId": "tag_531",
       "displayType": "block_1_3",
       "tagName": "深海猎人实验室",
@@ -18438,6 +18712,484 @@
           "colorBack": "#e6e8e6",
           "colorText": "313131",
           "actId": "act34side"
+        },
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_532",
+      "displayType": "block_1_3",
+      "tagName": "安布罗修休息室",
+      "itemTag": "DEADLINE",
+      "orderNum": 3011,
+      "startDatetime": 1719302400,
+      "endDatetime": 1720468799,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag532_a",
+              "slotIndex": 0,
+              "cmd": "FURNSHOP",
+              "param1": "LAbbey_2023",
+              "param2": null,
+              "skinId": ""
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_532",
+        "text": "这教宗坐过的椅子，圣徒摸过的石头，哪个单卖不能换笔大钱？现在这些好东西加起来也就收你个工本费，我够意思吧！"
+      },
+      "templateType": "NORFURN",
+      "templateParam": {
+        "normalGiftParam": null,
+        "normalSkinParam": null,
+        "normalFurnParam": {
+          "showStartTs": 1719302400,
+          "showEndTs": 1720468799,
+          "furnPackId": "furni_set_LAbbey",
+          "isNew": false,
+          "isPackSell": false,
+          "count": 4,
+          "colorBack": "#c0beb9",
+          "colorText": "313131",
+          "actId": "act26side"
+        },
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_535",
+      "displayType": "block_1_4",
+      "tagName": "术师芯片礼包",
+      "itemTag": "DEADLINE",
+      "orderNum": 2105,
+      "startDatetime": 1720497600,
+      "endDatetime": 1721678399,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag535_a",
+              "slotIndex": 0,
+              "cmd": "GIFTPACKAGE",
+              "param1": "GP_Once_185",
+              "param2": null,
+              "skinId": ""
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_535",
+        "text": "考虑到几位干员对物资的特殊需求，采购部特别置办了一些优惠物资。限时限量，过期不候哦！"
+      },
+      "templateType": "NORGIFT",
+      "templateParam": {
+        "normalGiftParam": {
+          "showStartTs": 1720512000,
+          "showEndTs": 1721678399,
+          "goodId": "GP_Once_185",
+          "giftPackageName": "术师芯片礼包",
+          "price": 30,
+          "logoId": "CHIPS",
+          "color": "ffd130",
+          "haveMark": false,
+          "availCount": 1
+        },
+        "normalSkinParam": null,
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_536",
+      "displayType": "block_1_4",
+      "tagName": "炉火温存组合包",
+      "itemTag": "DEADLINE",
+      "orderNum": 2101,
+      "startDatetime": 1720497600,
+      "endDatetime": 1722283199,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag536_a",
+              "slotIndex": 0,
+              "cmd": "GIFTPACKAGE",
+              "param1": "GP_Once_186",
+              "param2": null,
+              "skinId": ""
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_536",
+        "text": "这都是我从卡兹戴尔带来的货品哦，渠道可靠！"
+      },
+      "templateType": "NORGIFT",
+      "templateParam": {
+        "normalGiftParam": {
+          "showStartTs": 1720512000,
+          "showEndTs": 1722283199,
+          "goodId": "GP_Once_186",
+          "giftPackageName": "炉火温存组合包",
+          "price": 68,
+          "logoId": "NORMAL",
+          "color": "ffd130",
+          "haveMark": false,
+          "availCount": 1
+        },
+        "normalSkinParam": null,
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_537",
+      "displayType": "block_1_4",
+      "tagName": "镜影幻惑组合包",
+      "itemTag": "DEADLINE",
+      "orderNum": 2102,
+      "startDatetime": 1720497600,
+      "endDatetime": 1722283199,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag537_a",
+              "slotIndex": 0,
+              "cmd": "GIFTPACKAGE",
+              "param1": "GP_Once_187",
+              "param2": null,
+              "skinId": ""
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_537",
+        "text": "这都是我从卡兹戴尔带来的货品哦，渠道可靠！"
+      },
+      "templateType": "NORGIFT",
+      "templateParam": {
+        "normalGiftParam": {
+          "showStartTs": 1720512000,
+          "showEndTs": 1722283199,
+          "goodId": "GP_Once_187",
+          "giftPackageName": "镜影幻惑组合包",
+          "price": 168,
+          "logoId": "NORMAL",
+          "color": "ffd130",
+          "haveMark": false,
+          "availCount": 1
+        },
+        "normalSkinParam": null,
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_538",
+      "displayType": "block_1_4",
+      "tagName": "集成战略数据包",
+      "itemTag": "DEADLINE",
+      "orderNum": 2103,
+      "startDatetime": 1720497600,
+      "endDatetime": 1722283199,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag538_a",
+              "slotIndex": 0,
+              "cmd": "GIFTPACKAGE",
+              "param1": "GP_Once_188",
+              "param2": null,
+              "skinId": ""
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_538",
+        "text": "这些是采购部特意为博士准备的组合包！快收下吧！虽然说是采购部的组合包，但这也是要动用预算经费的。"
+      },
+      "templateType": "NORGIFT",
+      "templateParam": {
+        "normalGiftParam": {
+          "showStartTs": 1720512000,
+          "showEndTs": 1722283199,
+          "goodId": "GP_Once_188",
+          "giftPackageName": "集成战略数据包",
+          "price": 30,
+          "logoId": "NORMAL",
+          "color": "ffd130",
+          "haveMark": false,
+          "availCount": 1
+        },
+        "normalSkinParam": null,
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_539",
+      "displayType": "block_1_4",
+      "tagName": "集成战略数据整合箱",
+      "itemTag": "DEADLINE",
+      "orderNum": 2104,
+      "startDatetime": 1720497600,
+      "endDatetime": 1722283199,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag539_a",
+              "slotIndex": 0,
+              "cmd": "GIFTPACKAGE",
+              "param1": "GP_Once_189",
+              "param2": null,
+              "skinId": ""
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_539",
+        "text": "这些是采购部特意为博士准备的组合包！快收下吧！虽然说是采购部的组合包，但这也是要动用预算经费的。"
+      },
+      "templateType": "NORGIFT",
+      "templateParam": {
+        "normalGiftParam": {
+          "showStartTs": 1720512000,
+          "showEndTs": 1722283199,
+          "goodId": "GP_Once_189",
+          "giftPackageName": "集成战略数据整合箱",
+          "price": 68,
+          "logoId": "NORMAL",
+          "color": "ffd130",
+          "haveMark": false,
+          "availCount": 1
+        },
+        "normalSkinParam": null,
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_545",
+      "displayType": "block_1_1",
+      "tagName": "珊瑚海岸/XVII",
+      "itemTag": "DEADLINE",
+      "orderNum": 1001,
+      "startDatetime": 1720497600,
+      "endDatetime": 1722283199,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag545_a",
+              "slotIndex": 0,
+              "cmd": "SKINSHOP",
+              "param1": null,
+              "param2": null,
+              "skinId": null
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_545",
+        "text": "夏天来啦！别考虑太多，换身新衣服好不好？"
+      },
+      "templateType": "NORSKIN",
+      "templateParam": {
+        "normalGiftParam": null,
+        "normalSkinParam": {
+          "showStartTs": 1720512000,
+          "showEndTs": 1722283199,
+          "skinIds": [
+            "char_4062_totter@summer#17",
+            "char_1020_reed2@summer#17",
+            "char_4032_provs@summer#17",
+            "char_2012_typhon@summer#17"
+          ],
+          "skinGroupName": "珊瑚海岸/XVII",
+          "brandIconId": "summer",
+          "colorBack": "8eb1d1",
+          "colorText": "ececec",
+          "text": "时装限时上架"
+        },
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_546",
+      "displayType": "block_1_1",
+      "tagName": "时代/XXV",
+      "itemTag": "DEADLINE",
+      "orderNum": 1002,
+      "startDatetime": 1720497600,
+      "endDatetime": 1721678399,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag546_a",
+              "slotIndex": 0,
+              "cmd": "SKINSHOP",
+              "param1": null,
+              "param2": null,
+              "skinId": null
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_546",
+        "text": "哦……她经常去实验室，衣服容易脏啊……那这样，我随衣服送个九九折干洗券吧，可以用三次，要珍惜哦。"
+      },
+      "templateType": "NORSKIN",
+      "templateParam": {
+        "normalGiftParam": null,
+        "normalSkinParam": {
+          "showStartTs": 1720512000,
+          "showEndTs": 1721678399,
+          "skinIds": [
+            "char_135_halo@epoque#25"
+          ],
+          "skinGroupName": "时代/XXV",
+          "brandIconId": "epoque",
+          "colorBack": "3898f1",
+          "colorText": "212121",
+          "text": "时装限时复刻"
+        },
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_547",
+      "displayType": "block_1_1",
+      "tagName": "珊瑚海岸/XI",
+      "itemTag": "DEADLINE",
+      "orderNum": 1003,
+      "startDatetime": 1720497600,
+      "endDatetime": 1721678399,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag547_a",
+              "slotIndex": 0,
+              "cmd": "SKINSHOP",
+              "param1": null,
+              "param2": null,
+              "skinId": null
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_547",
+        "text": "夏天来啦！别考虑太多，换身新衣服好不好？"
+      },
+      "templateType": "NORSKIN",
+      "templateParam": {
+        "normalGiftParam": null,
+        "normalSkinParam": {
+          "showStartTs": 1720512000,
+          "showEndTs": 1721678399,
+          "skinIds": [
+            "char_479_sleach@summer#11",
+            "char_344_beewax@summer#11",
+            "char_4072_ironmn@summer#11"
+          ],
+          "skinGroupName": "珊瑚海岸/XI",
+          "brandIconId": "summer",
+          "colorBack": "96f2f6",
+          "colorText": "212121",
+          "text": "时装限时复刻"
+        },
+        "normalFurnParam": null,
+        "returnSkinParam": null
+      }
+    },
+    {
+      "tagId": "tag_549",
+      "displayType": "block_1_3",
+      "tagName": "心像空间",
+      "itemTag": "DEADLINE",
+      "orderNum": 4001,
+      "startDatetime": 1720497600,
+      "endDatetime": 1721678399,
+      "groupList": [
+        {
+          "recommendGroup": [
+            1
+          ],
+          "dataList": [
+            {
+              "imgId": "tag549_a",
+              "slotIndex": 0,
+              "cmd": "FURNSHOP",
+              "param1": "mindsanctum_2024",
+              "param2": null,
+              "skinId": ""
+            }
+          ]
+        }
+      ],
+      "tagWord": {
+        "id": "tag_549",
+        "text": "听说与心理相关的东西是很有赚头的，所以我准备用这套设计来试试水。"
+      },
+      "templateType": "NORFURN",
+      "templateParam": {
+        "normalGiftParam": null,
+        "normalSkinParam": null,
+        "normalFurnParam": {
+          "showStartTs": 1720512000,
+          "showEndTs": 1721678399,
+          "furnPackId": "furni_set_mindsanctum",
+          "isNew": true,
+          "isPackSell": true,
+          "count": 0,
+          "colorBack": "#ff5288",
+          "colorText": "313131",
+          "actId": null
         },
         "returnSkinParam": null
       }
@@ -27245,6 +27997,50 @@
     {
       "items": [
         {
+          "spriteId": "shop_lmlee@sanrio#1",
+          "startTime": 1718870400,
+          "endTime": 1720036799,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_322_lmlee@sanrio#1",
+          "skinId": "char_322_lmlee@sanrio#1",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_gdglow@sanrio#1",
+          "startTime": 1718870400,
+          "endTime": 1720036799,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_377_gdglow@sanrio#1",
+          "skinId": "char_377_gdglow@sanrio#1",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_ulika@sanrio#1",
+          "startTime": 1718870400,
+          "endTime": 1720036799,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_4091_ulika@sanrio#1",
+          "skinId": "char_4091_ulika@sanrio#1",
+          "furniId": ""
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "spriteId": "shop_inside@kitchen#2",
+          "startTime": 1719302400,
+          "endTime": 1720468799,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_498_inside@kitchen#2",
+          "skinId": "char_498_inside@kitchen#2",
+          "furniId": ""
+        }
+      ]
+    },
+    {
+      "items": [
+        {
           "spriteId": "shop_grabds@yun#3",
           "startTime": 1717704000,
           "endTime": 1718913599,
@@ -27315,6 +28111,37 @@
     {
       "items": [
         {
+          "spriteId": "shop_Once_180",
+          "startTime": 1718870400,
+          "endTime": 1720036799,
+          "cmd": "GIFTPACKAGE",
+          "param1": "GP_Once_180",
+          "skinId": "",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_Once_181",
+          "startTime": 1718870400,
+          "endTime": 1720036799,
+          "cmd": "GIFTPACKAGE",
+          "param1": "GP_Once_181",
+          "skinId": "",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_Once_182",
+          "startTime": 1718870400,
+          "endTime": 1720036799,
+          "cmd": "GIFTPACKAGE",
+          "param1": "GP_Once_182",
+          "skinId": "",
+          "furniId": ""
+        }
+      ]
+    },
+    {
+      "items": [
+        {
           "spriteId": "shop_Once_183",
           "startTime": 1717560000,
           "endTime": 1718740799,
@@ -27341,24 +28168,144 @@
     {
       "items": [
         {
-          "spriteId": "shop_molKitchen_2023_r1",
-          "startTime": 1716537600,
-          "endTime": 1717703999,
-          "cmd": "FURNSHOP",
-          "param1": "molKitchen_2023",
-          "skinId": "",
-          "furniId": null
+          "spriteId": "shop_reed2_summer#17",
+          "startTime": 1720497600,
+          "endTime": 1722283199,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_1020_reed2@summer#17",
+          "skinId": "char_1020_reed2@summer#17",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_typhon_summer#17",
+          "startTime": 1720497600,
+          "endTime": 1722283199,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_2012_typhon@summer#17",
+          "skinId": "char_2012_typhon@summer#17",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_provs_summer#17",
+          "startTime": 1720497600,
+          "endTime": 1722283199,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_4032_provs@summer#17",
+          "skinId": "char_4032_provs@summer#17",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_totter_summer#17",
+          "startTime": 1720497600,
+          "endTime": 1722283199,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_4062_totter@summer#17",
+          "skinId": "char_4062_totter@summer#17",
+          "furniId": ""
         }
       ]
     },
     {
       "items": [
         {
-          "spriteId": "shop_cultureroom_2023_r1",
-          "startTime": 1716537600,
-          "endTime": 1717703999,
+          "spriteId": "shop_halo_epoque#25_r1",
+          "startTime": 1720497600,
+          "endTime": 1721678399,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_135_halo@epoque#25_r1",
+          "skinId": "char_135_halo@epoque#25",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_sleach_summer#11_r1",
+          "startTime": 1720497600,
+          "endTime": 1721678399,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_479_sleach@summer#11_r1",
+          "skinId": "char_479_sleach@summer#11",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_ironmn_summer#11_r1",
+          "startTime": 1720497600,
+          "endTime": 1721678399,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_4072_ironmn@summer#11_r1",
+          "skinId": "char_4072_ironmn@summer#11",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_beewax_summer#11_r1",
+          "startTime": 1720497600,
+          "endTime": 1721678399,
+          "cmd": "SKINSHOP",
+          "param1": "SS_char_344_beewax@summer#11_r1",
+          "skinId": "char_344_beewax@summer#11",
+          "furniId": ""
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "spriteId": "shop_Once_188",
+          "startTime": 1720497600,
+          "endTime": 1722283199,
+          "cmd": "GIFTPACKAGE",
+          "param1": "GP_Once_188",
+          "skinId": "",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_Once_189",
+          "startTime": 1720497600,
+          "endTime": 1722283199,
+          "cmd": "GIFTPACKAGE",
+          "param1": "GP_Once_189",
+          "skinId": "",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_Once_186",
+          "startTime": 1720497600,
+          "endTime": 1722283199,
+          "cmd": "GIFTPACKAGE",
+          "param1": "GP_Once_186",
+          "skinId": "",
+          "furniId": ""
+        },
+        {
+          "spriteId": "shop_Once_187",
+          "startTime": 1720497600,
+          "endTime": 1722283199,
+          "cmd": "GIFTPACKAGE",
+          "param1": "GP_Once_187",
+          "skinId": "",
+          "furniId": ""
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "spriteId": "shop_Once_185",
+          "startTime": 1720497600,
+          "endTime": 1721678399,
+          "cmd": "GIFTPACKAGE",
+          "param1": "GP_Once_185",
+          "skinId": "",
+          "furniId": ""
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "spriteId": "shop_mindsanctum_2024",
+          "startTime": 1720497600,
+          "endTime": 1721678399,
           "cmd": "FURNSHOP",
-          "param1": "cultureroom_2023",
+          "param1": "mindsanctum_2024",
           "skinId": "",
           "furniId": null
         }
@@ -27548,7 +28495,6 @@
     "GP_gM_68_M_3": "ALWAYS_UNLOCK",
     "GP_gM_69_M_1": "ALWAYS_UNLOCK",
     "GP_gM_69_M_2": "ALWAYS_UNLOCK",
-    "GP_gM_69_M_3": "ALWAYS_UNLOCK",
     "GP_gM_70_M_1": "ALWAYS_UNLOCK",
     "GP_gM_70_M_2": "ALWAYS_UNLOCK",
     "GP_gM_70_M_3": "ALWAYS_UNLOCK",
@@ -27876,6 +28822,16 @@
     "GP_Once_182": "ALWAYS_UNLOCK",
     "GP_Once_183": "ALWAYS_UNLOCK",
     "GP_Once_184": "ALWAYS_UNLOCK",
+    "GP_Once_185": "ALWAYS_UNLOCK",
+    "GP_Once_186": "ALWAYS_UNLOCK",
+    "GP_Once_187": "ALWAYS_UNLOCK",
+    "GP_Once_188": "ALWAYS_UNLOCK",
+    "GP_Once_189": "ALWAYS_UNLOCK",
+    "GP_Once_190": "ALWAYS_UNLOCK",
+    "GP_Once_191": "ALWAYS_UNLOCK",
+    "GP_Once_192": "ALWAYS_UNLOCK",
+    "GP_Once_193": "ALWAYS_UNLOCK",
+    "GP_Once_194": "ALWAYS_UNLOCK",
     "GP_NpOne_1": "ALWAYS_UNLOCK",
     "GP_NpOne_2": "ALWAYS_UNLOCK",
     "GP_NpOne_3": "ALWAYS_UNLOCK",
@@ -28153,11 +29109,6 @@
     "GP_gM_69_M_2": {
       "goodId": "GP_gM_69_M_2",
       "displayName": "每月芯片自选组合包",
-      "condTrigPackageType": "NONE"
-    },
-    "GP_gM_69_M_3": {
-      "goodId": "GP_gM_69_M_3",
-      "displayName": "每月材料自选组合包",
       "condTrigPackageType": "NONE"
     },
     "GP_gM_70_M_1": {
@@ -29793,6 +30744,56 @@
     "GP_Once_184": {
       "goodId": "GP_Once_184",
       "displayName": "沉甸甸的资金箱",
+      "condTrigPackageType": "NONE"
+    },
+    "GP_Once_185": {
+      "goodId": "GP_Once_185",
+      "displayName": "术师芯片礼包",
+      "condTrigPackageType": "NONE"
+    },
+    "GP_Once_186": {
+      "goodId": "GP_Once_186",
+      "displayName": "炉火温存组合包",
+      "condTrigPackageType": "NONE"
+    },
+    "GP_Once_187": {
+      "goodId": "GP_Once_187",
+      "displayName": "镜影幻惑组合包",
+      "condTrigPackageType": "NONE"
+    },
+    "GP_Once_188": {
+      "goodId": "GP_Once_188",
+      "displayName": "集成战略数据包",
+      "condTrigPackageType": "NONE"
+    },
+    "GP_Once_189": {
+      "goodId": "GP_Once_189",
+      "displayName": "集成战略数据整合箱",
+      "condTrigPackageType": "NONE"
+    },
+    "GP_Once_190": {
+      "goodId": "GP_Once_190",
+      "displayName": "中坚寻访组合包",
+      "condTrigPackageType": "NONE"
+    },
+    "GP_Once_191": {
+      "goodId": "GP_Once_191",
+      "displayName": "祈望梦人组合包",
+      "condTrigPackageType": "NONE"
+    },
+    "GP_Once_192": {
+      "goodId": "GP_Once_192",
+      "displayName": "坚韧行者组合包",
+      "condTrigPackageType": "NONE"
+    },
+    "GP_Once_193": {
+      "goodId": "GP_Once_193",
+      "displayName": "登阶遗君组合包",
+      "condTrigPackageType": "NONE"
+    },
+    "GP_Once_194": {
+      "goodId": "GP_Once_194",
+      "displayName": "☆超新星☆组合包",
       "condTrigPackageType": "NONE"
     },
     "GP_NpOne_1": {

@@ -1,26 +1,28 @@
 from .activeRecruitTicket import activeRecruitTicket
 #from .bankWithdraw import bankWithdraw
 from .battleFinish import battleFinish
-#from .buyGoods import buyGoods
+from .buyGoods import buyGoods
 from .chooseBattleReward import chooseBattleReward
 from .chooseInitialRecruitSet import chooseInitialRecruitSet
 from .chooseInitialRelic import chooseInitialRelic
 #from .confirmPredict import confirmPredict
 from .finishBattleReward import finishBattleReward
 from .finishEvent import finishEvent
-#from .gameSettle import gameSettle
+from .gameSettle import gameSettle
 #from .getTicketAssistList import getTicketAssistList
-#from .leaveShop import leaveShop
+from .leaveShop import leaveShop
 from .moveAndBattleStart import moveAndBattleStart
-#from .moveTo import moveTo
+from .moveTo import moveTo
 #from .readEndingChange import readEndingChange
 from .recruitChar import recruitChar
-#from .refreshShop import refreshShop
+from .refreshShop import refreshShop
+from .shopAction import shopAction
 from .selectChoice import selectChoice
 #from .shopBattleStart import shopBattleStart
 #from .useTotem import useTotem
 from .giveUpGame import giveUpGame
 from .createGame import createGame
+from .closeRecruitTicket import closeRecruitTicket
 
 from litestar import Router
 
@@ -30,25 +32,27 @@ router = Router(
         activeRecruitTicket,
         #bankWithdraw,
         battleFinish,
-        #buyGoods,
+        buyGoods,
         chooseBattleReward,
         chooseInitialRecruitSet,
         chooseInitialRelic,
+        closeRecruitTicket,
         #confirmPredict,
         finishBattleReward,
         finishEvent,
-        #gameSettle,
+        gameSettle,
         #getTicketAssistList,
-        #leaveShop,
+        leaveShop,
         moveAndBattleStart,
-        #moveTo,
+        moveTo,
         #readEndingChange,
         recruitChar,
-        #refreshShop,
+        refreshShop,
         selectChoice,
         #shopBattleStart,
         #useTotem,
         giveUpGame,
-        createGame
+        createGame,
+        shopAction
     ]
 )

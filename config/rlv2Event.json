@@ -1,0 +1,1363 @@
+{
+    "rogue_3": {
+        "Encounter": {
+            "enterScene": {
+                "scene_ro3_res1_enter": {
+                    "choices": {
+                        "choice_ro3_res1_1": {
+                            "nextScene": "scene_ro3_res1_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": 4
+                                }
+                            ]
+                        },
+                        "choice_ro3_res1_2": {
+                            "nextScene": "scene_ro3_res1_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_population",
+                                    "amount": 2
+                                }
+                            ]
+                        }
+                    },
+                    "zone": 1,
+                    "pullOut": null
+                },
+                "scene_ro3_res2_enter": {
+                    "choices": {
+                        "choice_ro3_res2_1": {
+                            "nextScene": "scene_ro3_res2_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "amount": 1
+                                }
+                            ]
+                        },
+                        "choice_ro3_res2_2": {
+                            "nextScene": "scene_ro3_res2_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_shield",
+                                    "amount": 3
+                                }
+                            ]
+                        }
+                    },
+                    "zone": 1,
+                    "pullOut": 3
+                    
+                },
+                "scene_ro3_res3_enter": {
+                    "choices": {
+                        "choice_ro3_res3_1": {
+                            "nextScene": "scene_ro3_res3_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_hp",
+                                    "amount": 3
+                                }
+                            ]
+                        },
+                        "choice_ro3_res3_2": {
+                            "nextScene": "scene_ro3_res3_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_hpmax",
+                                    "amount": 3
+                                }
+                            ]
+                        }
+                    },
+                    "zone": 1,
+                    "pullOut": 3
+                },
+                "scene_ro3_res4_enter": {
+                    "choices": {
+                        "choice_ro3_res4_1": {
+                            "nextScene": "scene_ro3_res4_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_population",
+                                    "amount": 2
+                                }
+                            ]
+                        },
+                        "choice_ro3_res4_2": {
+                            "nextScene": "scene_ro3_res4_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_population",
+                                    "amount": 4
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 3,
+                                    "appear": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_res4_3": {
+                            "nextScene": "scene_ro3_res4_3",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_relic_explore_6",
+                                    "amount": -1
+                                },
+                                {
+                                    "itemId": "rogue_3_population",
+                                    "amount": 15
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_relic_explore_6",
+                                    "condition": "have",
+                                    "amount": 1,
+                                    "appear": false
+                                }
+                            ]
+                        }
+                    },
+                    "zone": 1,
+                    "pullOut": 5
+                },
+                "scene_ro3_res5_enter": {
+                    "choices": {
+                        "choice_ro3_res5_1": {
+                            "nextScene": "scene_ro3_res5_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": 5
+                                },
+                                {
+                                    "itemId": "rogue_3_chaos",
+                                    "amount": 1
+                                }
+                            ]
+                        },
+                        "choice_ro3_res5_2": {
+                            "nextScene": "scene_ro3_res5_3",
+                            "gain": []
+                        },
+                        "choice_ro3_res5_3": {
+                            "nextScene": "scene_ro3_res5_1",
+                            "gain": []
+                        }
+                    },
+                    "zone": 1,
+                    "pullOut": 3
+                },
+                "scene_ro3_res3a_enter": {
+                    "choices": {
+                        "choice_ro3_res3a_6": {
+                            "nextScene": "scene_ro3_res3a_4",
+                            "gain": []
+                        },
+                        "choice_ro3_res3a_2": {
+                            "nextScene": "scene_ro3_res3a_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_hpmax",
+                                    "amount": [
+                                        6,
+                                        8
+                                    ]
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "is",
+                                    "amount": 0,
+                                    "appear": false
+                                }
+                            ]
+                        },
+                        "choice_ro3_res3a_3": {
+                            "nextScene": "scene_ro3_res3a_3",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_hp",
+                                    "amount": -3
+                                }
+                            ]
+                        },
+                        "choice_ro3_res3a_4": {
+                            "nextScene": "scene_ro3_res3a_1",
+                            "gain": [],
+                            "condition": [
+                                {
+                                    "itemId": "flag",
+                                    "flagId": "treeFlag",
+                                    "condition": "have",
+                                    "amount": 0,
+                                    "appear": false
+                                }
+                            ]
+                        }
+                    },
+                    "zone": [
+                        "passage",
+                        2
+                    ]
+                },
+                "scene_ro3_res5a_enter": {
+                    "choices": {
+                        "choice_ro3_res5a_1": {
+                            "nextScene": "scene_ro3_res5a_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_population",
+                                    "amount": -3
+                                },
+                                {
+                                    "itemId": "rogue_3_hp",
+                                    "amount": 4
+                                }
+                            ]
+                        },
+                        "choice_ro3_res5a_2": {
+                            "nextScene": "scene_ro3_res5a_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_relic_explore_6",
+                                    "amount": -1
+                                },
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "encounterAll",
+                                    "amount": 1,
+                                    "probShow": false
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_relic_explore_6",
+                                    "condition": "have",
+                                    "amount": 1,
+                                    "appear": false
+                                }
+                            ]
+                        },
+                        "choice_ro3_res5a_3": {
+                            "nextScene": "scene_ro3_res5a_3",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_chaos",
+                                    "amount": 4
+                                }
+                            ]
+                        }
+                    },
+                    "zone": [
+                        "passage",
+                        4
+                    ]
+                },
+                "scene_ro3_rec1_enter": {
+                    "choices": {
+                        "choice_ro3_rec1_1": {
+                            "nextScene": "scene_ro3_rec1_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": -2
+                                },
+                                {
+                                    "itemId": "randomRecruitTicketTeam",
+                                    "amount": 1
+                                }
+                            ]
+                        },
+                        "choice_ro3_rec1_2": {
+                            "nextScene": "scene_ro3_rec1_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": -4
+                                },
+                                {
+                                    "itemId": "randomRecruitTicketAll",
+                                    "amount": 1
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 2,
+                                    "appear": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_rec1_3": {
+                            "nextScene": "scene_ro3_rec1_3",
+                            "gain": []
+                        }
+                    },
+                    "zone": 2,
+                    "pullOut": 4
+                },
+                "scene_ro3_rec2_enter": {
+                    "choices": {
+                        "choice_ro3_rec2_1": {
+                            "nextScene": "scene_ro3_rec2_1",
+                            "gain": []
+                        },
+                        "choice_ro3_rec2_2": {
+                            "nextScene": "scene_ro3_rec2_2",
+                            "gain": [
+                                {
+                                    "itemId": "randomRecruitTicketAll",
+                                    "amount": 1
+                                }
+                            ]
+                        },
+                        "choice_ro3_rec2_3": {
+                            "nextScene": "scene_ro3_rec2_3",
+                            "gain": [
+                                {
+                                    "itemId": "randomRecruitTicketAll",
+                                    "amount": 1
+                                },
+                                {
+                                    "itemId": "rogue_3_population",
+                                    "amount": 2
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 3,
+                                    "appear": true
+                                }
+                            ]
+                        }
+                    },
+                    "zone": 4,
+                    "pullOut": null
+                },
+                "scene_ro3_relic1_enter": {
+                    "choices": {
+                        "choice_ro3_relic1_1": {
+                            "nextScene": "scene_ro3_relic1_2",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "encounterAll",
+                                    "amount": 1,
+                                    "probShow": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_relic1_2": {
+                            "nextScene": "scene_ro3_relic1_3",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "encounterAll",
+                                    "amount": 1,
+                                    "probShow": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_relic1_3": {
+                            "nextScene": "scene_ro3_relic1_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": 6
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "is",
+                                    "amount": 0,
+                                    "appear": false
+                                }
+                            ]
+                        },
+                        "choice_ro3_relic1_6": {
+                            "nextScene": "scene_ro3_relic1_5",
+                            "gain": [
+                                {
+                                    "itemId": "flag",
+                                    "flagId": "adFlag",
+                                    "amount": 1
+                                }
+                            ]
+                        }
+                    },
+                    "zone": 3,
+                    "pullOut": 5
+                },
+                "scene_ro3_relic2_enter": {
+                    "choices": {
+                        "choice_ro3_relic2_1": {
+                            "nextScene": "scene_ro3_relic2_1",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "encounterAll",
+                                    "amount": 1,
+                                    "probShow": false
+                                }
+                            ]
+                        },
+                        "choice_ro3_relic2_2": {
+                            "nextScene": "scene_ro3_relic2_2",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "encounterAll",
+                                    "amount": 1,
+                                    "probShow": true
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "flag",
+                                    "flagId": "adFlag",
+                                    "condition": "have",
+                                    "amount": 0,
+                                    "appear": false
+                                }
+                            ]
+                        },
+                        "choice_ro3_relic2_3": {
+                            "nextScene": "scene_ro3_relic2_3",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_relic_explore_6",
+                                    "amount": -1
+                                },
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "encounterAll",
+                                    "amount": 2,
+                                    "probShow": false
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_relic_explore_6",
+                                    "condition": "have",
+                                    "amount": 1,
+                                    "appear": false
+                                }
+                            ]
+                        }
+                    },
+                    "zone": 4,
+                    "pullOut": null
+                },
+                "scene_ro3_spring_enter": {
+                    "choices": {
+                        "choice_ro3_spring_1": {
+                            "nextScene": "scene_ro3_spring_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_hp",
+                                    "amount": 114514
+                                }
+                            ]
+                        }
+                    },
+                    "zone": [
+                        "passage",
+                        1
+                    ]
+                },
+                "scene_ro3_height_enter": {
+                    "choices": {
+                        "choice_ro3_height_1": {
+                            "nextScene": "scene_ro3_height_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "amount": 1
+                                },
+                                {
+                                    "itemId": "flag",
+                                    "flagId": "treeFlag",
+                                    "amount": 1
+                                }
+                            ]
+                        },
+                        "choice_ro3_height_2": {
+                            "nextScene": "scene_ro3_height_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "amount": 2
+                                },
+                                {
+                                    "itemId": "rogue_3_chaos",
+                                    "amount": 3
+                                },
+                                {
+                                    "itemId": "flag",
+                                    "flagId": "treeFlag",
+                                    "amount": 1
+                                }
+                            ]
+                        }
+                    },
+                    "zone": [
+                        "passage",
+                        4
+                    ]
+                },
+                "scene_ro3_pick1_enter": {
+                    "choices": {
+                        "choice_ro3_pick1_1": {
+                            "nextScene": "scene_ro3_pick1_1",
+                            "gain": [
+                                {
+                                    "itemId": "RELIC",
+                                    "relicId": "rogue_3_relic_fight_6",
+                                    "amount": 1,
+                                    "probShow": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_pick1_2": {
+                            "nextScene": "scene_ro3_pick1_4",
+                            "gain": []
+                        },
+                        "choice_ro3_pick1_3": {
+                            "nextScene": "scene_ro3_pick1_2",
+                            "gain": [
+                                {
+                                    "itemId": "RELIC",
+                                    "relicId": "rogue_3_relic_fight_7",
+                                    "amount": 1,
+                                    "probShow": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_pick1_4": {
+                            "nextScene": "scene_ro3_pick1_3",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": 7
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 3,
+                                    "appear": true
+                                }
+                            ]
+                        }
+                    },
+                    "zone": 3,
+                    "pullOut": null
+                },
+                "scene_ro3_pick2_enter": {
+                    "choices": {
+                        "choice_ro3_pick2_1": {
+                            "nextScene": "scene_ro3_pick2_1",
+                            "gain": [
+                                {
+                                    "itemId": "RELIC",
+                                    "relicId": "rogue_3_relic_fight_8",
+                                    "amount": 1,
+                                    "probShow": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_pick2_2": {
+                            "nextScene": "scene_ro3_pick2_2",
+                            "gain": [
+                                {
+                                    "itemId": "RELIC",
+                                    "relicId": "rogue_3_relic_fight_9",
+                                    "amount": 1,
+                                    "probShow": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_pick2_3": {
+                            "nextScene": "scene_ro3_pick2_3",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "bossRelic",
+                                    "amount": 1,
+                                    "probShow": false
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 4,
+                                    "appear": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_pick2_4": {
+                            "nextScene": "scene_ro3_pick2_4",
+                            "gain": []
+                        }
+                    },
+                    "zone": [
+                        "passage",
+                        1
+                    ]
+                },
+                "scene_ro3_normal1_enter": {
+                    "choices": {
+                        "choice_ro3_normal1_1": {
+                            "nextScene": "scene_ro3_normal1_1",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_TOTEM",
+                                    "pool": "totemAll",
+                                    "amount": 1,
+                                    "probShow": false
+                                }
+                            ]
+                        }
+                    },
+                    "zone": 1,
+                    "pullOut": 2
+                },
+                "scene_ro3_normal2_enter": {
+                    "choices": {
+                        "choice_ro3_normal2_1": {
+                            "nextScene": "scene_ro3_normal2_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_hpmax",
+                                    "amount": 1
+                                }
+                            ]
+                        },
+                        "choice_ro3_normal2_2": {
+                            "nextScene": "scene_ro3_normal2_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_hp",
+                                    "amount": -1
+                                },
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": 4
+                                }
+                            ]
+                        },
+                        "choice_ro3_normal2_3": {
+                            "nextScene": "scene_ro3_normal2_3",
+                            "gain": []
+                        }
+                    },
+                    "zone": 1,
+                    "pullOut": 2
+                },
+                "scene_ro3_normal3_enter": {
+                    "choices": {
+                        "choice_ro3_normal3_1": {
+                            "nextScene": "scene_ro3_normal3_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_chaos",
+                                    "amount": 1
+                                },
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": 3
+                                }
+                            ]
+                        },
+                        "choice_ro3_normal3_2": {
+                            "nextScene": "scene_ro3_normal3_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_chaos",
+                                    "amount": 2
+                                },
+                                {
+                                    "itemId": "RANDOM_TOTEM",
+                                    "pool": "normalTotem",
+                                    "amount": 1,
+                                    "probShow": false
+                                }
+                            ]
+                        },
+                        "choice_ro3_normal3_3": {
+                            "nextScene": "scene_ro3_normal3_3",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_chaos",
+                                    "amount": -2
+                                }
+                            ]
+                        }
+                    },
+                    "zone": 1,
+                    "pullOut": 3
+                },
+                "scene_ro3_bat1_enter": {
+                    "choices": {
+                        "choice_ro3_bat1_1": {
+                            "nextScene": "scene_ro3_bat1_1",
+                            "gain": []
+                        },
+                        "choice_ro3_bat1_2": {
+                            "nextScene": "scene_ro3_bat1_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": -5
+                                },
+                                {
+                                    "itemId": "rogue_3_shield",
+                                    "amount": 2
+                                }
+                            ]
+                        },
+                        "choice_ro3_bat1_3": {
+                            "nextScene": "scene_ro3_bat1_3",
+                            "gain": []
+                        }
+                    },
+                    "zone": 1,
+                    "pullOut": 3
+                },
+                "scene_ro3_bat2_enter": {
+                    "choices": {
+                        "choice_ro3_bat2_1": {
+                            "nextScene": "scene_ro3_bat2_1",
+                            "gain": []
+                        },
+                        "choice_ro3_bat2_2": {
+                            "nextScene": "scene_ro3_bat2_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": 7
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 3,
+                                    "appear": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_bat2_3": {
+                            "nextScene": "scene_ro3_bat2_3",
+                            "gain": []
+                        }
+                    },
+                    "zone": 2,
+                    "pullOut": 4
+                },
+                "scene_ro3_bat3_enter": {
+                    "choices": {
+                        "choice_ro3_bat3_1": {
+                            "nextScene": "scene_ro3_bat3_1",
+                            "gain": []
+                        },
+                        "choice_ro3_bat3_2": {
+                            "nextScene": "scene_ro3_bat3_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_population",
+                                    "amount": 3
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 1,
+                                    "appear": true
+                                },
+                                {
+                                    "itemId": "rogue_3_hp",
+                                    "condition": "more",
+                                    "amount": 3,
+                                    "appear": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_bat3_3": {
+                            "nextScene": "scene_ro3_bat3_3",
+                            "gain": []
+                        }
+                    },
+                    "zone": 3,
+                    "pullOut": 4
+                },
+                "scene_ro3_bat4_enter": {
+                    "choices": {
+                        "choice_ro3_bat4_1": {
+                            "nextScene": "scene_ro3_bat4_1",
+                            "gain": []
+                        },
+                        "choice_ro3_bat4_2": {
+                            "nextScene": "scene_ro3_bat4_2",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "bossRelic",
+                                    "amount": 1
+                                }
+                            ]
+                        },
+                        "choice_ro3_bat4_3": {
+                            "nextScene": "scene_ro3_bat4_3",
+                            "gain": []
+                        }
+                    },
+                    "zone": 5,
+                    "pullOut": null
+                },
+                "scene_ro3_bat5_enter": {
+                    "choices": {
+                        "choice_ro3_bat5_1": {
+                            "nextScene": "scene_ro3_bat5_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_hp",
+                                    "condition": "more",
+                                    "amount": -3,
+                                    "appear": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_bat5_2": {
+                            "nextScene": "scene_ro3_bat5_1",
+                            "gain": [],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 1,
+                                    "appear": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_bat5_3": {
+                            "nextScene": "scene_ro3_bat5_2",
+                            "gain": []
+                        }
+                    },
+                    "zone": 3,
+                    "pullOut": 4
+                },
+                "scene_ro3_bat6_enter": {
+                    "choices": {
+                        "choice_ro3_bat6_1": {
+                            "nextScene": "scene_ro3_bat6_1",
+                            "gain": []
+                        },
+                        "choice_ro3_bat6_2": {
+                            "nextScene": "scene_ro3_bat6_2",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_TOTEM",
+                                    "pool": "rareTotem",
+                                    "amount": 1
+                                },
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": -12
+                                }
+                            ]
+                        },
+                        "choice_ro3_bat6_3": {
+                            "nextScene": "scene_ro3_bat5_2",
+                            "gain": []
+                        }
+                    },
+                    "zone": 3,
+                    "pullOut": 5
+                },
+                "scene_ro3_bat7_enter": {
+                    "choices": {
+                        "choice_ro3_bat7_1": {
+                            "nextScene": "scene_ro3_bat7_1",
+                            "gain": []
+                        },
+                        "choice_ro3_bat7_2": {
+                            "nextScene": "scene_ro3_bat7_2",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_gold",
+                                    "amount": 6
+                                },
+                                {
+                                    "itemId": "rogue_3_population",
+                                    "amount": 3
+                                }
+                            ]
+                        },
+                        "choice_ro3_bat7_3": {
+                            "nextScene": "scene_ro3_bat7_3",
+                            "gain": []
+                        }
+                    },
+                    "zone": 5,
+                    "pullOut": null
+                },
+                "scene_ro3_bat8_enter": {
+                    "choices": {
+                        "choice_ro3_bat8_1": {
+                            "nextScene": "scene_ro3_bat8_1",
+                            "gain": []
+                        },
+                        "choice_ro3_bat8_2": {
+                            "nextScene": "scene_ro3_bat8_2",
+                            "gain": []
+                        }
+                    },
+                    "zone": 5,
+                    "pullOut": null
+                },
+                "scene_ro3_bat9_enter": {
+                    "choices": {
+                        "choice_ro3_bat9_1": {
+                            "nextScene": "scene_ro3_bat9_1",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_shield",
+                                    "amount": 1
+                                }
+                            ]
+                        },
+                        "choice_ro3_bat9_2": {
+                            "nextScene": "scene_ro3_bat9_3",
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_shield",
+                                    "amount": 3
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 3,
+                                    "appear": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_bat9_3": {
+                            "nextScene": "scene_ro3_bat9_2",
+                            "gain": []
+                        }
+                    },
+                    "zone": 3,
+                    "pullOut": 5
+                }
+            },
+            "others": {
+                "scene_ro3_res1_1": {},
+                "scene_ro3_res1_2": {},
+                "scene_ro3_res2_1": {},
+                "scene_ro3_res2_2": {},
+                "scene_ro3_res3_1": {},
+                "scene_ro3_res3_2": {},
+                "scene_ro3_res4_1": {},
+                "scene_ro3_res4_2": {},
+                "scene_ro3_res4_3": {},
+                "scene_ro3_res5_1": {},
+                "scene_ro3_res5_3": {
+                    "choices": {
+                        "choice_ro3_res5_4": {
+                            "nextScene": "scene_ro3_res5_4",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "encounterAll",
+                                    "amount": 1,
+                                    "probShow": false
+                                },
+                                {
+                                    "itemId": "rogue_3_chaos",
+                                    "amount": 3
+                                }
+                            ]
+                        },
+                        "choice_ro3_res5_5": {
+                            "nextScene": "scene_ro3_res5_5",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "encounterAll",
+                                    "amount": 1,
+                                    "probShow": false
+                                }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 5
+                                }
+                            ]
+                        },
+                        "choice_ro3_res5_6": {
+                            "nextScene": "scene_ro3_res5_1",
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_res5_2": {},
+                "scene_ro3_res5_4": {},
+                "scene_ro3_res5_5": {},
+                "scene_ro3_res2a_3": {},
+                "scene_ro3_res2a_4": {},
+                "scene_ro3_res3a_2": {},
+                "scene_ro3_res3a_3": {},
+                "scene_ro3_res3a_1": {
+                    "choices": {
+                        "choice_ro3_res3a_5": {
+                            "nextScene": null,
+                            "gain": [
+                                {
+                                    "itemId": "rogue_3_hp",
+                                    "amount": 3
+                                }
+                            ]
+                        }
+                    }
+                },
+                "scene_ro3_res3a_4": {
+                    "choices": {
+                        "choice_ro3_res3a_1": {
+                            "nextScene": "ELITE_BATTLE",
+                            "battlePool": 4,
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_res5a_1": {},
+                "scene_ro3_res5a_2": {},
+                "scene_ro3_res5a_3": {},
+                "scene_ro3_rec1_1": {},
+                "scene_ro3_rec1_2": {},
+                "scene_ro3_rec1_3": {},
+                "scene_ro3_rec2_1": {},
+                "scene_ro3_rec2_2": {},
+                "scene_ro3_rec2_3": {},
+                "scene_ro3_relic1_1": {
+                    "choices": {
+                        "choice_ro3_relic1_3": {
+                            "nextScene": "scene_ro3_relic1_2",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "bossRelic",
+                                    "amount": 1,
+                                    "probShow": true
+                                }
+                            ]
+                        },
+                        "choice_ro3_relic1_4": {
+                            "nextScene": "scene_ro3_relic1_3",
+                            "gain": [
+                                {
+                                    "itemId": "RANDOM_RELIC",
+                                    "pool": "bossRelic",
+                                    "amount": 1,
+                                    "probShow": true
+                                }
+                            ]
+                        }
+                    }
+                },
+                "scene_ro3_relic1_2": {},
+                "scene_ro3_relic1_3": {},
+                "scene_ro3_relic1_4": {},
+                "scene_ro3_relic1_5": {},
+                "scene_ro3_relic2_1": {},
+                "scene_ro3_relic2_2": {},
+                "scene_ro3_relic2_3": {},
+                "scene_ro3_spring_1": {},
+                "scene_ro3_height_1": {},
+                "scene_ro3_height_2": {},
+                "scene_ro3_pick1_1": {},
+                "scene_ro3_pick1_4": {},
+                "scene_ro3_pick1_2": {},
+                "scene_ro3_pick1_3": {},
+                "scene_ro3_pick2_1": {},
+                "scene_ro3_pick2_2": {},
+                "scene_ro3_pick2_3": {},
+                "scene_ro3_pick2_4": {},
+                "scene_ro3_normal1_1": {},
+                "scene_ro3_normal2_1": {},
+                "scene_ro3_normal2_2": {},
+                "scene_ro3_normal2_3": {},
+                "scene_ro3_normal3_1": {},
+                "scene_ro3_normal3_2": {},
+                "scene_ro3_normal3_3": {},
+                "scene_ro3_bat1_1": {
+                    "choices": {
+                        "choice_ro3_bat1_4": {
+                            "nextScene": "NORMAL_BATTLE",
+                            "battlePool": "ro3_t_1",
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_bat1_2": {},
+                "scene_ro3_bat1_3": {},
+                "scene_ro3_bat2_1": {
+                    "choices": {
+                        "choice_ro3_bat2_4": {
+                            "nextScene": "NORMAL_BATTLE",
+                            "battlePool": "ro3_t_2",
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_bat2_2": {},
+                "scene_ro3_bat2_3": {},
+                "scene_ro3_bat3_1": {
+                    "choices": {
+                        "choice_ro3_bat3_4": {
+                            "nextScene": "NORMAL_BATTLE",
+                            "battlePool": "ro3_t_3",
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_bat3_2": {},
+                "scene_ro3_bat3_3": {},
+                "scene_ro3_bat4_1": {
+                    "choices": {
+                        "choice_ro3_bat4_4": {
+                            "nextScene": "NORMAL_BATTLE",
+                            "battlePool": "ro3_t_4",
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_bat4_2": {},
+                "scene_ro3_bat4_3": {},
+                "scene_ro3_bat5_1": {
+                    "choices": {
+                        "choice_ro3_bat5_4": {
+                            "nextScene": "NORMAL_BATTLE",
+                            "battlePool": "ro3_ev_1",
+                            "gain": []
+                        },
+                        "choice_ro3_bat5_5": {
+                            "nextScene": "scene_ro3_bat5_2",
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_bat5_2": {},
+                "scene_ro3_bat6_1": {
+                    "choices": {
+                        "choice_ro3_bat6_4": {
+                            "nextScene": "NORMAL_BATTLE",
+                            "battlePool": "ro3_ev_2",
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_bat6_2": {},
+                "scene_ro3_bat6_3": {},
+                "scene_ro3_bat7_1": {
+                    "choices": {
+                        "choice_ro3_bat7_4": {
+                            "nextScene": "NORMAL_BATTLE",
+                            "battlePool": "ro3_ev_3",
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_bat7_2": {},
+                "scene_ro3_bat7_3": {},
+                "scene_ro3_bat8_1": {
+                    "choices": {
+                        "choice_ro3_bat8_3": {
+                            "nextScene": "NORMAL_BATTLE",
+                            "battlePool": "ro3_ev_4",
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_bat8_2": {},
+                "scene_ro3_bat9_1": {
+                    "choices": {
+                        "choice_ro3_bat9_4": {
+                            "nextScene": "NORMAL_BATTLE",
+                            "battlePool": "ro3_ev_5",
+                            "gain": []
+                        }
+                    }
+                },
+                "scene_ro3_bat9_2": {},
+                "scene_ro3_bat9_3": {
+                    "choices": {
+                        "choice_ro3_bat9_5": {
+                            "nextScene": "NORMAL_BATTLE",
+                            "battlePool": "ro3_ev_5",
+                            "gain": []
+                        }
+                    }
+                }
+            },
+            "Special": {
+                "enterScene": {
+                    "scene_ro3_ex1_enter": {}
+                }
+            }
+        },
+        "Passage": {
+            "enterScene": {
+                "scene_ro3_portal0201a_enter": {},
+                "scene_ro3_portal0301a_enter": {},
+                "scene_ro3_portal0401a_enter": {},
+                "scene_ro3_portal0501a_enter": {},
+                "scene_ro3_portal0601a_enter": {},
+                "scene_ro3_portal0201b_enter": {},
+                "scene_ro3_portal0301b_enter": {},
+                "scene_ro3_portal0401b_enter": {},
+                "scene_ro3_portal0501b_enter": {},
+                "scene_ro3_portal0601b_enter": {},
+                "scene_ro3_portal0201c_enter": {},
+                "scene_ro3_portal0301c_enter": {},
+                "scene_ro3_portal0401c_enter": {},
+                "scene_ro3_portal0501c_enter": {},
+                "scene_ro3_portal0601c_enter": {},
+                "scene_ro3_portal0201d_enter": {},
+                "scene_ro3_portal0301d_enter": {},
+                "scene_ro3_portal0401d_enter": {},
+                "scene_ro3_portal0501d_enter": {},
+                "scene_ro3_portal0601d_enter": {},
+                "scene_ro3_portal0201e_enter": {},
+                "scene_ro3_portal0301e_enter": {},
+                "scene_ro3_portal0401e_enter": {},
+                "scene_ro3_portal0501e_enter": {},
+                "scene_ro3_portal0601e_enter": {},
+                "scene_ro3_portal0202a_enter": {},
+                "scene_ro3_portal0302a_enter": {},
+                "scene_ro3_portal0402a_enter": {},
+                "scene_ro3_portal0502a_enter": {},
+                "scene_ro3_portal0602a_enter": {},
+                "scene_ro3_portal0202b_enter": {},
+                "scene_ro3_portal0302b_enter": {},
+                "scene_ro3_portal0402b_enter": {},
+                "scene_ro3_portal0502b_enter": {},
+                "scene_ro3_portal0602b_enter": {},
+                "scene_ro3_portal0202c_enter": {},
+                "scene_ro3_portal0302c_enter": {},
+                "scene_ro3_portal0402c_enter": {},
+                "scene_ro3_portal0502c_enter": {},
+                "scene_ro3_portal0602c_enter": {},
+                "scene_ro3_portal0203a_enter": {},
+                "scene_ro3_portal0303a_enter": {},
+                "scene_ro3_portal0403a_enter": {},
+                "scene_ro3_portal0503a_enter": {},
+                "scene_ro3_portal0603a_enter": {},
+                "scene_ro3_portal0203b_enter": {},
+                "scene_ro3_portal0303b_enter": {},
+                "scene_ro3_portal0403b_enter": {},
+                "scene_ro3_portal0503b_enter": {},
+                "scene_ro3_portal0603b_enter": {},
+                "scene_ro3_portal0203c_enter": {},
+                "scene_ro3_portal0303c_enter": {},
+                "scene_ro3_portal0403c_enter": {},
+                "scene_ro3_portal0503c_enter": {},
+                "scene_ro3_portal0603c_enter": {}
+            }
+        },
+        "Sacrifice": {
+            "enterScene": {
+                "scene_ro3_sacrifice1_enter": {},
+                "scene_ro3_sacrifice1a_enter": {},
+                "scene_ro3_sacrifice2_enter": {}
+            }
+        },
+        "Entertainment": {
+            "enterScene": {
+                "scene_ro3_ent1_enter": {},
+                "scene_ro3_ent2_enter": {},
+                "scene_ro3_ent3_enter": {}
+            }
+        },
+        "Expedition": {
+            "enterScene": {
+                "scene_ro3_scout_enter": {}
+            }
+        },
+        "SafeHouse": {
+            "enterScene": {
+                "scene_ro3_rest1_enter": {},
+                "scene_ro3_rest2_enter": {},
+                "scene_ro3_rest3_enter": {},
+                "scene_ro3_rest4_enter": {}
+            }
+        },
+        "Prophecy": {
+            "enterScene": {
+                "scene_ro3_story1_enter": {},
+                "scene_ro3_story2_enter": {},
+                "scene_ro3_story3_enter": {},
+                "scene_ro3_rest4_enter": {},
+                "scene_ro3_ex2_enter": {},
+                "scene_ro3_ex3_enter": {}
+            }
+        },
+        "Wish": {
+            "enterScene": {
+                "scene_ro3_chest_enter": {}
+            }
+        },
+        "TODO": {
+            "scene_ro3_res2a_enter": {
+                "_comment": "疗愈仪式事件，待抓包",
+                "choices": {
+                    "choice_ro3_res2a_1": {
+                        "nextScene": "scene_ro3_res2a_3",
+                        "gain": [
+                            {
+                                "itemId": "rogue_3_vision",
+                                "amount": 5
+                            },
+                            {
+                                "itemId": "rogue_3_chaos",
+                                "amount": 1
+                            }
+                        ]
+                    },
+                    "choice_ro3_res2a_2": {
+                        "nextScene": "scene_ro3_res5_3",
+                        "gain": []
+                    },
+                    "choice_ro3_res2a_3": {
+                        "nextScene": "scene_ro3_res5_1",
+                        "gain": []
+                    }
+                },
+                "zone": [
+                    "passage"
+                ]
+            }
+        }
+    }
+}

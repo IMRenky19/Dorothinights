@@ -3,9 +3,9 @@
         "sign": "Dorothinights",
         "content": {
             "configVer": "5",
-            "funcVer": "V051",
+            "funcVer": "V052",
             "configs": {
-                "V051": {
+                "V052": {
                     "override": true,
                     "network": {
                         "gs": "{server}",

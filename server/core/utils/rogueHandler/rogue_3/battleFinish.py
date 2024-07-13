@@ -1,16 +1,11 @@
-from server.core.utils.rogueHandler.rogue_3.tools.movements import moveTo
 from ....Model.RogueBase import RogueBasicModel
-from ....utils.json import read_json
 from ....utils.accounts import decrypt_battle_data
-from .tools.rlv2tools import *
+from ..common.rlv2tools import *
 from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH
 from server.core.utils.time import time
-from random import shuffle, randint
-from copy import deepcopy
 from .tools.movements import *
 from .tools.battleAndEvent import *
 from math import floor
-from .tools.map import NodeType
 
 
 
@@ -18,6 +13,11 @@ async def battleFinish(rogueClass: RogueBasicModel, battleData: str, loginTime: 
     ts = time()
     rlv2 = getRogueData(rogueClass)
     rlv2_extension = getRogueExtensionData(rogueClass)
+    if getCurrentZone(rlv2) == 5 and isZoneEnd(rlv2):
+        endGame(rlv2, rlv2_extension)
+        rogueClass.rlv2 = rlv2
+        rogueClass.extension = rlv2_extension
+        return
     decryptedBattleData = decrypt_battle_data(battleData, loginTime)
     #print(decryptedBattleData)
     currentZone = getCurrentZone(rlv2)

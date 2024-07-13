@@ -1,0 +1,95 @@
+{
+    "rogue_3":{
+        "ZONE_1_NORMAL_BATTLE_POOL": [
+            "ro3_n_1_1",            
+            "ro3_n_1_2",            
+            "ro3_n_1_3",            
+            "ro3_n_1_4",            
+            "ro3_n_1_5"             
+        ],
+        "ZONE_2_NORMAL_BATTLE_POOL": [
+            "ro3_n_2_1"            
+        ],
+        "ZONE_3_NORMAL_BATTLE_POOL": [
+            "ro3_n_3_1",            
+            "ro3_n_3_2",            
+            "ro3_n_3_3",            
+            "ro3_n_3_4",            
+            "ro3_n_3_5",            
+            "ro3_n_3_6",            
+            "ro3_n_3_7"             
+        ],
+        "ZONE_4_NORMAL_BATTLE_POOL": [
+            "ro3_n_4_1",            
+            "ro3_n_4_2",            
+            "ro3_n_4_3",            
+            "ro3_n_4_4",            
+            "ro3_n_4_5",            
+            "ro3_n_4_6",            
+            "ro3_n_4_7",            
+            "ro3_n_4_8"             
+        ],
+        "ZONE_5_NORMAL_BATTLE_POOL": [
+            "ro3_n_5_1",            
+            "ro3_n_5_2",            
+            "ro3_n_5_3",            
+            "ro3_n_5_4",            
+            "ro3_n_5_5",            
+            "ro3_n_5_6",            
+            "ro3_n_5_7",            
+            "ro3_n_5_8"             
+        ],
+        "ZONE_6_NORMAL_BATTLE_POOL": [
+            "ro3_n_6_1",            
+            "ro3_n_6_2"             
+        ],
+        "ZONE_1_EMERGENCY_BATTLE_POOL": [
+            "ro3_e_1_1",            
+            "ro3_e_1_2",            
+            "ro3_e_1_3",            
+            "ro3_e_1_4",            
+            "ro3_e_1_5"             
+        ],
+        "ZONE_2_EMERGENCY_BATTLE_POOL": [
+            "ro3_e_2_1",            
+            "ro3_e_2_2",            
+            "ro3_e_2_3",            
+            "ro3_e_2_4",            
+            "ro3_e_2_5",            
+            "ro3_e_2_6"             
+        ],
+        "ZONE_3_EMERGENCY_BATTLE_POOL": [
+            "ro3_e_3_1",            
+            "ro3_e_3_2",            
+            "ro3_e_3_3",            
+            "ro3_e_3_4",            
+            "ro3_e_3_5",            
+            "ro3_e_3_6",            
+            "ro3_e_3_7"             
+        ],
+        "ZONE_4_EMERGENCY_BATTLE_POOL": [
+            "ro3_e_4_1",            
+            "ro3_e_4_2",            
+            "ro3_e_4_3",            
+            "ro3_e_4_4",            
+            "ro3_e_4_5",            
+            "ro3_e_4_6",            
+            "ro3_e_4_7",            
+            "ro3_e_4_8"             
+        ],
+        "ZONE_5_EMERGENCY_BATTLE_POOL": [
+            "ro3_e_5_1",            
+            "ro3_e_5_2",            
+            "ro3_e_5_3",            
+            "ro3_e_5_4",            
+            "ro3_e_5_5",            
+            "ro3_e_5_6",            
+            "ro3_e_5_7",            
+            "ro3_e_5_8"             
+        ],
+        "ZONE_6_EMERGENCY_BATTLE_POOL": [
+            "ro3_e_6_1",            
+            "ro3_e_6_2"             
+        ]
+    }
+}

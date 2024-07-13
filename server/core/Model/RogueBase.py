@@ -14,6 +14,7 @@ class RogueBasicModel(Base):
     uid: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
     phone: Mapped[str] = mapped_column(String(255))
     secret: Mapped[str] = mapped_column(String(255))
+    theme: Mapped[str] = mapped_column(String(255))
     
     
     rlv2: Mapped[str] = mapped_column(JSON)
