@@ -771,9 +771,9 @@ def generateSightByVision(zone: int, currentPosition: dict | None, vision: int, 
     else:
         position = currentPosition
         
-    currentNode = mapData[str(zone)]["nodes"][f"{position["x"]}0{position["y"]}" if position["x"] != 0 else f"{position["y"]}"] if position["x"] != -1 else None
-    nextNode = [mapData[str(zone)]["nodes"][f"{node["x"]}0{node["y"]}"] \
-            for node in currentNode["next"]]  if position["x"] != -1 else [mapData[str(zone)]["nodes"][f"{node["pos"]["y"]}"] \
+    currentNode = mapData[str(zone)]["nodes"][f"{position['x']}0{position['y']}" if position["x"] != 0 else f"{position['y']}"] if position["x"] != -1 else None
+    nextNode = [mapData[str(zone)]["nodes"][f"{node['x']}0{node['y']}"] \
+            for node in currentNode["next"]]  if position["x"] != -1 else [mapData[str(zone)]["nodes"][f"{node['pos']['y']}"] \
             for node in mapData[str(zone)]["nodes"].values() if node["pos"]["x"] == 0]
     
     match vision:

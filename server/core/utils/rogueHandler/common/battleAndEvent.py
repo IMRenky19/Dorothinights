@@ -43,8 +43,8 @@ def battleGenerator(mapData: dict, zone: int, pool: list, currentPosition: dict 
                 
     else:
         shuffle(pool)
-        currentNode = mapData[str(zone)]["nodes"][f"{currentPosition["x"]}0{currentPosition["y"]}" if currentPosition["x"] != 0 else f"{currentPosition["y"]}"]
-        nextNode = [mapData[str(zone)]["nodes"][f"{node["x"]}0{node["y"]}"] \
+        currentNode = mapData[str(zone)]["nodes"][f"{currentPosition['x']}0{currentPosition['y']}" if currentPosition["x"] != 0 else f"{currentPosition['y']}"]
+        nextNode = [mapData[str(zone)]["nodes"][f"{node['x']}0{node['y']}"] \
             for node in currentNode["next"]]
         #print(nextNode)
         for node in nextNode:

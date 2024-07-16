@@ -330,7 +330,7 @@ def getNextTicketIndex(rlv2_data: dict):
     return f"t_{i}"
 
 def getNextRelicIndex(rlv2_data: dict):
-    return f"r_{len(rlv2_data["current"]["inventory"]["relic"])}"
+    return f"r_{len(rlv2_data['current']['inventory']['relic'])}"
 
 def getNextPendingIndex(rlv2_data: dict):
     d = set()
@@ -376,7 +376,7 @@ def getModeGrade(rlv2_data: dict):
     return rlv2_data["current"]['game']['modeGrade']
 
 def positionToIndex(position: dict):
-    return f"{position["x"]}0{position["y"]}" if position["x"] != 0 else f"{position["y"]}"
+    return f"{position['x']}0{position['y']}" if position["x"] != 0 else f"{position['y']}"
 
 
 def addTicket(rlv2_data: dict, ticket_id: str, init: bool, profession: str = 'all'):
