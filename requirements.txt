@@ -1,0 +1,5 @@
+uvicorn
+litestar
+advanced_alchemy
+pycryptodome
+asyncmy
