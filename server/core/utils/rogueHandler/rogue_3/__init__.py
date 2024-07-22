@@ -12,6 +12,8 @@ from .moveTo import rogueMoveTo
 from .recruitChar import recruitChar
 from .refreshShop import refreshShop
 from .selectChoice import selectChoice
+from .confirmPredict import confirmPredict
+from .useTotem import useTotem
 
 #__all__ = [
 #    "activeRecruitTicket",

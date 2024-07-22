@@ -1,0 +1,99 @@
+{
+    "comment1":"一个大类对应一个肉鸽",
+    "rogue_1":{},
+    "rogue_2":{},
+    "rogue_3":{
+        "comment":"下面一个大类对应一种节点类型，Encounter：不期而遇，Passage：树篱之途，Sacrifice：失与得，其他节点以此类推",
+        "Encounter":{
+            "enterScene": {
+                "comment": "所有事件的入口scene都放在这里！",
+                "scene_ro3_template1_enter": {
+                    "choices": {
+                        "comment": "这里是选项！",
+                        "choice_ro3_template1_1":{
+                            "nextScene": "该字段为选中该选项后会跳转到的下一个scene的Id！",
+                            "gain": [
+                                "该选项可以获得的物品存放在这里！",
+                                {
+                                    "itemId": "这个字段是物品id，填啥都行，收藏品也不是不行，有几个特殊id下个选项说",
+                                    "amount": "这个字段是物品数量，填数字，负数的话会正常扣，收藏品也一样"
+                                },
+                                {
+                                    "itemId": "还是物品Id",
+                                    "amount": "还是数量，记得填数字"
+                                }
+                            ],
+                            "condition":[
+                                "这个是可选字段！",
+                                {
+                                    "itemId": "需要判定的物品Id",
+                                    "condition": "这个是条件，more是多于，less是少于，is是等于，have跟is一个作用不过是用来判定收藏品的",
+                                    "amount": "填大于/等于/少于的数量，如果条件填的是have的话这块一般为1",
+                                    "appear": "布尔值，true表示不满足条件也会出现只是不可选，一般用于抗干扰相关选项，且直接忽略后面的probShow（当false处理）；false表示不满足条件就不出现，一般用在隐藏选项"
+                                }
+                            ]
+                        },
+                        "choice_ro3_template1_2":{
+                            "nextScene": "该字段同样为选中该选项后会跳转到的下一个scene的Id！",
+                            "gain": [
+                                "这个选项会展示一些别的东西，该选项可以获得的物品还是存放在这里！",
+                                "只不过有一些特殊物品Id需要说：",
+                                "flag：标记，比如萨米肉鸽里面的广告单，itemId如果是这个的话会寻找flagId添加到rogueExtension里面，",
+                                "判定flag的有无同样需要把condition的itemId写成flag后填上flagId字段！",
+
+                                "RANDOM_RELIC：一个随机藏品，itemId如果是这个的话会寻找pool字段然后生成对应池子（池子跟poolTable里的id同名）的随机藏品！",
+                                "后面会跟一个probShow字段，如果为true则直接在选项上显示对应藏品，如果为false则不显示",
+                                "哦对了后面会跟一个amount，一般是1，如果有特殊情况好几个也是支持的，不过这时候probShow会失效",
+
+                                "RELIC：一个藏品，itemId如果是这个的话会寻找relicId然后给你对应的藏品！",
+                                "后面同样会跟一个probShow字段，用法同上",
+
+                                "RANDOM_TOTEM：一个随机密文板，用法同randomrelic",
+
+                                {
+                                    "itemId": "这个字段是物品id，填啥都行，收藏品也不是不行，有几个特殊id下个选项说",
+                                    "amount": "这个字段是物品数量，填数字，负数的话会正常扣，收藏品也一样",
+                                    "amount_comment": "不过这个字段也可以填一个格式为[min,max]的list，会在这个范围内过一遍random"
+                                },
+                                {
+                                    "itemId": "还是物品Id",
+                                    "amount": "还是数量，记得填数字"
+                                }
+                            ],
+                            "condition":[
+                                "这个是可选字段！",
+                                {
+                                    "itemId": "需要判定的物品Id",
+                                    "condition": "这个是条件，more是多于，less是少于，is是等于，have跟is一个作用不过是用来判定收藏品的",
+                                    "amount": "填大于/等于/少于的数量，如果条件填的是have的话这块一般为1",
+                                    "appear": "布尔值，true表示不满足条件也会出现只是不可选，一般用于抗干扰相关选项；false表示不满足条件就不出现，一般用在隐藏选项"
+                                }
+                            ]
+                        }
+
+                    },
+                    "zone": "填数字，表示这个事件从哪层开始被放入事件池",
+                    "zone_comment": "这块同样可以填一个格式为['passage', zoneMin，zoneMax]的list上去（zone是真实层数），表示当前事件仅在真实层数大于等于zoneMin小于zoneMax的树洞出现，如果只填了passage的话说明这个事件是个树洞都有可能出现而且可能出现不止一次",
+                    "pullOut": "同样填数字，表示这个事件从哪层开始被事件池清掉，null表示这个事件是个钉子户"
+                }
+            },
+            "others":{
+                "comment": "所有非入口的scene在这里！",
+                "scene_ro3_template1_1": {
+                    "choices": {
+                        "choice_ro3_template1_3":{
+                            "nextScene": "这里同样是填下一个scene的id，不过有个特殊情况：",
+                            "nextScene_comment": "当该字段为ELITE_BATTLE或者NORMAL_BATTLE时，选择该选项后会把该节点变成特殊类型战斗，具体战斗关卡会检测后面的battlePool字段，如为int类型则在对应层数roll一个出来，如为str类型则视为已经指定关卡",
+                            "gain": [],
+                            "gain_comment": "当这个选项什么东西都不给的情况下就可以这么写！",
+                            "comment": "另外condition可以不写，不写时默认出现"
+                        }
+                    }
+                },
+                "scene_ro3_template1_2_comment":"如果接下来的scene只有choice_leave的话接下来可以直接空着，服务端会贴心地给你补上choice_leave的选项:)",
+                "scene_ro3_template1_2":{}
+            }
+        }
+    },
+    "rogue_4":{}
+}

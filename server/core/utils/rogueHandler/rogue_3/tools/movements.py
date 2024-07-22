@@ -3,7 +3,11 @@ from server.core.utils.time import time
 from ...common.rlv2tools import *
 from ... import common
 from .map import mapGenerator, visionGenerator
-from .battleAndEvent import battleGenerator
+from .battleAndEvent import battleGenerator, gainItem
+from .totemAndChaos import *
+from server.constants import ROGUE_RELIC_POOL_PATH
+
+totemList = read_json(ROGUE_RELIC_POOL_PATH)["rogue_3"]["totemAll"]
 
 
 ts = time()
@@ -41,6 +45,15 @@ def moveToNextZone(rlv2_data: dict, rlv2_extension: dict, isHiddenZone = False):
         addVision(rlv2_data, 2)
     if rlv2_extension["12_less_vision"] and rlv2_data["current"]["player"]["cursor"]["zone"] in (1,3,5):
         addVision(rlv2_data, -1)
+    if not isHiddenZone:
+        if rlv2_data["current"]["module"]["totem"]["predictTotemId"]:
+            addTotem(rlv2_data, rlv2_data["current"]["module"]["totem"]["predictTotemId"])
+        generatePredictPending(rlv2_data, rlv2_extension)
+        
+    #测试密文版
+    if zone == 1:
+        for totem in totemList:
+            gainItem(rlv2_data, totem, 1)
     
     
     
@@ -52,6 +65,8 @@ def moveTo(rlv2_data: dict, rlv2_extension: dict, position: dict, zone: int):
     if currentPosition:
         if currentPosition["x"] == position["x"]:
             addVision(rlv2_data, -1)
+    
+    
     
     rlv2_data["current"]["map"]["zones"].update(
         battleGenerator(
@@ -66,6 +81,7 @@ def moveTo(rlv2_data: dict, rlv2_extension: dict, position: dict, zone: int):
             rlv2_data["current"]["player"]["cursor"]["position"]
         )
     )
+    print(getReachableNodeDict(rlv2_data))
     
     
 def zoneEndChecker(rogueData: dict, rogueExtensionData: dict):
@@ -191,7 +207,7 @@ def endGame(rogueData: dict, rogueExtensionData: dict):
                     },
                     "recruitRealCount": recruitCount,
                     "troopChars": troopChars,
-                    "itemCount": itemCount,
+                    "itemCount": itemCount - 1,
                     "cntArrivedNodeType":{      #TODO
                         "BATTLE_NORMAL":0,
                         "BATTLE_SHOP":0,

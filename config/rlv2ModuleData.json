@@ -1,0 +1,1386 @@
+{
+    "rogue_3": {
+        "totem": {
+            "upper": {
+                "rogue_3_totem_R_L1": {
+                    "isSelected": false,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "RIGHT",
+                            "type": [
+                                1,
+                                2,
+                                4
+                            ],
+                            "amount": 999
+                        }
+                    ],
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_L2": {
+                    "isSelected": true,
+                    "multiNode": false,
+                    "isSpecialEffectInPassage": false,
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_L3": {
+                    "isSelected": true,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "ALL",
+                            "type": [
+                                1,
+                                2,
+                                4
+                            ],
+                            "amount": 1
+                        }
+                    ],
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_L4": {
+                    "isSelected": true,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "ALL",
+                            "type": [
+                                1,
+                                2,
+                                4
+                            ],
+                            "amount": 2
+                        }
+                    ],
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_L5": {
+                    "isSelected": false,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": true,
+                    "special": {
+                        "selector": [
+                            {
+                                "range": "ALL",
+                                "type": [
+                                    1,
+                                    2,
+                                    4,
+                                    8,
+                                    16,
+                                    32,
+                                    64,
+                                    128,
+                                    256,
+                                    512,
+                                    1024,
+                                    2048,
+                                    4096,
+                                    8192,
+                                    16384,
+                                    131072,
+                                    262144
+                                ],
+                                "amount": 3
+                            }
+                        ]
+                    },
+                    "selector": [
+                        {
+                            "range": "ALL",
+                            "type": [
+                                1,
+                                2,
+                                4
+                            ],
+                            "amount": 3
+                        }
+                    ],
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_L6": {
+                    "isSelected": false,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "ALL",
+                            "type": [
+                                1,
+                                2,
+                                4
+                            ],
+                            "amount": 999
+                        }
+                    ],
+                    "type": "RED"
+                },
+                "rogue_3_totem_G_L1": {
+                    "isSelected": true,
+                    "multiNode": false,
+                    "isSpecialEffectInPassage": false,
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_L2": {
+                    "isSelected": true,
+                    "multiNode": false,
+                    "isSpecialEffectInPassage": false,
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_L3": {
+                    "isSelected": true,
+                    "multiNode": false,
+                    "isSpecialEffectInPassage": false,
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_L4": {
+                    "isSelected": true,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "ALL",
+                            "type": [
+                                8,
+                                16,
+                                32,
+                                64,
+                                128,
+                                256,
+                                512,
+                                1024,
+                                2048,
+                                4096,
+                                8192,
+                                16384,
+                                131072,
+                                262144
+                            ],
+                            "amount": 2
+                        }
+                    ],
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_L5": {
+                    "isSelected": false,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "ALL",
+                            "type": [
+                                8,
+                                16,
+                                32,
+                                64,
+                                128,
+                                256,
+                                512,
+                                1024,
+                                2048,
+                                4096,
+                                8192,
+                                16384,
+                                131072,
+                                262144
+                            ],
+                            "amount": 3
+                        }
+                    ],
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_L6": {
+                    "isSelected": false,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "ALL",
+                            "type": [
+                                8,
+                                16,
+                                32,
+                                64,
+                                128,
+                                256,
+                                512,
+                                1024,
+                                2048,
+                                4096,
+                                8192,
+                                16384,
+                                131072,
+                                262144
+                            ],
+                            "amount": 999
+                        }
+                    ],
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_B_L1": {
+                    "isSelected": true,
+                    "multiNode": false,
+                    "isSpecialEffectInPassage": false,
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_L2": {
+                    "isSelected": true,
+                    "multiNode": false,
+                    "isSpecialEffectInPassage": false,
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_L3": {
+                    "isSelected": false,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "UP_AND_DOWN",
+                            "type": [
+                                1,
+                                2,
+                                4,
+                                8,
+                                16,
+                                32,
+                                64,
+                                128,
+                                256,
+                                512,
+                                1024,
+                                2048,
+                                4096,
+                                8192,
+                                16384,
+                                131072,
+                                262144
+                            ],
+                            "amount": 2
+                        }
+                    ],
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_L4": {
+                    "isSelected": false,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "RIGHT",
+                            "type": [
+                                1,
+                                2,
+                                4,
+                                8,
+                                16,
+                                32,
+                                64,
+                                128,
+                                256,
+                                512,
+                                1024,
+                                2048,
+                                4096,
+                                8192,
+                                16384,
+                                131072,
+                                262144
+                            ],
+                            "amount": 999
+                        }
+                    ],
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_L5": {
+                    "isSelected": true,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "ALL",
+                            "type": [
+                                1,
+                                2,
+                                4,
+                                8,
+                                16,
+                                32,
+                                64,
+                                128,
+                                256,
+                                512,
+                                1024,
+                                2048,
+                                4096,
+                                8192,
+                                16384,
+                                131072,
+                                262144
+                            ],
+                            "amount": 2
+                        }
+                    ],
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_L6": {
+                    "isSelected": true,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "CONNECTED",
+                            "type": [
+                                1,
+                                2,
+                                4,
+                                8,
+                                16,
+                                32,
+                                64,
+                                128,
+                                256,
+                                512,
+                                1024,
+                                2048,
+                                4096,
+                                8192,
+                                16384,
+                                131072,
+                                262144
+                            ],
+                            "amount": 999
+                        }
+                    ],
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_A_L1": {
+                    "isSelected": true,
+                    "multiNode": false,
+                    "isSpecialEffectInPassage": false,
+                    "type": "ALL"
+                },
+                "rogue_3_totem_A_L2": {
+                    "isSelected": false,
+                    "multiNode": true,
+                    "isSpecialEffectInPassage": false,
+                    "selector": [
+                        {
+                            "range": "ALL",
+                            "type": [
+                                1,
+                                2,
+                                4,
+                                8,
+                                16,
+                                32,
+                                64,
+                                128,
+                                256,
+                                512,
+                                1024,
+                                2048,
+                                4096,
+                                8192,
+                                16384,
+                                131072,
+                                262144
+                            ],
+                            "amount": 2
+                        }
+                    ],
+                    "type": "ALL"
+                }
+            },
+            "lower": {
+                "rogue_3_totem_R_E1": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E1_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E1_b",
+                        "immediateReward": false
+                    },
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_E2": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E2_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E2_b",
+                        "immediateReward": false
+                    },
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_E3": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E3_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": false,
+                        "immediateReward": true,
+                        "reward": [
+                            {
+                                "countByNodeAmount": false,
+                                "item": "rogue_3_hpmax",
+                                "amount": 2
+                            }
+                        ]
+                    },
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_E4": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E4_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E4_b",
+                        "immediateReward": false
+                    },
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_E5": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E5_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": true,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E5_b",
+                        "immediateReward": false
+                    },
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_E6": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E6_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E6_b",
+                        "immediateReward": false
+                    },
+                    "type": "RED"
+                },
+                "rogue_3_totem_R_E7": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": false,
+                        "immediateReward": true,
+                        "reward": [
+                            {
+                                "countByNodeAmount": true,
+                                "item": "rogue_3_hp",
+                                "amount": 2
+                            }
+                        ]
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_R_E7_a",
+                        "immediateReward": false
+                    },
+                    "type": "RED"
+                },
+                "rogue_3_totem_G_E1": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_G_E1_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_G_E1_b",
+                        "immediateReward": false
+                    },
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_E2": {
+                    "basicEffect": {
+                        "changeNode": true,
+                        "nodeType": 4096,
+                        "attachBuff": false,
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_G_E2_a",
+                        "immediateReward": false
+                    },
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_E3": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_G_E3_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": true,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_G_E3_b",
+                        "immediateReward": false
+                    },
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_E4": {
+                    "basicEffect": {
+                        "changeNode": true,
+                        "nodeType": 1024,
+                        "attachBuff": false,
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": false,
+                        "immediateReward": true,
+                        "reward": [
+                            {
+                                "countByNodeAmount": false,
+                                "item": "rogue_3_chaos",
+                                "amount": -2
+                            }
+                        ]
+                    },
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_E5": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_G_E5_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": true,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_G_E5_b",
+                        "immediateReward": false
+                    },
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_E6": {
+                    "basicEffect": {
+                        "changeNode": true,
+                        "nodeType": 32,
+                        "attachBuff": false,
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": true,
+                        "changeNode": true,
+                        "nodeType": 512,
+                        "attachBuff": false,
+                        "immediateReward": false
+                    },
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_G_E7": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": false,
+                        "immediateReward": true,
+                        "reward": [
+                            {
+                                "countByNodeAmount": true,
+                                "item": "rogue_3_gold",
+                                "amount": 4
+                            }
+                        ]
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_G_E7_a",
+                        "immediateReward": false
+                    },
+                    "type": "GREEN"
+                },
+                "rogue_3_totem_B_E1": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_B_E1_a",
+                        "immediateReward": true,
+                        "reward": [
+                            {
+                                "countByNodeAmount": false,
+                                "item": "rogue_3_chaos",
+                                "amount": -1
+                            }
+                        ]
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": false,
+                        "immediateReward": true,
+                        "reward": [
+                            {
+                                "countByNodeAmount": false,
+                                "item": "rogue_3_chaos",
+                                "amount": -2
+                            }
+                        ]
+                    },
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_E2": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_B_E2_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": false,
+                        "immediateReward": true,
+                        "reward": [
+                            {
+                                "countByNodeAmount": false,
+                                "item": "rogue_3_hpmax",
+                                "amount": 2
+                            }
+                        ]
+                    },
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_E3": {
+                    "basicEffect": {
+                        "changeNode": true,
+                        "nodeType": 2,
+                        "attachBuff": false,
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_B_E3_a",
+                        "immediateReward": false
+                    },
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_E4": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_B_E4_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": true,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_B_E4_b",
+                        "immediateReward": false
+                    },
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_E5": {
+                    "basicEffect": {
+                        "changeNode": true,
+                        "nodeType": 2048,
+                        "attachBuff": false,
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_B_E5_a",
+                        "immediateReward": false
+                    },
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_E6": {
+                    "basicEffect": {
+                        "changeNode": false,
+                        "attachBuff": true,
+                        "buff": "node_effect_B_E6_a",
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": true,
+                        "changeNode": true,
+                        "nodeType": 8192,
+                        "attachBuff": true,
+                        "buff": "node_effect_B_E6_b",
+                        "immediateReward": false
+                    },
+                    "type": "BLUE"
+                },
+                "rogue_3_totem_B_E7": {
+                    "basicEffect": {
+                        "changeNode": true,
+                        "nodeType": 16,
+                        "attachBuff": false,
+                        "immediateReward": false
+                    },
+                    "extraEffect": {
+                        "coverBasicEffect": false,
+                        "changeNode": false,
+                        "attachBuff": false,
+                        "immediateReward": true,
+                        "reward": [
+                            {
+                                "countByNodeAmount": false,
+                                "item": "rogue_3_hpmax",
+                                "amount": 2
+                            }
+                        ]
+                    },
+                    "type": "BLUE"
+                }
+            }
+        },
+        "chaos": {
+            "normalChaos": {
+                "rogue_3_chaos_1": {
+                    "buff": [
+                        {
+                            "key": "choice_cost_up",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_population"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 1
+                                },
+                                {
+                                    "key": "prob",
+                                    "value": 0.25
+                                }
+                            ]
+                        },
+                        {
+                            "key": "choice_cost_up",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_gold"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 1
+                                },
+                                {
+                                    "key": "prob",
+                                    "value": 0.25
+                                }
+                            ]
+                        },
+                        {
+                            "key": "choice_cost_up",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_chaos_purify"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 1
+                                },
+                                {
+                                    "key": "prob",
+                                    "value": 0.25
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "deeperChaosId": "rogue_3_chaos_1_a"
+                },
+                "rogue_3_chaos_2": {
+                    "buff": [
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "rogue_3_blackfog[random_tile]"
+                                },
+                                {
+                                    "key": "cnt",
+                                    "value": 4
+                                },
+                                {
+                                    "key": "attack_speed",
+                                    "value": -50
+                                },
+                                {
+                                    "key": "rogue_3_blackfog[enemy].attack_speed",
+                                    "value": 0
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "deeperChaosId": "rogue_3_chaos_2_a"
+                },
+                "rogue_3_chaos_3": {
+                    "buff": [
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "enemy_attr_final[tag]"
+                                },
+                                {
+                                    "key": "max_hp",
+                                    "value": 1.15
+                                },
+                                {
+                                    "key": "move_speed",
+                                    "value": 1.15
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "deeperChaosId": "rogue_3_chaos_3_a"
+                },
+                "rogue_3_chaos_4": {
+                    "buff": [
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "rogue_3_probDoubleEnemyHP"
+                                },
+                                {
+                                    "key": "prob",
+                                    "value": 0.05
+                                },
+                                {
+                                    "key": "max_hp",
+                                    "value": 1
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "deeperChaosId": "rogue_3_chaos_4_a"
+                },
+                "rogue_3_chaos_5": {
+                    "buff": [
+                        {
+                            "key": "shop_discount_rarity",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_gold"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 0.25
+                                },
+                                {
+                                    "key": "rarity",
+                                    "valueStr": "NORMAL"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "shop_discount_rarity",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_gold"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 0.25
+                                },
+                                {
+                                    "key": "rarity",
+                                    "valueStr": "RARE"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "shop_discount_rarity",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_gold"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 0.25
+                                },
+                                {
+                                    "key": "rarity",
+                                    "valueStr": "SUPER_RARE"
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "deeperChaosId": "rogue_3_chaos_5_a"
+                },
+                "rogue_3_chaos_6": {
+                    "buff": [
+                        {
+                            "key": "level_cost_increase_time_mul",
+                            "blackboard": [
+                                {
+                                    "key": "scale",
+                                    "value": 1.25
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "deeperChaosId": "rogue_3_chaos_6_a"
+                },
+                "rogue_3_chaos_7": {
+                    "buff": [
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "deploy_damage[once]"
+                                },
+                                {
+                                    "key": "hp_radio",
+                                    "value": 0.3
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "deeperChaosId": "rogue_3_chaos_7_a"
+                },
+                "rogue_3_chaos_8": {
+                    "buff": [
+                        {
+                            "key": "extra_cost_on_cost",
+                            "blackboard": [
+                                {
+                                    "key": "id1",
+                                    "valueStr": "rogue_3_vision"
+                                },
+                                {
+                                    "key": "id3",
+                                    "valueStr": "rogue_3_hpmax"
+                                },
+                                {
+                                    "key": "cost1",
+                                    "value": 99
+                                },
+                                {
+                                    "key": "cost2",
+                                    "value": 1
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "deeperChaosId": "rogue_3_chaos_8_a"
+                },
+                "rogue_3_chaos_9": {
+                    "buff": [
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "rogue_3_hideEnemyHUD"
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": true,
+                    "tag": "hpShowState",
+                    "change": "HIDDEN",
+                    "normal": "NORMAL",
+                    "deeperChaosId": "rogue_3_chaos_9_a"
+                },
+                "rogue_3_chaos_10": {
+                    "buff": [
+                        {
+                            "key": "char_ability_new",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "rogue_3_SetSpineColorBalck"
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "deeperChaosId": "rogue_3_chaos_10_a"
+                }
+            },
+            "deeperChaos": {
+                "rogue_3_chaos_1_a": {
+                    "buff": [
+                        {
+                            "key": "choice_cost_up",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_population"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 2
+                                },
+                                {
+                                    "key": "prob",
+                                    "value": 0.5
+                                }
+                            ]
+                        },
+                        {
+                            "key": "choice_cost_up",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_gold"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 2
+                                },
+                                {
+                                    "key": "prob",
+                                    "value": 0.5
+                                }
+                            ]
+                        },
+                        {
+                            "key": "choice_cost_up",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_chaos_purify"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 2
+                                },
+                                {
+                                    "key": "prob",
+                                    "value": 0.5
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "normalChaosId": "rogue_3_chaos_1"
+                },
+                "rogue_3_chaos_2_a": {
+                    "buff": [
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "rogue_3_blackfog[random_tile]"
+                                },
+                                {
+                                    "key": "cnt",
+                                    "value": 8
+                                },
+                                {
+                                    "key": "attack_speed",
+                                    "value": -75
+                                },
+                                {
+                                    "key": "rogue_3_blackfog[enemy].attack_speed",
+                                    "value": 0
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "normalChaosId": "rogue_3_chaos_2"
+                },
+                "rogue_3_chaos_3_a": {
+                    "buff": [
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "enemy_attr_final[tag]"
+                                },
+                                {
+                                    "key": "max_hp",
+                                    "value": 1.2
+                                },
+                                {
+                                    "key": "move_speed",
+                                    "value": 1.2
+                                },
+                                {
+                                    "key": "attack_speed",
+                                    "value": 20
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "normalChaosId": "rogue_3_chaos_3"
+                },
+                "rogue_3_chaos_4_a": {
+                    "buff": [
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "rogue_3_probDoubleEnemyHP"
+                                },
+                                {
+                                    "key": "prob",
+                                    "value": 0.1
+                                },
+                                {
+                                    "key": "max_hp",
+                                    "value": 1
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "normalChaosId": "rogue_3_chaos_4"
+                },
+                "rogue_3_chaos_5_a": {
+                    "buff": [
+                        {
+                            "key": "shop_discount_rarity",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_gold"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 0.5
+                                },
+                                {
+                                    "key": "rarity",
+                                    "valueStr": "NORMAL"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "shop_discount_rarity",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_gold"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 0.5
+                                },
+                                {
+                                    "key": "rarity",
+                                    "valueStr": "RARE"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "shop_discount_rarity",
+                            "blackboard": [
+                                {
+                                    "key": "id",
+                                    "valueStr": "rogue_3_gold"
+                                },
+                                {
+                                    "key": "up",
+                                    "value": 1
+                                },
+                                {
+                                    "key": "rarity",
+                                    "valueStr": "SUPER_RARE"
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "deeperChaosId": "rogue_3_chaos_5_a"
+                },
+                "rogue_3_chaos_6_a": {
+                    "buff": [
+                        {
+                            "key": "level_cost_increase_time_mul",
+                            "blackboard": [
+                                {
+                                    "key": "scale",
+                                    "value": 1.66
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "normalChaosId": "rogue_3_chaos_6"
+                },
+                "rogue_3_chaos_7_a": {
+                    "buff": [
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "deploy_damage[once]"
+                                },
+                                {
+                                    "key": "hp_radio",
+                                    "value": 0.6
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "normalChaosId": "rogue_3_chaos_7"
+                },
+                "rogue_3_chaos_8_a": {
+                    "buff": [
+                        {
+                            "key": "extra_cost_on_cost",
+                            "blackboard": [
+                                {
+                                    "key": "id1",
+                                    "valueStr": "rogue_3_vision"
+                                },
+                                {
+                                    "key": "id3",
+                                    "valueStr": "rogue_3_hpmax"
+                                },
+                                {
+                                    "key": "cost1",
+                                    "value": 99
+                                },
+                                {
+                                    "key": "cost2",
+                                    "value": 2
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "normalChaosId": "rogue_3_chaos_8"
+                },
+                "rogue_3_chaos_9_a": {
+                    "buff": [
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "rogue_3_hideEnemyHUD"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "value": 0.0,
+                                    "valueStr": "enemy_max_hp_down"
+                                },
+                                {
+                                    "key": "max_hp",
+                                    "value": 1.1,
+                                    "valueStr": null
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": true,
+                    "tag": "hpShowState",
+                    "change": "HIDDEN",
+                    "normal": "NORMAL",
+                    "normalChaosId": "rogue_3_chaos_9"
+                },
+                "rogue_3_chaos_10_a": {
+                    "buff": [
+                        {
+                            "key": "char_ability_new",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "rogue_3_SetSpineColorBalck"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "char_attribute_add",
+                            "blackboard": [
+                                {
+                                    "key": "cost",
+                                    "value": 1,
+                                    "valueStr": null
+                                }
+                            ]
+                        }
+                    ],
+                    "specialEffect": false,
+                    "normalChaosId": "rogue_3_chaos_10"
+                }
+            }
+        }
+    }
+}

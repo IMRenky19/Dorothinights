@@ -8,7 +8,12 @@
             "ro3_n_1_5"             
         ],
         "ZONE_2_NORMAL_BATTLE_POOL": [
-            "ro3_n_2_1"            
+            "ro3_n_2_1",            
+            "ro3_n_2_2",            
+            "ro3_n_2_3",            
+            "ro3_n_2_4",            
+            "ro3_n_2_5",            
+            "ro3_n_2_6"             
         ],
         "ZONE_3_NORMAL_BATTLE_POOL": [
             "ro3_n_3_1",            

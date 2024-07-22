@@ -5,7 +5,7 @@ from .buyGoods import buyGoods
 from .chooseBattleReward import chooseBattleReward
 from .chooseInitialRecruitSet import chooseInitialRecruitSet
 from .chooseInitialRelic import chooseInitialRelic
-#from .confirmPredict import confirmPredict
+from .confirmPredict import confirmPredict
 from .finishBattleReward import finishBattleReward
 from .finishEvent import finishEvent
 from .gameSettle import gameSettle
@@ -19,7 +19,7 @@ from .refreshShop import refreshShop
 from .shopAction import shopAction
 from .selectChoice import selectChoice
 #from .shopBattleStart import shopBattleStart
-#from .useTotem import useTotem
+from .useTotem import useTotem
 from .giveUpGame import giveUpGame
 from .createGame import createGame
 from .closeRecruitTicket import closeRecruitTicket
@@ -37,7 +37,7 @@ router = Router(
         chooseInitialRecruitSet,
         chooseInitialRelic,
         closeRecruitTicket,
-        #confirmPredict,
+        confirmPredict,
         finishBattleReward,
         finishEvent,
         gameSettle,
@@ -50,7 +50,7 @@ router = Router(
         refreshShop,
         selectChoice,
         #shopBattleStart,
-        #useTotem,
+        useTotem,
         giveUpGame,
         createGame,
         shopAction

@@ -170,6 +170,7 @@ def getOutBuffs(rogueClass: RogueBasicModel):
             "shopCanBattle": False,
             "extraGoods1": False,
             "extraGoods2": False,
+            "lastTotemNodeIndex": [],
             "upgrade_bonus_4": False,        #地区行动方案效果（0无，1有，2带随机直升）
             "upgrade_bonus_5": False,        #全局作战文件效果（0无，1有，2带随机直升）
             "upgrade_bonus_6": False         #人事部密信效果（0无，1有，2带随机直升）
@@ -296,7 +297,8 @@ def getInnerBuffs(rogueClass: RogueBasicModel, hardLevel: int):
             "band_direct_upgrade":0,         #职业队直升，0禁用，1近锋，2重辅，3狙医，4术特
             "no_upgrade_population":0,       #升级是否不消耗希望
             "totem_modify": 0,               #密文修饰概率
-            "band_13_another_vision_set": 0  #科学主义分队效果：每层+2抗干扰
+            "band_13_another_vision_set": 0, #科学主义分队效果：每层+2抗干扰
+            "band_12_always_predict_totem": 0,#生活至上分队效果：远见时总是远见密文板
             
         }
         
@@ -499,7 +501,8 @@ async def createGameExtra(rogueClass: RogueBasicModel, hardLevel: int):
                     "lastBattleGain": 0
                 },
                 "totem": {
-                    "totemPiece": []
+                    "totemPiece": [],
+                    "predictTotemId": None
                 },
                 "vision": {
                     "value": 0,

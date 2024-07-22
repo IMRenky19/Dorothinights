@@ -1,4 +1,4 @@
-from .map import generateSightByVision
+from ..rogue_3.tools.map import generateSightByVision
 from ....Model.RogueBase import RogueBasicModel
 from server.core.utils.time import time
 from random import shuffle, randint, sample, random
@@ -158,10 +158,56 @@ def getVision(rlv2_data: dict):
 def setVision(rlv2_data: dict, sets: int):
     rlv2_data["current"]["module"]["vision"]["value"] = sets
     
-def addVision(rlv2_data: dict, add: int):
+def addVision(rlv2_data: dict, add: int):   #ROGUE_3独有
     rlv2_data["current"]["module"]["vision"]["value"] += add
     visionChecker(rlv2_data)
     generateSightByVision(getCurrentZone(rlv2_data), getPosition(rlv2_data), getVision(rlv2_data), rlv2_data["current"]["map"]["zones"])
+    
+def addChaos(rlv2_data: dict, add: int):
+    rlv2_data["current"]["module"]["chaos"]["value"] += add
+    
+def setChaos(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["module"]["chaos"]["value"] = sets
+    
+def setChaosMaxLevel(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["module"]["chaos"]["level"] = sets
+    
+def setChaosMaxValue(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["module"]["chaos"]["curMaxValue"] = sets
+    
+def addChaosMaxValue(rlv2_data: dict, add: int):
+    rlv2_data["current"]["module"]["chaos"]["curMaxValue"] += add
+    
+def setChaosMaxLevel(rlv2_data: dict, sets: int):
+    rlv2_data["current"]["module"]["chaos"]["level"] = sets
+    
+def addChaosMaxLevel(rlv2_data: dict, add: int):
+    rlv2_data["current"]["module"]["chaos"]["level"] += add
+    
+def getChaosValue(rlv2_data: dict, add: int):
+    return rlv2_data["current"]["module"]["chaos"]["value"]
+
+def getChaosLevel(rlv2_data: dict):
+    return rlv2_data["current"]["module"]["chaos"]["level"]
+
+def chaosLevelChecker(rogueData: dict, rogueExtension: dict):
+    currentChaos = getChaosValue(rogueData)
+    currentChaosLevel = getChaosLevel(rogueData)
+    normalChaos = [0,4,8,12,16,20,24,28,32,None]
+    deeperChaos = [0,4,8,12,15,18,21,23,25,None]
+    chaosNumList = deeperChaos if rogueExtension["1_chaos_deeper"] else normalChaos
+    chaoticNum = 0
+    while True:
+        currentChaos = getChaosValue(rogueData)
+        currentChaosLevel = getChaosLevel(rogueData)
+        if currentChaos >= chaosNumList[currentChaosLevel + 1] and True:          #TODO:专家模式，炼狱模式
+            addChaosMaxLevel(rogueData, 1)
+            setChaosMaxValue(rogueData, chaosNumList[currentChaosLevel + 2])
+            chaoticNum += 1
+            continue
+        if currentChaos < chaosNumList[currentChaosLevel + 1] or chaosNumList[currentChaosLevel + 1] == None:
+            break
+    return chaoticNum
     
 def visionChecker(rogueData: dict):
     currentVision = getVision(rogueData)
@@ -263,6 +309,9 @@ def addTotem(rlv2_data: dict, item: str, enchantment: str = None):
         }
     )
     
+def getTotemList(rlv2_data: dict):
+    return rlv2_data["current"]["module"]["totem"]["totemPiece"]
+    
 def isTotemExist(rlv2_data: dict, totemId: str):
     for totem in rlv2_data["current"]["module"]["totem"]["totemPiece"]:
         if totem["id"] == totemId:
@@ -316,6 +365,8 @@ def addTicketBattle(rlv2_data: dict, item: str, fromWhere = "battle"):
             "needAssist": False
     }
     return index
+
+
 def removeTotem(rlv2_data: dict, index: str):
     rlv2_data["current"]["module"]["totem"]["totemPiece"][int(index[2:]) - 1]["used"] = True
 
@@ -330,7 +381,7 @@ def getNextTicketIndex(rlv2_data: dict):
     return f"t_{i}"
 
 def getNextRelicIndex(rlv2_data: dict):
-    return f"r_{len(rlv2_data["current"]["inventory"]["relic"])}"
+    return f"r_{len(rlv2_data['current']['inventory']['relic'])}"
 
 def getNextPendingIndex(rlv2_data: dict):
     d = set()
@@ -447,6 +498,8 @@ def getChars(rogueData: dict, rogueExtension: dict, recruitTicketId: str, userSy
     }
     
     isOnlyUpgrade = False if recruitTicketId.find("upgrade") == -1 else True
+    if isOnlyUpgrade:
+        isFreeUpgrade = True
     ticketDetail = rogueTable["details"][theme]["upgradeTickets"][recruitTicketId]\
                             if isOnlyUpgrade \
                         else rogueTable["details"][theme]["recruitTickets"][recruitTicketId]
@@ -456,7 +509,7 @@ def getChars(rogueData: dict, rogueExtension: dict, recruitTicketId: str, userSy
     rarityList = [int(x.split("_")[1])
         for x in ticketDetail["rarityList"]
     ]
-    extraCloneChar = ticketDetail["extraCharIds"]
+    extraCloneChar = ticketDetail["extraCharIds"] if ticketDetail.__contains__("extraCharIds") else []
     haveUpgradeBonus = False if recruitTicketId.find("discount") == -1 else True
     rarity6Buff = rogueExtension["upgrade_bonus_6"]
     rarity5Buff = rogueExtension["upgrade_bonus_5"]
@@ -507,6 +560,7 @@ def getChars(rogueData: dict, rogueExtension: dict, recruitTicketId: str, userSy
                 "isUpgrade": True,
                 "isCure": False,
                 "population": rarity if not isFreeUpgrade else 0,
+                "defaultSkillIndex": 0,
                 "charBuff": [],
                 "troopInstId": canUpgradeChars[char["charId"]]["troopInstId"]
             }
@@ -543,6 +597,7 @@ def getChars(rogueData: dict, rogueExtension: dict, recruitTicketId: str, userSy
                 "upgradePhase": 0,
                 "isUpgrade": False,
                 "isCure": False,
+                "defaultSkillIndex": 0,
                 "population": rarity,
                 "charBuff": [],
                 "troopInstId": "0"
@@ -631,7 +686,6 @@ def getChars(rogueData: dict, rogueExtension: dict, recruitTicketId: str, userSy
                 case 3:
                     char["level"] = 80
             if len(char["skills"]) == 3:
-                char["defaultSkillIndex"] = 1
                 char["skills"][-1]["unlock"] = 0
             for skill in char["skills"]:
                 skill["specializeLevel"] = 0

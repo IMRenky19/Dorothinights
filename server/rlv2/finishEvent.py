@@ -7,6 +7,17 @@ async def finishEvent(request: Request) -> Response:
     request_data = await request.json()
     secret = request.headers["Secret"]
     rogue = await rogueFinishEvent(secret)
+    #match rogue.extension["isPredict"]:
+    #    case "chaos":
+    #        deleted = {
+    #            "rlv2":{
+    #                "current":{
+    #                    "module":{
+    #                        "totem":["predict"]
+    #                    }
+    #                }
+    #            }
+    #        }
     return Response(
         content= {
             "playerDataDelta":{
