@@ -17,6 +17,6 @@ async def rogueMoveTo(rogueClass: RogueBasicModel, position: dict):
     moveTo(rlv2, rlv2_extension, position, getCurrentZone(rlv2))
     pending = generateNonBattlePending(rlv2, rlv2_extension)
     addPending(rlv2, pending)
-    
+    clearExtraResponseData(rlv2, rlv2_extension)
     rogueClass.rlv2 = rlv2
     rogueClass.extension = rlv2_extension

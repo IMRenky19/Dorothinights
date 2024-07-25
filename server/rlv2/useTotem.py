@@ -10,14 +10,15 @@ async def useTotem(request: Request) -> Response:
     nodeIndex = request_data["nodeIndex"]
     rogue = await rogueUseTotem(secret, totemIndex, nodeIndex)
     nodeIndex = rogue.extension["lastTotemNodeIndex"]
+    content= {
+        "playerDataDelta":{
+            "modified":{
+                "rlv2":rogue.rlv2
+            },
+            "deleted":{}
+        }
+    }
+    content.update(rogue.extension["extraResponse"])
     return Response(
-        content= {
-            "nodeIndex": nodeIndex,
-            "playerDataDelta":{
-                "modified":{
-                    "rlv2":rogue.rlv2
-                },
-                "deleted":{}
-            }
-        } 
+        content = content
     )

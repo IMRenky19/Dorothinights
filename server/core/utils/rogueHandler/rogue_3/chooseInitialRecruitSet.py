@@ -11,6 +11,7 @@ ts = time()
 async def chooseInitialRecruitSet(rogueClass: RogueBasicModel, select: str):
     
     rlv2_data = getRogueData(rogueClass)
+    rlv2_extension = getRogueExtensionData(rogueClass)
     rlv2_data["current"]["player"]["pending"].pop(0)
     
     match select:
@@ -28,6 +29,7 @@ async def chooseInitialRecruitSet(rogueClass: RogueBasicModel, select: str):
                 addTicket(rlv2_data, ticket_id, True, profession)
         case "recruit_group_random":
             pass
-        
+    clearExtraResponseData(rlv2_data, rlv2_extension)
         
     rogueClass.rlv2 = rlv2_data
+    rogueClass.extension = rlv2_extension

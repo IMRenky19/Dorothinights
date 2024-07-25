@@ -19,6 +19,7 @@ async def chooseBattleReward(rogueClass: RogueBasicModel, index: int, sub: int):
     #itemType: str = battleRewardsPending[-1]["content"]["battleReward"]["rewards"][index]["items"][sub]["id"]
     #gainItem(rlv2, itemType)
     gainItemsAfterBattle(rlv2, index, sub, userSyncData, rlv2_extension)
+    clearExtraResponseData(rlv2, rlv2_extension)
     #TODO:判断当前节点是否为当前层结尾
     rogueClass.rlv2 = rlv2
     rogueClass.extension = rlv2_extension

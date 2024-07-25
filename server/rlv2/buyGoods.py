@@ -8,13 +8,15 @@ async def buyGoods(request: Request) -> Response:
     secret = request.headers["Secret"]
     choose = int(request_data["select"][0])
     rogue = await rogueBuyGoods(secret, choose)
+    content= {
+        "playerDataDelta":{
+            "modified":{
+                "rlv2":rogue.rlv2
+            },
+            "deleted":{}
+        }
+    }
+    content.update(rogue.extension["extraResponse"])
     return Response(
-        content= {
-            "playerDataDelta":{
-                "modified":{
-                    "rlv2":rogue.rlv2
-                },
-                "deleted":{}
-            }
-        } 
+        content = content
     )

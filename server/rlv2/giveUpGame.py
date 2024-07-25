@@ -8,25 +8,29 @@ async def giveUpGame(request: Request) -> Response:
     
     secret = request.headers["Secret"]
     await giveUpRogue(secret)    
-    return Response(
-        content = {
-            "result": "ok", 
-            "playerDataDelta": {
-                "modified": {
-                    "rlv2": {
-                        "current": {
-                            "player": None, 
-                            "record": None, 
-                            "map": None, 
-                            "troop": None, 
-                            "inventory": None, 
-                            "game": None, 
-                            "buff": None, 
-                            "module": None
-                            }
+    
+    content = {
+        "result": "ok", 
+        "playerDataDelta": {
+            "modified": {
+                "rlv2": {
+                    "current": {
+                        "player": None, 
+                        "record": None, 
+                        "map": None, 
+                        "troop": None, 
+                        "inventory": None, 
+                        "game": None, 
+                        "buff": None, 
+                        "module": None
                         }
-                    }, 
-                "deleted": {}
-                }
+                    }
+                }, 
+            "deleted": {}
             }
-        )
+    }  
+    
+    #content.update(rogue.extension["extraResponse"])
+    return Response(
+        content = content
+    )

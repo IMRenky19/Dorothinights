@@ -11,6 +11,7 @@ ts = time()
 
 async def recruitChar(rogueClass: RogueBasicModel, ticketId: str, choice: str, isClose = False):
     #print(choice)
+    rlv2Extension = getRogueExtensionData(rogueClass)
     if isClose:
         rlv2 = getRogueData(rogueClass)
         popPending(rlv2)
@@ -38,5 +39,12 @@ async def recruitChar(rogueClass: RogueBasicModel, ticketId: str, choice: str, i
         userData = await getAccountBySecret(rogueClass.secret)
         userSyncData = userData.user
         activateTickets(rlv2, rlv2["current"]["inventory"]["recruit"][nextTicketId]["id"], userSyncData, rogueExtension, nextTicketId)
-
+        
+    rlv2Extension["extraResponse"] = {
+        "chars": [rlv2["current"]["inventory"]["recruit"][ticketId]["result"]]
+    }
+    rlv2Extension["isNewExtraResponse"] = True
+    clearExtraResponseData(rlv2, rlv2Extension)
+    rogueClass.extension = rlv2Extension
     rogueClass.rlv2 = rlv2
+    

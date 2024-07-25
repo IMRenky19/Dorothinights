@@ -89,8 +89,32 @@ async def battleFinish(rogueClass: RogueBasicModel, battleData: str, loginTime: 
             pass
     pending = generateBattleRewardPending(rlv2, rlv2_extension, currentNodeStage, \
         currentNodeType, decryptedBattleData, gainExp, gainGold)
+    if pending["content"]["battleReward"]["earn"]["damage"] != 0:
+        tmpValue = (1 if rlv2_extension["3_more_chaos"] else 0) + (1 if rlv2_extension["band_11_another_chaos_set"] else 0) + 1
+        increaseChaosValue(rlv2, rlv2_extension, tmpValue)
+        rlv2["current"]["module"]["chaos"]["lastBattleGain"] = tmpValue
+        rlv2["current"]["player"]["property"]["conPerfectBattle"] = 0
+    else:
+        if rlv2_extension["band_11_another_chaos_set"]:
+            increaseChaosValue(rlv2, rlv2_extension, -2)
+            rlv2["current"]["module"]["chaos"]["lastBattleGain"] = -2
+        rlv2["current"]["player"]["property"]["conPerfectBattle"] += 1
+    currentVision = getVision(rlv2)
+    if currentVision > 6:
+        existence = isRelicExist(rlv2, "rogue_3_relic_fight_22", rlv2_extension)
+        if (existence and (getRelicLayer(rlv2, existence[1]) <= 10)) and random() < 0.3:
+            addRelicLayer(rlv2, existence[1], 1)
+    if currentNodeType == NodeType.ELITE_BATTLE:
+        existence = isRelicExist(rlv2, "rogue_3_relic_fight_28",   rlv2_extension)
+        if existence and (getRelicLayer(rlv2, existence[1]) <= 15):
+            addRelicLayer(rlv2, existence[1], 1)
+        existence = isRelicExist(rlv2, "rogue_3_relic_fight_29",   rlv2_extension)
+        if existence and (getRelicLayer(rlv2, existence[1]) <= 15):
+            addRelicLayer(rlv2, existence[1], 1)
+    
     popPending(rlv2)
     addPending(rlv2, pending)
     setCurrentState(rlv2, "PENDING")
+    clearExtraResponseData(rlv2, rlv2_extension)
     rogueClass.rlv2 = rlv2
     rogueClass.extension = rlv2_extension

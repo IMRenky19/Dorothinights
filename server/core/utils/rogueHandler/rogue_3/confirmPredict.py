@@ -17,5 +17,6 @@ async def confirmPredict(rogueClass: RogueBasicModel):
     rlv2_extension = getRogueExtensionData(rogueClass)
     setCurrentState(rlv2, "WAIT_MOVE")
     clearAllPending(rlv2)
+    clearExtraResponseData(rlv2, rlv2_extension)
     rogueClass.rlv2 = rlv2
     rogueClass.extension = rlv2_extension

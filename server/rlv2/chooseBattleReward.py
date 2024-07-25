@@ -8,13 +8,15 @@ async def chooseBattleReward(request: Request) -> Response:
     index = request_data["index"]
     sub = request_data["sub"]
     rogue = await rogueChooseBattleReward(secret, index, sub)
+    content= {
+        "playerDataDelta":{
+            "modified":{
+                "rlv2":rogue.rlv2
+            },
+            "deleted":{}
+        }
+    }
+    content.update(rogue.extension["extraResponse"])
     return Response(
-        content= {
-            "playerDataDelta":{
-                "modified":{
-                    "rlv2":rogue.rlv2
-                },
-                "deleted":{}
-            }
-        } 
+        content = content
     )

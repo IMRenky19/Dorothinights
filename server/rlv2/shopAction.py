@@ -13,13 +13,15 @@ async def shopAction(request: Request) -> Response:
     elif request_data["recycle"]:
         pass    #TODO:萨卡兹肉鸽出售藏品/思绪功能
     
+    content= {
+        "playerDataDelta":{
+            "modified":{
+                "rlv2":rogue.rlv2
+            },
+            "deleted":{}
+        }
+    }
+    content.update(rogue.extension["extraResponse"])
     return Response(
-        content= {
-            "playerDataDelta":{
-                "modified":{
-                    "rlv2":rogue.rlv2
-                },
-                "deleted":{}
-            }
-        } 
+        content = content
     )

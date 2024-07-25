@@ -15,9 +15,14 @@ async def buyGoods(rogueClass: RogueBasicModel, choice: int):
     userSyncData = userData.user
     shop = rlv2["current"]["player"]["pending"][0]["content"]["battleShop"]
     chosenItem = shop["goods"][choice]
-    gainItem(rlv2, None, 1, chosenItem["itemId"], userSyncData, rlv2_extension)
     addGold(rlv2, -(chosenItem["priceCount"]))
+    gainItem(rlv2, None, 1, chosenItem["itemId"], userSyncData, rlv2_extension)
+    
+    if isRelicExist(rlv2, "rogue_3_relic_explore_2", rlv2_extension):   #TODO：失与得部分
+        addPopulation(rlv2, 1)
+        
     chosenItem["count"] -= 1
     #TODO:判断当前节点是否为当前层结尾
+    clearExtraResponseData(rlv2, rlv2_extension)
     rogueClass.rlv2 = rlv2
     rogueClass.extension = rlv2_extension

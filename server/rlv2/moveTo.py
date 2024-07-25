@@ -7,13 +7,15 @@ async def moveTo(request: Request) -> Response:
     secret = request.headers["Secret"]
     position = request_data["to"]
     rogue = await rogueMoveTo(secret, position)
+    content= {
+        "playerDataDelta":{
+            "modified":{
+                "rlv2":rogue.rlv2
+            },
+            "deleted":{}
+        }
+    }
+    content.update(rogue.extension["extraResponse"])
     return Response(
-        content= {
-            "playerDataDelta":{
-                "modified":{
-                    "rlv2":rogue.rlv2
-                },
-                "deleted":{}
-            }
-        } 
+        content = content
     )

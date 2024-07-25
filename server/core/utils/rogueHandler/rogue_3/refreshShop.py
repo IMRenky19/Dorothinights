@@ -13,5 +13,6 @@ async def refreshShop(rogueClass: RogueBasicModel):
     shop["goods"] = generateShopGoods(shop["id"], rlv2, rlv2_extension)
     #shop["refreshCnt"] _= 1
     #TODO:判断当前节点是否为当前层结尾
+    clearExtraResponseData(rlv2, rlv2_extension)
     rogueClass.rlv2 = rlv2
     rogueClass.extension = rlv2_extension

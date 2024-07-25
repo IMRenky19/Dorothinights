@@ -4,6 +4,7 @@ from ..common.rlv2tools import *
 from .. import common
 from .tools.battleAndEvent import *
 from .tools.movements import *
+from .tools.totemAndChaos import increaseChaosValue
 from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_MODULE_DATA_PATH
 from server.core.utils.time import time
 from random import shuffle, randint
@@ -17,6 +18,7 @@ async def useTotem(rogueClass: RogueBasicModel, totemIndex: list, nodeIndex: lis
     rlv2Data = getRogueData(rogueClass)
     rlv2ExtensionData = getRogueExtensionData(rogueClass)
     
+    increaseChaosValue(rlv2Data, rlv2ExtensionData, -1, False)
     totemList = getTotemList(rlv2Data)
     
     upperTotemId = totemList[int(totemIndex[0].split("_")[1])]["id"]
@@ -129,10 +131,10 @@ async def useTotem(rogueClass: RogueBasicModel, totemIndex: list, nodeIndex: lis
         battleGenerator(rlv2Data["current"]["map"]["zones"], int(zone), [], None, True, selectedNodePos)
     if rewards:
         for item in rewards:
-            gainItem(rlv2Data, item["item"], len(selectedNodePos)*item["amount"] if item["countByNodeAmount"] else item["amount"])
+            gainItem(rlv2Data, item["item"], len(selectedNodePos)*item["amount"] if item["countByNodeAmount"] else item["amount"], rogueExtension = rlv2ExtensionData)
             
     #totemList[int(totemIndex[0][2])-1]["used"] = True
     #totemList[int(totemIndex[1][2])-1]["used"] = True
-    
+    clearExtraResponseData(rlv2Data, rlv2ExtensionData)
     rogueClass.rlv2 = rlv2Data
     rogueClass.extension = rlv2ExtensionData

@@ -207,7 +207,7 @@ def generateBattlePending(rogueData: dict, rogueExtension: dict, boxInfo: dict, 
                 "diceRoll":[],
                 "boxInfo":boxInfo,
                 "tmpChar":[],
-                "sanity":0,
+                "sanity":22222,
                 "unKeepBuff":battleBuffs
             }
         }
@@ -382,7 +382,7 @@ def generateBattleRewardPending(rogueData: dict, rogueExtension: dict, stageName
 
 
 
-def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int, chestInfo: dict, theme: str, chanceInfo: dict, ticketCount = 1, rogueExtension: dict = {}, hasRelicInfo: dict = {}, rogueData = {}) -> list:
+def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int, chestInfo: dict, theme: str, chanceInfo: dict, ticketCount = 1, rogueExtension: dict = {}, hasRelicInfo: dict = {}, rogueData = {}, relicExtra = 0, ticketExtra = 0) -> list:
     index = 0
     rewards = []
     #TODO:根据是否在树洞更改部分资源掉落概率
@@ -416,7 +416,7 @@ def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold:
                     {
                         "sub": 0,
                         "id": f"{theme}_gold",
-                        "count":2
+                        "count":2 + (1 if isRelicExist(rogueData, "rogue_3_relic_res_1", rogueExtension) else 0)
                     }
                 ],
                 "done": 0,
@@ -433,7 +433,7 @@ def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold:
                     {
                         "sub": 0,
                         "id": f"{theme}_gold",
-                        "count":4
+                        "count":4 + (5 if isRelicExist(rogueData, "rogue_3_relic_res_1", rogueExtension) else 0)
                     }
                 ],
                 "done": 0,
@@ -450,7 +450,7 @@ def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold:
                     {
                         "sub": 0,
                         "id": f"{theme}_gold",
-                        "count":10
+                        "count":10 + (15 if isRelicExist(rogueData, "rogue_3_relic_res_1", rogueExtension) else 0)
                     }
                 ],
                 "done": 0,
@@ -464,7 +464,7 @@ def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold:
     hasRelicInfo = rogueData["current"]["inventory"]["relic"]
     hasRelic = [x["id"] for x in hasRelicInfo.values()]
     relics = [i for i in roguePoolTable[theme]["battleRelicPool"] if not (i in hasRelic)] if not isBoss else [i for i in roguePoolTable[theme]["bossRelicPool"] if not (i in hasRelic)]
-    relicCount = 2 if isBoss else 1
+    relicCount = (2 if isBoss else 1) + relicExtra
     sub = 0
     relicItems = []
     if random() < relicChance:
@@ -500,7 +500,7 @@ def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold:
                 "items":[],
                 "done": 0
             }
-    for i in range(ticketCount):
+    for i in range(ticketCount + ticketExtra):
         ticketBaseObject["items"].append(
             {
                 "sub": i,
@@ -519,17 +519,17 @@ def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold:
     }
         
 
-def gainItemsAfterBattle(rogueData: dict, index: int, subIndex: int, userData = None, rogueExtension = None):
+def gainItemsAfterBattle(rogueData: dict, index: int, subIndex: int, userData = None, rogueExtension = None, customGainItem = None):
     theme = getTheme(rogueData)
     #TODO 招募券以及典训藏品的激活，部分加携带/生命值/护盾/希望等等的资源增加，部分藏品的特殊效果（密信系列的招募减希望/直升，和坍缩值/指挥经验相关机制，叠层藏品）
     battleRewardsPending = rogueData["current"]["player"]["pending"]
     itemType: str = battleRewardsPending[-1]["content"]["battleReward"]["rewards"][index]["items"][subIndex]["id"]
     itemCount = battleRewardsPending[-1]["content"]["battleReward"]["rewards"][index]["items"][subIndex]["count"]
     item = battleRewardsPending[-1]["content"]["battleReward"]["rewards"][index]
-    gainItem(rogueData, itemType, itemCount, userSyncData = userData, rogueExtension=rogueExtension)
+    customGainItem(rogueData, itemType, itemCount, itemType, userSyncData = userData, rogueExtension=rogueExtension)
     item["done"] = 1
         
-def gainItem(rogueData: dict, itemType: str, amount: int, item: str = None, userSyncData = None, rogueExtension = None, canUpgradeIndex = None):
+def gainItem(rogueData: dict, itemType: str, amount: int, item: str = None, userSyncData = None, rogueExtension = None, canUpgradeIndex = None, customProcessRelic = None):
     theme = getTheme(rogueData)
     if not itemType:
         itemType = item
@@ -545,7 +545,7 @@ def gainItem(rogueData: dict, itemType: str, amount: int, item: str = None, user
         case itemType if itemType.find("relic") != -1:
             realRelic = relicLevelCheck(item, rogueExtension)
             index = addRelic(rogueData, realRelic)
-            processRelic(rogueData, rogueExtension, index, userSyncData)
+            customProcessRelic(rogueData, rogueExtension, index, userSyncData)
         case itemType if itemType.find("shield") != -1:
             addShield(rogueData, amount)
         case itemType if itemType.find("population") != -1:
@@ -563,12 +563,6 @@ def gainItem(rogueData: dict, itemType: str, amount: int, item: str = None, user
         case itemType if itemType.find("char_limit") != -1:
             #addCharLimit(rogueExtension, amount)
             pass
-        case itemType if itemType.find("totem") != -1:
-            addTotem(rogueData, itemType)
-        case itemType if itemType.find("vision") != -1:
-            addVision(rogueData, amount)
-        case itemType if itemType.find("chaos") != -1:
-            addChaos(rogueData, amount)
            
 def activateTickets(rogueData: dict, item, userSyncData, rogueExtension, ticketId):
     theme = getTheme(rogueData)
@@ -582,15 +576,15 @@ def activateTickets(rogueData: dict, item, userSyncData, rogueExtension, ticketI
     rogueData["current"]["inventory"]["recruit"][ticketId]["state"] = 1
     rogueData["current"]["inventory"]["recruit"][ticketId]["list"] = chars
     
-def processRelic(rogueData, rogueExtension, index, userSyncData):
+def processRelic(rogueData, rogueExtension, index, userSyncData, customGainItem):
     theme = getTheme(rogueData)
     relicId = rogueData["current"]["inventory"]["relic"][index]["id"]
     relicDetail = rogueTable["details"][theme]["relics"][relicId]
     for buff in relicDetail["buffs"]:
         if buff["key"] == "immediate_reward":
-            gainItem(rogueData, buff["blackboard"][0]["valueStr"], buff["blackboard"][1]["value"], buff["blackboard"][0]["valueStr"], userSyncData, rogueExtension)
+            customGainItem(rogueData, buff["blackboard"][0]["valueStr"], buff["blackboard"][1]["value"], buff["blackboard"][0]["valueStr"], userSyncData, rogueExtension)
         if buff["key"] == "immediate_cost":
-            gainItem(rogueData, buff["blackboard"][0]["valueStr"], -(buff["blackboard"][1]["value"]), buff["blackboard"][0]["valueStr"], userSyncData, rogueExtension)
+            customGainItem(rogueData, buff["blackboard"][0]["valueStr"], -(buff["blackboard"][1]["value"]), buff["blackboard"][0]["valueStr"], userSyncData, rogueExtension)
     
 def relicLevelCheck(relicId: str, rogueExtension: dict):
     canUpgradeIndex = rogueExtension["canUpgradeIndex"]

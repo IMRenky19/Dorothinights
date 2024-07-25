@@ -7,13 +7,15 @@ async def battleFinish(request: Request) -> Response:
     secret = request.headers["Secret"]
     battleData = request_data["data"]
     rogue = await rogueBattleFinish(secret, battleData)
+    content= {
+        "playerDataDelta":{
+            "modified":{
+                "rlv2":rogue.rlv2
+            },
+            "deleted":{}
+        }
+    }
+    content.update(rogue.extension["extraResponse"])
     return Response(
-        content= {
-            "playerDataDelta":{
-                "modified":{
-                    "rlv2":rogue.rlv2
-                },
-                "deleted":{}
-            }
-        } 
+        content = content
     )

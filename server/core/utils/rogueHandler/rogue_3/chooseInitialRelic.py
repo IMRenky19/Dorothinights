@@ -54,6 +54,6 @@ async def chooseInitialRelic(rogueClass: RogueBasicModel, num: int):
         "count": 1,
         "ts": ts
     }
-    
+    clearExtraResponseData(rlv2_data, extension)
     rogueClass.rlv2 = rlv2_data
     rogueClass.extension = extension

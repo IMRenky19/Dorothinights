@@ -7,6 +7,7 @@ ts = time()
 
 async def activeRecruitTicket(rogueClass: RogueBasicModel, choice: str):
     rlv2_data = getRogueData(rogueClass)
+    rlv2Extension = getRogueExtensionData(rogueClass)
     user = await getAccountBySecret(rogueClass.secret)
     userSyncData = user.user
     addRecruitPending(rlv2_data, choice)
@@ -20,6 +21,10 @@ async def activeRecruitTicket(rogueClass: RogueBasicModel, choice: str):
     rlv2_data["current"]["inventory"]["recruit"][choice]["state"] = 1
     rlv2_data["current"]["inventory"]["recruit"][choice]["list"] = chars
     
-    
+    clearExtraResponseData(rlv2_data, rlv2Extension)
+    #rlv2Extension["extraResponse"] = {
+    #    "chars": [rlv2_data["current"]["inventory"]["recruit"][ticketId]["result"]]
+    #}
+    rogueClass.extension = rlv2Extension
     rogueClass.rlv2 = rlv2_data
     

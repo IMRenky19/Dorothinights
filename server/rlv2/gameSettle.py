@@ -96,49 +96,53 @@ async def gameSettle(request: Request) -> Response:
     }
     await giveUpRogue(secret)
     
-    return Response(
-        content= {
-            "game":endData,
-            "outer":{           #TODO
-                "mission":{
-                    "before":[],
-                    "after":[]
-                },
-                "missionBp":{
-                    "cnt":0,
-                    "from":55000,
-                    "to":55000
-                },
-                "relicBp":{
-                    "cnt":0,
-                    "from":55000,
-                    "to":55000
-                },
-                "totemBp":{
-                    "cnt":0,
-                    "from":55000,
-                    "to":55000
-                },
-                "relicUnlock":[],
-                "totemUnlock":[],
-                "gp":0
+    
+    content= {
+        "game":endData,
+        "outer":{           #TODO
+            "mission":{
+                "before":[],
+                "after":[]
             },
-            "playerDataDelta":{
-                "modified":{
-                    "rlv2": {
-                        "current": {
-                            "player": None, 
-                            "record": None, 
-                            "map": None, 
-                            "troop": None, 
-                            "inventory": None, 
-                            "game": None, 
-                            "buff": None, 
-                            "module": None
-                            }
+            "missionBp":{
+                "cnt":0,
+                "from":55000,
+                "to":55000
+            },
+            "relicBp":{
+                "cnt":0,
+                "from":55000,
+                "to":55000
+            },
+            "totemBp":{
+                "cnt":0,
+                "from":55000,
+                "to":55000
+            },
+            "relicUnlock":[],
+            "totemUnlock":[],
+            "gp":0
+        },
+        "playerDataDelta":{
+            "modified":{
+                "rlv2": {
+                    "current": {
+                        "player": None, 
+                        "record": None, 
+                        "map": None, 
+                        "troop": None, 
+                        "inventory": None, 
+                        "game": None, 
+                        "buff": None, 
+                        "module": None
                         }
-                    },
+                    }
                 },
-                "deleted":{}
-        }
+            },
+            "deleted":{}
+    }
+    content.update(rogue.extension["extraResponse"])
+    return Response(
+        content = content
     )
+    

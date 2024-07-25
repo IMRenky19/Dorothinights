@@ -20,7 +20,7 @@ def createGameBase():
                     "current": 8,
                     "max": 8
                 },
-                "gold": 6 + 9999,
+                "gold": 6,
                 "shield": 0,
                 "capacity": 6,
                 "population": {
@@ -125,11 +125,9 @@ def createGameBase():
 def createGame(hardLevel: int, rogueClass: RogueBasicModel):
     base_data = createGameBase()
     return base_data
-def getOutBuffs(rogueClass: RogueBasicModel):
-        rlv2_tmp = rogueClass.rlv2
-        rlv2Theme = rogueClass.theme
-        outer_buff = rlv2_tmp["outer"][rlv2Theme]["buff"]
-        shop_buff = rlv2_tmp["outer"][rlv2Theme]["bank"]["reward"]
+def getOutBuffs(rlv2_data: dict, rlv2_extension: dict):
+        outer_buff = rlv2_data["outer"]["rogue_3"]["buff"]
+        shop_buff = rlv2_data["outer"]["rogue_3"]["bank"]["reward"]
         ex_buff_outer = {
             "extra_atk": 0,
             "extra_gold": 0,
@@ -162,6 +160,7 @@ def getOutBuffs(rogueClass: RogueBasicModel):
             "realZone": 0,
             "currentEvent": None,
             "currentScene": None,
+            
             "canUpgradeIndex": [16,17,18,19,22,23,35,36,37,38,40,41,43,44,54,55,56,59],
             "shopHaveBattled": False,
             "shopCost": 1,
@@ -171,9 +170,13 @@ def getOutBuffs(rogueClass: RogueBasicModel):
             "extraGoods1": False,
             "extraGoods2": False,
             "lastTotemNodeIndex": [],
+            "extraResponse": {},
+            "isNewExtraResponse": False,
+            "newZoneChaos": False,
             "upgrade_bonus_4": False,        #地区行动方案效果（0无，1有，2带随机直升）
             "upgrade_bonus_5": False,        #全局作战文件效果（0无，1有，2带随机直升）
-            "upgrade_bonus_6": False         #人事部密信效果（0无，1有，2带随机直升）
+            "upgrade_bonus_6": False,        #人事部密信效果（0无，1有，2带随机直升）
+            "recruit_discount_all": False
         }
         
         for buff, status in outer_buff["unlocked"].items():
@@ -276,9 +279,9 @@ def getOutBuffs(rogueClass: RogueBasicModel):
                     ex_buff_outer["extraGoods1"] = True if status else False
                 case "bank_reward_5":
                     ex_buff_outer["extraGoods2"] = True if status else False
-        rogueClass.extension.update(ex_buff_outer)
+        rlv2_extension.update(ex_buff_outer)
        
-def getInnerBuffs(rogueClass: RogueBasicModel, hardLevel: int):
+def getInnerBuffs(rlv2_extension: dict, hardLevel: int):
         ex_buff_inner = {
             "hardLevel": hardLevel,
             "1_chaos_deeper": 0,             #1级buff：坍缩值12以上时坍缩值更容易加深
@@ -299,6 +302,7 @@ def getInnerBuffs(rogueClass: RogueBasicModel, hardLevel: int):
             "totem_modify": 0,               #密文修饰概率
             "band_13_another_vision_set": 0, #科学主义分队效果：每层+2抗干扰
             "band_12_always_predict_totem": 0,#生活至上分队效果：远见时总是远见密文板
+            "band_11_another_chaos_set": 0
             
         }
         
@@ -306,25 +310,26 @@ def getInnerBuffs(rogueClass: RogueBasicModel, hardLevel: int):
         if hardLevel >= 1:
             ex_buff_inner["1_chaos_deeper"] = 1
             if hardLevel >= 2:
-                rogueClass.extension["extra_hp_limit"] -= 4
+                rlv2_extension["extra_hp_limit"] -= 4
                 if hardLevel >= 3:
                     ex_buff_inner["stronger_relics"] = 1
-                    if rogueClass.extension["difficulty_1_buff"]:
-                        rogueClass.extension["extra_hp"] += 0.03
-                        rogueClass.extension["extra_exp"] = (rogueClass.extension["extra_exp"] + 1)*1.05-1
-                        rogueClass.extension["extra_gold"] += 2
+                    ex_buff_inner["3_more_chaos"] = 1
+                    if rlv2_extension["difficulty_1_buff"]:
+                        rlv2_extension["extra_hp"] += 0.03
+                        rlv2_extension["extra_exp"] = (rlv2_extension["extra_exp"] + 1)*1.05-1
+                        rlv2_extension["extra_gold"] += 2
                     if hardLevel >= 6:
                         ex_buff_inner["stronger_relics"] = 2
                         ex_buff_inner["more_population_cost"] = 1
-                        if rogueClass.extension["difficulty_2_buff"]:
-                            rogueClass.extension["extra_atk"] += 0.03
+                        if rlv2_extension["difficulty_2_buff"]:
+                            rlv2_extension["extra_atk"] += 0.03
                             ex_buff_inner["scout_bring_gold"] = 1
                             ex_buff_inner["more_goods"] = 1
                         if hardLevel >= 9:
-                            rogueClass.extension["extra_char_limit"] -= 1
+                            rlv2_extension["extra_char_limit"] -= 1
                             ex_buff_inner["stronger_relics"] = 3
-                            if rogueClass.extension["difficulty_3_buff"]:
-                                rogueClass.extension["extra_def"] += 0.03
+                            if rlv2_extension["difficulty_3_buff"]:
+                                rlv2_extension["extra_def"] += 0.03
                                 ex_buff_inner["safe_house_add_hp"] = 1
                                 ex_buff_inner["add_shield"] = 1
                             if hardLevel >= 12:
@@ -367,22 +372,24 @@ def getInnerBuffs(rogueClass: RogueBasicModel, hardLevel: int):
             case 15:
                 ex_buff_inner["difficulty_multiplier"], ex_buff_inner["score_multiplier"], ex_buff_inner["totem_modify"] = [0.16, 1.5, 0.2]
                 
-        rogueClass.extension.update(ex_buff_inner)
+        rlv2_extension.update(ex_buff_inner)
  
 async def createGameExtra(rogueClass: RogueBasicModel, hardLevel: int):
     rlv2_table = read_json(ROGUELIKE_TOPIC_EXCEL_PATH)
+    rlv2_data = getRogueData(rogueClass)
+    rlv2_extension = getRogueExtensionData(rogueClass)
     bands = rlv2_table["details"]["rogue_3"]["init"][0]["initialBandRelic"]
     initial = createGame(hardLevel, rogueClass)
     have_init_support = 1
-    getOutBuffs(rogueClass)
-    getInnerBuffs(rogueClass, hardLevel)
+    getOutBuffs(rlv2_data, rlv2_extension)
+    getInnerBuffs(rlv2_extension, hardLevel)
     initial["player"]["property"].update(
         {
-            "gold": 6 + rogueClass.extension["extra_gold"] + 9999,
-            "capacity": 6 + rogueClass.extension["extra_capacity"],
+            "gold": 6 + rlv2_extension["extra_gold"] + 9999,
+            "capacity": 6 + rlv2_extension["extra_capacity"],
             "hp": {
-                "current": 8 + rogueClass.extension["extra_hp_limit"],
-                "max": 8 + rogueClass.extension["extra_hp_limit"]
+                "current": 8 + rlv2_extension["extra_hp_limit"],
+                "max": 8 + rlv2_extension["extra_hp_limit"]
             },
             "hpShowState": "NORMAL"
         }
@@ -512,4 +519,9 @@ async def createGameExtra(rogueClass: RogueBasicModel, hardLevel: int):
         },
         
     )
-    rogueClass.rlv2["current"] = initial
+    clearExtraResponseData(rlv2_data, rlv2_extension)
+    rlv2_data["current"] = initial
+    
+    rogueClass.rlv2 = rlv2_data
+    rogueClass.extension = rlv2_extension
+    

@@ -585,7 +585,7 @@
                             {
                                 "countByNodeAmount": false,
                                 "item": "rogue_3_chaos",
-                                "amount": -2
+                                "amount": -1
                             }
                         ]
                     },
@@ -668,7 +668,7 @@
                             {
                                 "countByNodeAmount": false,
                                 "item": "rogue_3_chaos",
-                                "amount": -2
+                                "amount": -1
                             }
                         ]
                     },
@@ -1045,6 +1045,15 @@
                                     "valueStr": "rogue_3_hideEnemyHUD"
                                 }
                             ]
+                        },
+                        {
+                            "key": "global_buff_normal",
+                            "blackboard": [
+                                {
+                                    "key": "key",
+                                    "valueStr": "rogue_3_hideHP"
+                                }
+                            ]
                         }
                     ],
                     "specialEffect": true,
@@ -1259,7 +1268,7 @@
                         }
                     ],
                     "specialEffect": false,
-                    "deeperChaosId": "rogue_3_chaos_5_a"
+                    "normalChaosId": "rogue_3_chaos_5"
                 },
                 "rogue_3_chaos_6_a": {
                     "buff": [

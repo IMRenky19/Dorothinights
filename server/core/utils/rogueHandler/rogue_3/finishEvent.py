@@ -14,7 +14,7 @@ async def rlv2FinishEvent(rogueData: RogueBasicModel):
     rlv2_extension = getRogueExtensionData(rogueData)
     moveToNextZone(rlv2, rlv2_extension)
     popPending(rlv2)
-    
+    clearExtraResponseData(rlv2, rlv2_extension)
     rogueData.rlv2 = rlv2
     rogueData.extension = rlv2_extension
     

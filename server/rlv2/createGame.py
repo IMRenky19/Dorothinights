@@ -10,16 +10,15 @@ async def createGame(request: Request) -> Response:
     theme = request_data["theme"]
     hardLevel = request_data["modeGrade"]
     rogue = await generateRogueData(theme, hardLevel, secret)
+    content= {
+        "playerDataDelta":{
+            "modified":{
+                "rlv2":rogue.rlv2
+            },
+            "deleted":{}
+        }
+    }
+    content.update(rogue.extension["extraResponse"])
     return Response(
-        content= {
-            "playerDataDelta":{
-                "modified":{
-                    "rlv2":rogue.rlv2
-                },
-                "deleted":{}
-            }
-        } 
-            
-            
-            
+        content = content
     )

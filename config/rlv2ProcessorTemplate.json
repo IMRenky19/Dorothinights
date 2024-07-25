@@ -1,0 +1,24 @@
+{
+    "rogue_3":{
+        "ON_ENTER_AN_NON_HIDDEN_ZONE": {
+            "addChaosWhenMoveToNextZone":0
+        },
+        "ON_ENTER_HIDDEN_ZONE": {},
+        "ON_ENTER_BATTLE": {},
+        "ON_MOVE_VERTICALLY": {},
+        "ON_MOVE_HORIZONTALLY": {},
+        "ON_ENTER_NON_BATTLE_NODES": {},
+        "ON_BATTLE_FINISH": {},
+        "ON_RECRUIT": {},
+        "ON_GAIN_ITEMS": {},
+        "ON_ENTER_WISH": {},
+        "ON_GAIN_EXP": {},
+        "ON_ENTER_SHOP": {},
+        "ON_BUY_ITEMS": {},
+        "ON_GAIN_VISIONS": {},
+        "ON_CHAOS_INCREASE": {},
+        "ON_GAIN_RESOURCES": {},
+        "ON_SACRIFICE": {},
+        "ON_FINISH_NODE": {}
+    }
+}

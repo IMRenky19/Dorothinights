@@ -1,4 +1,3 @@
-from ..rogue_3.tools.map import generateSightByVision
 from ....Model.RogueBase import RogueBasicModel
 from server.core.utils.time import time
 from random import shuffle, randint, sample, random
@@ -19,6 +18,22 @@ def getRogueExtensionData(rogueClass: RogueBasicModel) -> dict:
 
 def getTheme(rlv2_data: dict):
     return rlv2_data["current"]["game"]["theme"]
+def clearExtraResponseData(rogueData: dict, rlv2Extension: dict):
+    if rlv2Extension["isNewExtraResponse"]:
+        rlv2Extension["isNewExtraResponse"] = False
+    else:
+        rlv2Extension["extraResponse"] = {}
+    if rlv2Extension["newZoneChaos"]:
+        rlv2Extension["newZoneChaos"] = False
+    else:
+        rogueData["current"]["module"]["chaos"]["deltaChaos"] = {
+            "deltaChaos": {
+                "preLevel": 0,
+                "afterLevel": 0,
+                "dValue": 0,
+                "dChaos":[]
+            }
+        }
           
   
 def addHpLimit(rlv2_data: dict, add: int):
@@ -151,74 +166,7 @@ def isZoneEnd(rlv2_data: dict):
     currentNode = rlv2_data["current"]["map"]["zones"]\
         [str(getCurrentZone(rlv2_data))]["nodes"][str(positionToIndex(getPosition(rlv2_data)))]
     return currentNode["zone_end"]
-    
-def getVision(rlv2_data: dict):
-    return rlv2_data["current"]["module"]["vision"]["value"]
 
-def setVision(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["module"]["vision"]["value"] = sets
-    
-def addVision(rlv2_data: dict, add: int):   #ROGUE_3独有
-    rlv2_data["current"]["module"]["vision"]["value"] += add
-    visionChecker(rlv2_data)
-    generateSightByVision(getCurrentZone(rlv2_data), getPosition(rlv2_data), getVision(rlv2_data), rlv2_data["current"]["map"]["zones"])
-    
-def addChaos(rlv2_data: dict, add: int):
-    rlv2_data["current"]["module"]["chaos"]["value"] += add
-    
-def setChaos(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["module"]["chaos"]["value"] = sets
-    
-def setChaosMaxLevel(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["module"]["chaos"]["level"] = sets
-    
-def setChaosMaxValue(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["module"]["chaos"]["curMaxValue"] = sets
-    
-def addChaosMaxValue(rlv2_data: dict, add: int):
-    rlv2_data["current"]["module"]["chaos"]["curMaxValue"] += add
-    
-def setChaosMaxLevel(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["module"]["chaos"]["level"] = sets
-    
-def addChaosMaxLevel(rlv2_data: dict, add: int):
-    rlv2_data["current"]["module"]["chaos"]["level"] += add
-    
-def getChaosValue(rlv2_data: dict, add: int):
-    return rlv2_data["current"]["module"]["chaos"]["value"]
-
-def getChaosLevel(rlv2_data: dict):
-    return rlv2_data["current"]["module"]["chaos"]["level"]
-
-def chaosLevelChecker(rogueData: dict, rogueExtension: dict):
-    currentChaos = getChaosValue(rogueData)
-    currentChaosLevel = getChaosLevel(rogueData)
-    normalChaos = [0,4,8,12,16,20,24,28,32,None]
-    deeperChaos = [0,4,8,12,15,18,21,23,25,None]
-    chaosNumList = deeperChaos if rogueExtension["1_chaos_deeper"] else normalChaos
-    chaoticNum = 0
-    while True:
-        currentChaos = getChaosValue(rogueData)
-        currentChaosLevel = getChaosLevel(rogueData)
-        if currentChaos >= chaosNumList[currentChaosLevel + 1] and True:          #TODO:专家模式，炼狱模式
-            addChaosMaxLevel(rogueData, 1)
-            setChaosMaxValue(rogueData, chaosNumList[currentChaosLevel + 2])
-            chaoticNum += 1
-            continue
-        if currentChaos < chaosNumList[currentChaosLevel + 1] or chaosNumList[currentChaosLevel + 1] == None:
-            break
-    return chaoticNum
-    
-def visionChecker(rogueData: dict):
-    currentVision = getVision(rogueData)
-    if currentVision > 6 and True:          #TODO:琥珀伤痕
-        setVision(rogueData, 6)
-        rogueData["current"]["module"]["vision"]["isMax"] = True
-    if currentVision < 6 and (rogueData["current"]["module"]["vision"]["isMax"]):
-        rogueData["current"]["module"]["vision"]["isMax"] = False
-    if currentVision < 0:
-        setVision(rogueData, 0)
-        
 def hpChecker(rogueData: dict):
     currentHp = getHp(rogueData)
     currentHpLimit = getHpLimit(rogueData)
@@ -329,7 +277,7 @@ def addRelic(rlv2_data: dict, item: str):
     }
     return index
     
-def isRelicExist(rlv2_data: dict, relicId: str, rogueExtension: dict):
+def isRelicExist(rlv2_data: dict, relicId: str, rogueExtension: dict, neededLevel: int = 0):
     realRelic = relicId
     tmp = relicId.split("_")
     canUpgradeIndex = rogueExtension["canUpgradeIndex"]
@@ -339,6 +287,18 @@ def isRelicExist(rlv2_data: dict, relicId: str, rogueExtension: dict):
     for relic in rlv2_data["current"]["inventory"]["relic"].values():
         tmp2 = relic["id"].split("_")
         if tmp2[3] == "legacy" and int(tmp2[4]) in canUpgradeIndex:
+            level = tmp2[5] if len(tmp2) > 5 else None
+            match neededLevel:
+                case 0:
+                    canLevel = [None, "a", "b", "c"]
+                case 1:
+                    canLevel = ["a", "b", "c"]
+                case 2:
+                    canLevel = ["b", "c"]
+                case 3:
+                    canLevel = ["c"]
+            if not(level in canLevel):
+                return False
             if len(tmp2) > 5:
                 realRelic2 = "_".join(tmp2[:5])
             else:
@@ -346,8 +306,21 @@ def isRelicExist(rlv2_data: dict, relicId: str, rogueExtension: dict):
         else:
             realRelic2 = relic["id"]
         if realRelic2 == realRelic:
-            return True
+            return [True, relic["index"]]
     return False
+
+def addRelicLayer(rlv2_data:dict, index:str, add: int):
+    if rlv2_data["current"]["inventory"]["relic"][index].__contains__("layer"):
+        rlv2_data["current"]["inventory"]["relic"][index]["layer"] += add
+    else:
+        rlv2_data["current"]["inventory"]["relic"][index]["layer"] = 0
+        rlv2_data["current"]["inventory"]["relic"][index]["layer"] += add
+        
+def setRelicLayer(rlv2_data:dict, index:str, sets: int):
+    rlv2_data["current"]["inventory"]["relic"][index]["layer"] = sets
+    
+def getRelicLayer(rlv2_data: dict, index: str):
+    return rlv2_data["current"]["inventory"]["relic"][index]["layer"] if rlv2_data["current"]["inventory"]["relic"][index].__contains__("layer") else 0
     
 def addTicketBattle(rlv2_data: dict, item: str, fromWhere = "battle"):
     index = getNextTicketIndex(rlv2_data)
@@ -514,6 +487,7 @@ def getChars(rogueData: dict, rogueExtension: dict, recruitTicketId: str, userSy
     rarity6Buff = rogueExtension["upgrade_bonus_6"]
     rarity5Buff = rogueExtension["upgrade_bonus_5"]
     rarity4Buff = rogueExtension["upgrade_bonus_4"]
+    rarityALLBuff = rogueExtension["recruit_discount_all"]
     isAddPopulationCost = rogueExtension["more_population_cost"]
     
     selectedCharsList = []
@@ -573,17 +547,17 @@ def getChars(rogueData: dict, rogueExtension: dict, recruitTicketId: str, userSy
         charRarity = int(char["rarity"])
         match charRarity:
             case 4:
-                rarity = (0 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 2) + isAddPopulationCost + (-2 if rarity4Buff else 0) + (-2 if charProfession in upgradeBonusProfessionList else 0)
+                rarity = (0 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 2) + isAddPopulationCost + (-2 if rarity4Buff else 0) + (-2 if charProfession in upgradeBonusProfessionList else 0) + (-2 if rarityALLBuff else 0)
                 if rarity < 0:
                     rarity = 0
                 rarity4Dict[charProfession].append(char)
             case 5:
-                rarity = (2 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 3) + isAddPopulationCost + (-2 if rarity5Buff else 0) + (-2 if charProfession in upgradeBonusProfessionList else 0)
+                rarity = (2 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 3) + isAddPopulationCost + (-2 if rarity5Buff else 0) + (-2 if charProfession in upgradeBonusProfessionList else 0) + (-2 if rarityALLBuff else 0)
                 if rarity < 0:
                     rarity = 0
                 rarity5Dict[charProfession].append(char)
             case 6:
-                rarity = (6 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 6) + isAddPopulationCost + (-2 if rarity6Buff else 0) + (-2 if charProfession in upgradeBonusProfessionList else 0)
+                rarity = (6 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 6) + isAddPopulationCost + (-2 if rarity6Buff else 0) + (-2 if charProfession in upgradeBonusProfessionList else 0) + (-2 if rarityALLBuff else 0)
                 if rarity < 0:
                     rarity = 0
                 rarity6Dict[charProfession].append(char)

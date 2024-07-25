@@ -18,6 +18,6 @@ async def moveAndBattleStart(rogueClass: RogueBasicModel, position: dict):
     setCurrentState(rlv2, "PENDING")
     pending = generateBattlePending(rlv2, rlv2_extension)
     addPending(rlv2, pending)
-    
+    clearExtraResponseData(rlv2, rlv2_extension)
     rogueClass.rlv2 = rlv2
     rogueClass.extension = rlv2_extension

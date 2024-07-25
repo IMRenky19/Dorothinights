@@ -8,13 +8,15 @@ async def chooseInitialRecruitSet(request: Request) -> Response:
     secret = request.headers["Secret"]
     choose = request_data["select"]
     rogue = await rogueChooseInitialRecruitSet(secret, choose)
+    content= {
+        "playerDataDelta":{
+            "modified":{
+                "rlv2":rogue.rlv2
+            },
+            "deleted":{}
+        }
+    }
+    content.update(rogue.extension["extraResponse"])
     return Response(
-        content= {
-            "playerDataDelta":{
-                "modified":{
-                    "rlv2":rogue.rlv2
-                },
-                "deleted":{}
-            }
-        } 
+        content = content
     )

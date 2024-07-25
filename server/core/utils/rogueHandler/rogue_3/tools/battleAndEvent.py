@@ -1,16 +1,20 @@
 from random import shuffle, random, choice
 from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_MODULE_DATA_PATH, ROGUE_RELIC_POOL_PATH
 from server.core.utils.json import read_json
+from server.core.utils.rogueHandler.rogue_3.tools.totemAndChaos import deepenChaos, increaseChaosValue
 
 from ... import common
 from ...common import NodeType
+from math import floor
 
 
 from ...common.rlv2tools import *
+from .visionProcessor import *
 
 roguePoolTable = read_json(ROGUE_RELIC_POOL_PATH)
 rogueModuleTable = read_json(ROGUE_MODULE_DATA_PATH)
 rogueTable = read_json(ROGUELIKE_TOPIC_EXCEL_PATH)
+chaosPool = rogueModuleTable["rogue_3"]["chaos"]
 
 
 
@@ -85,6 +89,9 @@ def getBattleBuffs(rogueData: dict, rogueExtension: dict):
     if currentNode["attach"]:
         for buff in currentNode["attach"]:
             buffs += rogueTable["details"][getTheme(rogueData)]["relics"][buff]["buffs"]
+    if rogueData["current"]["module"]["chaos"]["chaosList"]:
+        for chaos in rogueData["current"]["module"]["chaos"]["chaosList"]:
+            buffs += rogueModuleTable["rogue_3"]["chaos"]["normalChaos"][chaos]["buff"] if len(chaos.split("_")) == 4 else rogueModuleTable["rogue_3"]["chaos"]["deeperChaos"][chaos]["buff"]
         
     themeBuffs = [
             # 0
@@ -909,17 +916,81 @@ def generateBattlePending(rogueData: dict, rogueExtension: dict) -> dict:
     buffs = getBattleBuffs(rogueData, rogueExtension)
     return common.generateBattlePending(rogueData, rogueExtension, boxInfo, buffs[0], buffs[1])
 
+def shopDiscount(rogueData: dict, rogueExtension: dict, goods: dict):
+    currentNode = rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]
+    currentNodeType = currentNode["type"]
+    normalGoodsDiscount = 1
+    rareGoodsDiscount = 1
+    superRareGoodsDiscount = 1
+    baseMultiplier = 1
+    
+    if currentNode["attach"]:
+        for buff in currentNode["attach"]:
+            for nodeBuff in rogueTable["details"][getTheme(rogueData)]["relics"][buff]["buffs"]:
+                if nodeBuff["key"] == "shop_discount_rarity" and currentNodeType == NodeType.SHOP:
+                    modifiedPrice = True
+                    match nodeBuff["blackboard"][2]["valueStr"]:
+                        case "NORMAL":
+                            normalGoodsDiscount *= (1 + nodeBuff["blackboard"][1]["value"])
+                        case "RARE":
+                            rareGoodsDiscount *= (1 + nodeBuff["blackboard"][1]["value"])
+                        case "SUPER_RARE":
+                            superRareGoodsDiscount *= (1 + nodeBuff["blackboard"][1]["value"])
+                            
+    chaosList = getChaos(rogueData)
+    chaosBuff = []
+    if chaosList:
+        for chaos in chaosList:
+            if len(chaos.split("_")) == 4:
+                chaosBuff += chaosPool["normalChaos"][chaos]["buff"]
+            if len(chaos.split("_")) == 5:
+                chaosBuff += chaosPool["deeperChaos"][chaos]["buff"]
+        for nodeBuff in chaosBuff:
+            if nodeBuff["key"] == "shop_discount_rarity" and currentNodeType == NodeType.SHOP:
+                modifiedPrice = True
+                match nodeBuff["blackboard"][2]["valueStr"]:
+                    case "NORMAL":
+                        normalGoodsDiscount *= (1 + nodeBuff["blackboard"][1]["value"])
+                    case "RARE":
+                        rareGoodsDiscount *= (1 + nodeBuff["blackboard"][1]["value"])
+                    case "SUPER_RARE":
+                        superRareGoodsDiscount *= (1 + nodeBuff["blackboard"][1]["value"])    
+    if isRelicExist(rogueData, "rogue_3_relic_legacy_58", rogueExtension):#锈蚀的铁锤
+        baseMultiplier = 0.5
+    for good in goods:
+        if good["origCost"] <= 8:
+            good["origCost"] *= baseMultiplier
+            if normalGoodsDiscount != 1 or modifiedPrice:
+                good["displayPriceChg"] = True
+            good["priceCount"] = floor((good["origCost"] * normalGoodsDiscount) + 0.99)
+            good["origCost"] = floor(good["origCost"] + 0.99)
+        elif good["origCost"] <= 12:
+            good["origCost"] *= baseMultiplier
+            if rareGoodsDiscount != 1 or modifiedPrice:
+                good["displayPriceChg"] = True
+            good["priceCount"] = floor((good["origCost"] * rareGoodsDiscount) + 0.99)
+            good["origCost"] = floor(good["origCost"] + 0.99)
+        else:
+            good["origCost"] *= baseMultiplier
+            if superRareGoodsDiscount != 1 or modifiedPrice:
+                good["displayPriceChg"] = True
+            good["priceCount"] = floor((good["origCost"] * superRareGoodsDiscount) + 0.99)
+            good["origCost"] = floor(good["origCost"] + 0.99)
+
 def generateNonBattlePending(rogueData: dict, rogueExtension: dict, selectedChoices = None) -> dict:
     pendingIndex = getNextPendingIndex(rogueData)
     currentNode = rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]
     currentNodeType = currentNode["type"]
     
-    
-    if currentNode["attach"]:
+    if currentNode["attach"] and (not selectedChoices):
         for buff in currentNode["attach"]:
             for nodeBuff in rogueTable["details"][getTheme(rogueData)]["relics"][buff]["buffs"]:
                 if nodeBuff["key"] == "totem_effect_reward":
                     gainItem(rogueData, nodeBuff["blackboard"][0]["valueStr"], nodeBuff["blackboard"][1]["value"], rogueExtension=rogueExtension)
+
+    if isRelicExist(rogueData, "rogue_3_relic_res_11", rogueExtension) and getVision(rogueData) >= 4:
+        addGold(rogueData, 2)
+                    
     match currentNodeType:
         case NodeType.SHOP:
             zone = getCurrentZone(rogueData)
@@ -952,6 +1023,15 @@ def generateNonBattlePending(rogueData: dict, rogueExtension: dict, selectedChoi
                     }
                 }
             }
+            
+        case NodeType.LOST_AND_FOUND:
+            if isRelicExist(rogueData, "rogue_3_relic_explore_1", rogueExtension):
+                addShield(rogueData, 2)
+            pending = common.generateNonBattlePending(pendingIndex, currentNodeType, rogueData, rogueExtension)
+        case NodeType.PASSAGE:
+            if isRelicExist(rogueData, "rogue_3_relic_explore_1", rogueExtension):
+                addShield(rogueData, 2)
+            pending = common.generateNonBattlePending(pendingIndex, currentNodeType, rogueData, rogueExtension)
         case _:
             pending = common.generateNonBattlePending(pendingIndex, currentNodeType, rogueData, rogueExtension)
     return pending
@@ -1179,7 +1259,7 @@ def generateShopGoods(shopId: str, rogueData: dict, rogueExtension: dict):
                 )
                 valid = False
                 index += 1
-    
+    shopDiscount(rogueData, rogueExtension, goods)
     return goods
     
 
@@ -1246,7 +1326,9 @@ def generateBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int
         ticketCount, 
         rogueExtension,
         hasRelicInfo,
-        rogueData
+        rogueData,
+        1 if isRelicExist(rogueData, "rogue_3_relic_legacy_60",rogueExtension) else 0,
+        2 if isRelicExist(rogueData, "rogue_3_relic_legacy_59", rogueExtension, 2) else (1 if isRelicExist(rogueData, "rogue_3_relic_legacy_59",rogueExtension) else 0),
     )
     rewards = baseRewards["rewards"]
     index = baseRewards["lastIndex"]
@@ -1258,6 +1340,36 @@ def generateBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int
     
     #TODO 掉落顺序4：生命值
     if random() < lifeChance:
+        rewards.append(
+            {
+                "index": index,
+                "items":[
+                    {
+                        "sub": 0,
+                        "id": f"{theme}_hp",
+                        "count":1
+                    }
+                ],
+                "done": 0
+                }
+            )
+        index += 1
+    if getHp(rogueData) <= rogueExtension["add_hp_limit_hp"]:
+        rewards.append(
+            {
+                "index": index,
+                "items":[
+                    {
+                        "sub": 0,
+                        "id": f"{theme}_hp",
+                        "count":1
+                    }
+                ],
+                "done": 0
+                }
+            )
+        index += 1
+    if isRelicExist(rogueData, "rogue_3_relic_legacy_62", rogueExtension):
         rewards.append(
             {
                 "index": index,
@@ -1292,15 +1404,20 @@ def generateBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int
     #TODO 修辞
     if random() < totemChance:
         totemAmount = (2 if isBoss else 1) + (1 if rogueExtension["more_totem"] else 0)
+        if isRelicExist(rogueData, "rogue_3_relic_explore_5", rogueExtension) and random() < 0.15:
+            extraTotem = True
+        else:
+            extraTotem = False
         totemItems = []
         totemPool = roguePoolTable[f"{theme}"]["totemAll"]
+        
         for i in range(totemAmount):
             shuffle(totemPool)
             totemItems.append(
                 {
                     "sub": i,
                     "id": totemPool.pop(),
-                    "count": 1
+                    "count": 10
                 }
             )
         rewards.append(
@@ -1311,6 +1428,15 @@ def generateBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int
                 }
             )
         index += 1
+        if extraTotem:
+            rewards.append(
+                {
+                    "index": index,
+                    "items":choice(totemPool),
+                    "done": 0
+                }
+            )
+            index += 1
         
     #掉落顺序7：密文版馈赠
     currentNode = rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]
@@ -1358,7 +1484,8 @@ def generateBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int
         
 
 def gainItemsAfterBattle(rogueData: dict, index: int, subIndex: int, userData = None, rogueExtension = None):
-    common.gainItemsAfterBattle(rogueData, index, subIndex, userData, rogueExtension)
+    common.gainItemsAfterBattle(rogueData, index, subIndex, userData, rogueExtension, gainItem)
+    
 
 def gainItem(rogueData: dict, itemType: str, amount: int, item: str = None, userSyncData = None, rogueExtension = None):
     if not itemType:
@@ -1368,11 +1495,17 @@ def gainItem(rogueData: dict, itemType: str, amount: int, item: str = None, user
         case itemType if itemType.find("totem") != -1:
             addTotem(rogueData, itemType)
         case itemType if itemType.find("vision") != -1:
-            addVision(rogueData, amount)
+            addVision(rogueData, amount, rogueExtension)
         case "rogue_3_vision_item":
-            addVision(rogueData, 1)
+            addVision(rogueData, 1, rogueExtension)
+        case "rogue_3_chaos_purify":
+            increaseChaosValue(rogueData, rogueExtension, -amount)
+            if rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]["type"] == NodeType.SHOP:
+                shopDiscount(rogueData, rogueExtension, rogueData["current"]["player"]["pending"][0]["content"]["battleShop"]["goods"])
         case itemType if itemType.find("chaos") != -1:
-            addChaos(rogueData, amount)
+            increaseChaosValue(rogueData, rogueExtension, amount)
+            if rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]["type"] == NodeType.SHOP:
+                shopDiscount(rogueData, rogueExtension, rogueData["current"]["player"]["pending"][0]["content"]["battleShop"]["goods"])
         case "pool_battle_only":
             hasRelicInfo = rogueData["current"]["inventory"]["relic"]
             hasRelic = [x["id"] for x in hasRelicInfo.values()]
@@ -1380,7 +1513,8 @@ def gainItem(rogueData: dict, itemType: str, amount: int, item: str = None, user
             relic = relicLevelCheck(relics.pop(randint(0,len(relics) - 1)), rogueExtension)
             addRelic(rogueData, relic)
         case _:
-            common.gainItem(rogueData, itemType, amount, item, userSyncData, rogueExtension)
+            common.gainItem(rogueData, itemType, amount, item, userSyncData, rogueExtension, customProcessRelic=processRelic)
+        
            
 def activateTickets(rogueData: dict, item, userSyncData, rogueExtension, ticketId):
     common.activateTickets(rogueData, item, userSyncData, rogueExtension, ticketId)
@@ -1388,13 +1522,53 @@ def activateTickets(rogueData: dict, item, userSyncData, rogueExtension, ticketI
 def processRelic(rogueData, rogueExtension, index, userSyncData):
     relicId = rogueData["current"]["inventory"]["relic"][index]["id"]
     relicDetail = rogueTable["details"]["rogue_3"]["relics"][relicId]
-    common.processRelic(rogueData, rogueExtension, index, userSyncData)
-    if relicId.find("rogue_3_relic_legacy_54") != -1:
-        rogueExtension["upgrade_bonus_4"] = True
+    common.processRelic(rogueData, rogueExtension, index, userSyncData, gainItem)
+    if relicId.find("rogue_3_relic_legacy_54") != -1:           #TODO:2为直升，但是现在还没做
+        rogueExtension["upgrade_bonus_4"] = 1
     if relicId.find("rogue_3_relic_legacy_55") != -1:
-        rogueExtension["upgrade_bonus_5"] = True
+        rogueExtension["upgrade_bonus_5"] = 1
     if relicId.find("rogue_3_relic_legacy_56") != -1:
-        rogueExtension["upgrade_bonus_6"] = True
+        rogueExtension["upgrade_bonus_6"] = 1
+    if relicId.find("rogue_3_relic_legacy_57") != -1:
+        rogueExtension["recruit_discount_all"] = True
+    
+    if relicId.find("rogue_3_relic_legacy_58") != -1 and rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]["type"] == NodeType.SHOP:
+        shopDiscount(rogueData, rogueExtension, rogueData["current"]["player"]["pending"][0]["content"]["battleShop"]["goods"])
+        
+    if relicId.find("rogue_3_relic_legacy_163") != -1:
+        addShield(rogueData, getHp(rogueData))
+        addHp(rogueData, -99999)
+    if relicId.find("rogue_3_relic_fight_14") != -1:
+        hasRelicInfo = rogueData["current"]["inventory"]["relic"]
+        hasRelic = [x["id"] for x in hasRelicInfo.values()]
+        relics = [i for i in roguePoolTable["rogue_3"]["cheapStuffPool"] if not (i in hasRelic)]
+        items = []
+        itemsId = []
+        for i in range(3):
+            shuffle(relics)
+            relic = relicLevelCheck(relics.pop(), rogueExtension)
+            gainItem(rogueData, relic, 1, relic, userSyncData, rogueExtension)
+            items.append(
+                {
+                    "id": relic,
+                    "count": 1
+                }
+            )
+            itemsId.append(relic)
+        rogueExtension["extraResponse"] = {
+            "items": items,
+            "pushMessage":[
+                {
+                    "path":"rlv2GotRandRelic",
+                    "payload":{
+                        "idList":itemsId
+                    }
+                }
+            ]
+        }
+        rogueExtension["isNewExtraResponse"] = True
+        
+        
     
             
     
