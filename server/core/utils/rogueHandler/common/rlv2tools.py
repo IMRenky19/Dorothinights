@@ -427,7 +427,7 @@ def getModeGrade(rlv2_data: dict):
     return rlv2_data["current"]['game']['modeGrade']
 
 def positionToIndex(position: dict):
-    return f"{position["x"]}0{position["y"]}" if position["x"] != 0 else f"{position["y"]}"
+    return f"{position['x']}0{position['y']}" if position["x"] != 0 else f"{position['y']}"
 
 
 def addTicket(rlv2_data: dict, ticket_id: str, init: bool, profession: str = 'all'):
