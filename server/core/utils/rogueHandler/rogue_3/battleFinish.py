@@ -19,7 +19,6 @@ async def battleFinish(rogueClass: RogueBasicModel, battleData: str, loginTime: 
         rogueClass.extension = rlv2_extension
         return
     decryptedBattleData = decrypt_battle_data(battleData, loginTime)
-    #print(decryptedBattleData)
     currentZone = getCurrentZone(rlv2)
     currentNode = rlv2["current"]["map"]["zones"]\
         [str(currentZone)]["nodes"][str(positionToIndex(getPosition(rlv2)))]

@@ -135,6 +135,7 @@ def randomizePutNode(total: int, column_amount: int, column_min_and_max_node: li
         last_column = column_min_and_max_node[column_amount - 1][0]
         before_first_try.append(column_min_and_max_node[column_amount - 1][1])
         return before_first_try
+    return []
     
     
 def generateRoute(nodeList: list, five = False):                  #todo

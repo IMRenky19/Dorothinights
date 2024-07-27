@@ -16,7 +16,7 @@ async def buyGoods(rogueClass: RogueBasicModel, choice: int):
     shop = rlv2["current"]["player"]["pending"][0]["content"]["battleShop"]
     chosenItem = shop["goods"][choice]
     addGold(rlv2, -(chosenItem["priceCount"]))
-    gainItem(rlv2, None, 1, chosenItem["itemId"], userSyncData, rlv2_extension)
+    gainItem(rlv2, chosenItem["itemId"], 1, chosenItem["itemId"], userSyncData, rlv2_extension)
     
     if isRelicExist(rlv2, "rogue_3_relic_explore_2", rlv2_extension):   #TODO：失与得部分
         addPopulation(rlv2, 1)

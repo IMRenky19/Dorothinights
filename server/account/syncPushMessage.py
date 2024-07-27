@@ -2,7 +2,6 @@ from litestar import Request, post, Response
 from server.core.database.function.userData import getAccountBySecret, writeAccountSyncData
 from server.core.utils.accounts import generateNewSyncData
 from server.core.utils.time import time
-from server.core.database.function.userData import show_secret
 from json import loads
 
 

@@ -55,7 +55,7 @@ def generateSightByVision(zone: int, currentPosition: dict | None, vision: int, 
     else:
         position = currentPosition
         
-    currentNode = mapData[str(zone)]["nodes"][positionToIndex(position)] if position["x"] != -1 else None
+    currentNode = mapData[str(zone)]["nodes"][positionToIndex(position)]
     nextNode = [mapData[str(zone)]["nodes"][positionToIndex(node)] \
             for node in currentNode["next"]]  if position["x"] != -1 else [mapData[str(zone)]["nodes"][str(node["pos"]["y"])] \
             for node in mapData[str(zone)]["nodes"].values() if node["pos"]["x"] == 0]
@@ -68,7 +68,6 @@ def generateSightByVision(zone: int, currentPosition: dict | None, vision: int, 
                 if node["alwaysVisible"]:
                     continue
                 if node["realNodeType"] == NodeType.ELITE_BATTLE or node["realNodeType"] == NodeType.NORMAL_BATTLE:
-                    print(1)
                     #node["realNodeType"] = node["type"]
                     node["type"] = NodeType.UNKNOWN
                     node["visibility"] = 2

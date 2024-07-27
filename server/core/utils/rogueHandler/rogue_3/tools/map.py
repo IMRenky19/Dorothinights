@@ -20,7 +20,7 @@ ZONE_3_ELITE_BOSS_POOL = [
       
 def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bool = False, \
                     end_4: bool = False, scoutUnlocked: bool = True, passageUnlocked: bool = True, \
-                        lostAndFoundUnlocked: bool = True, test = False):
+                        lostAndFoundUnlocked: bool = True, test = False) -> dict:
     
     total_node = 0
     nodeList = []
@@ -164,6 +164,7 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
             ]
             
             for i in tmpNodeList:
+                random_chance = 0
                 if i[0].x == 1:
                     random_chance = 0.5
                 if i[0].x == 2:
@@ -272,10 +273,12 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
             for i in tmpNodeList:
                 if i[0].x == 1:
                     random_chance = 0.33
-                if i[0].x == 2:
+                elif i[0].x == 2:
                     random_chance = 0.33
-                if i[0].x == 3:
+                elif i[0].x == 3:
                     random_chance = 0.33
+                else:
+                    random_chance = 0.0
                 for j in i:
                     if (random() <= random_chance or (not nonBattlePool)) and battleNodeTotal:
                         if eliteBattleTotal and random() >= 0.5:
@@ -380,12 +383,15 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
             ]
             
             for i in tmpNodeList:
+                random_choice = 0
                 if i[0].x == 1:
                     random_chance = 0.2
-                if i[0].x == 2:
+                elif i[0].x == 2:
                     random_chance = 0.3
-                if i[0].x == 3:
+                elif i[0].x == 3:
                     random_chance = 0.5
+                else:
+                    random_chance = 0
                 for j in i:
                     if (random() <= random_chance or (not nonBattlePool)) and battleNodeTotal:
                         if eliteBattleTotal and random() >= 0.5:
@@ -489,10 +495,12 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
             for i in tmpNodeList:
                 if i[0].x == 1:
                     random_chance = 0.33
-                if i[0].x == 2:
+                elif i[0].x == 2:
                     random_chance = 0.33
-                if i[0].x == 3:
+                elif i[0].x == 3:
                     random_chance = 0.33
+                else:
+                    random_chance = 0
                 for j in i:
                     if (random() <= random_chance or (not nonBattlePool)) and battleNodeTotal:
                         if eliteBattleTotal and random() >= 0.5:
@@ -583,8 +591,10 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
             for i in tmpNodeList:
                 if i[0].x == 1:
                     random_chance = 0
-                if i[0].x == 2:
+                elif i[0].x == 2:
                     random_chance = 1
+                else:
+                    random_chance = 0
                 for j in i:
                     if (random() < random_chance) and battleNodeTotal:
                         if eliteBattleTotal and random() >= 0.3:
@@ -611,7 +621,8 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
                     new_map.addNode(j)
             return new_map.exportMap()
         
-
+        case _:
+            return {}
 
 
 

@@ -12,6 +12,9 @@ from ...common.rlv2tools import *
 totemPool = read_json(ROGUE_RELIC_POOL_PATH)["rogue_3"]["totemAll"]
 chaosPool = read_json(ROGUE_MODULE_DATA_PATH)["rogue_3"]["chaos"]
 
+def getChaos(rlv2_data: dict):
+    return rlv2_data["current"]["module"]["chaos"]["chaosList"]
+
 def addChaos(rlv2_data: dict, add: int):
     rlv2_data["current"]["module"]["chaos"]["value"] += add
     if rlv2_data["current"]["module"]["chaos"]["value"] < 0:
@@ -19,10 +22,7 @@ def addChaos(rlv2_data: dict, add: int):
     
 def setChaos(rlv2_data: dict, sets: int):
     rlv2_data["current"]["module"]["chaos"]["value"] = sets
-    
-def setChaosMaxLevel(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["module"]["chaos"]["level"] = sets
-    
+
 def setChaosMaxValue(rlv2_data: dict, sets: int):
     rlv2_data["current"]["module"]["chaos"]["curMaxValue"] = sets
     
@@ -81,7 +81,6 @@ def getReachableNodeDict(rogueData: dict):
     
     
     def tmp(allNodeList: dict, currentIndex, reachableNodeDict):
-        print(currentIndex)
         if not currentIndex:
             return allNodeList
         nextNode = allNodeList[currentIndex]["next"] if currentIndex else [allNodeList[positionToIndex(x["pos"])] for x in allNodeList.values() if x["pos"]["x"] == 0]
@@ -104,7 +103,7 @@ def increaseChaosValue(rogueData: dict, rogueExtension: dict, amount: int, isNew
         addGold(rogueData, 1)
     deepenChaos(rogueData, rogueExtension, oldChaosValue, oldChaosValue + amount, isNewZone)
 
-def chaosLevelChecker(rogueData: dict, rogueExtension: dict):
+def chaosLevelChecker(rogueData: dict, rogueExtension: dict) -> int:
     currentChaos = getChaosValue(rogueData)
     currentChaosLevel = getChaosLevel(rogueData)
     normalChaos = [0,4,8,12,16,20,24,28,32,999]
@@ -117,23 +116,11 @@ def chaosLevelChecker(rogueData: dict, rogueExtension: dict):
             finalChaosLevel = i
             setChaosMaxValue(rogueData, chaosNumList[i+1])
             return finalChaosLevel - currentChaosLevel
-    #while True:
-    #    currentChaos = getChaosValue(rogueData)
-    #    print(currentChaos)
-    #    print(getChaosLevel(rogueData))
-    #    currentChaosLevel = getChaosLevel(rogueData)
-    #    if currentChaos >= chaosNumList[currentChaosLevel + 1] and True:          #TODO:专家模式，炼狱模式
-    #        addChaosMaxLevel(rogueData, 1)
-    #        setChaosMaxValue(rogueData, chaosNumList[currentChaosLevel + 2])
-    #        chaoticNum += 1
-    #        continue
-    #    if currentChaos < chaosNumList[currentChaosLevel + 1] or chaosNumList[currentChaosLevel + 1] == None:
-    #        
-    #        break
-    #return chaoticNum
+        else:
+            return 0
+    return 0
 
 def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterChaos: int, isNewZone = False):
-    print("CHAOS!")
     currentChaosList = deepcopy(rogueData["current"]["module"]["chaos"]["chaosList"])
     deltaChaosValue = afterChaos - beforeChaos
     canUpgradeChaos = []
@@ -145,11 +132,13 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
     deepenAmount = 0
     currentNormalChaos = []
     currentDeeperChaos = []
+    preLevel = 0
+    chaosNum = 0
+    afterLevel = 0
     if deltaChaosValue > 0:      #加深坍缩
         preLevel = getChaosLevel(rogueData)
         chaosNum = chaosLevelChecker(rogueData, rogueExtension)
         afterLevel = getChaosLevel(rogueData)
-        print(chaosNum)
         for chaos in currentChaosList:
             if len(chaos.split("_")) == 4:
                 currentNormalChaos.append(chaos)
@@ -161,7 +150,6 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
             if rdNum == 0:
                 rdNum = 1
             if rdNum < ((len(currentNormalChaos) / maxChaosSlot) + (len(currentDeeperChaos) / maxChaosSlot)) and currentNormalChaos:
-                print(currentNormalChaos,normalChaosList )
                 rd = choice(currentNormalChaos)
                 for operation in waitToProcess:
                     if operation["chaosId"] == rd:
@@ -188,7 +176,6 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
         chaosNum = -chaosLevelChecker(rogueData, rogueExtension)
         
         afterLevel = getChaosLevel(rogueData)
-        print(chaosNum)
         for chaos in currentChaosList:
             if len(chaos.split("_")) == 4:
                 currentNormalChaos.append(chaos)
@@ -199,19 +186,19 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
             shuffle(currentChaosList)
             luckyChaos = currentChaosList.pop()
             if len(luckyChaos.split("_")) == 4:
-                waitToProcess.append({
-                    "operation": "DELETE",
-                    "chaosId": luckyChaos
-                }),
-            if len(luckyChaos.split("_")) == 5:
+                waitToProcess.append(
+                {
+                        "operation": "DELETE",
+                        "chaosId": luckyChaos
+                    }
+                )
+            elif len(luckyChaos.split("_")) == 5:
                 waitToProcess.append({
                     "operation": "RELIEVE",
                     "chaosId": chaosPool["deeperChaos"][luckyChaos]["normalChaosId"]
                 })
     if deltaChaosValue == 0:
         return
-        
-    print(waitToProcess)
     deepenChangeList = []
     relieveChangeList = []
     for operation in waitToProcess:
@@ -235,7 +222,9 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
                 rogueData["current"]["module"]["chaos"]["chaosList"].remove(operation["chaosId"])
                 relieveChangeList.append(operation["chaosId"])
     if (not isNewZone) and deepenChangeList:
-        rogueExtension["extraResponse"].update(
+        writeExtraResponseData(
+            rogueData, 
+            rogueExtension, 
             {
                 "pushMessage":[
                     {
@@ -248,7 +237,6 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
                 ]
             }
         )
-        rogueExtension["isNewExtraResponse"] = True
     else:
         rogueData["current"]["module"]["chaos"]["deltaChaos"].update(
             {
@@ -260,17 +248,18 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
         )
         rogueExtension["newZoneChaos"] = True
     if (not isNewZone) and relieveChangeList:
-        rogueExtension["extraResponse"].update(
+        writeExtraResponseData(
+            rogueData, 
+            rogueExtension, 
             {
                 "pushMessage":[
                     {
                         "path":"rlv2ChaosChange",
                         "payload":{
                             "upgrade":False,
-                            "changeList":relieveChangeList
+                            "changeList":deepenChangeList
                         }
                     }
                 ]
             }
         )
-        rogueExtension["isNewExtraResponse"] = True

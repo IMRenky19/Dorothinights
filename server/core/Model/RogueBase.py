@@ -17,8 +17,8 @@ class RogueBasicModel(Base):
     theme: Mapped[str] = mapped_column(String(255))
     
     
-    rlv2: Mapped[str] = mapped_column(JSON)
-    extension: Mapped[str] = mapped_column("extension",JSON)
+    rlv2: Mapped[dict] = mapped_column(JSON)
+    extension: Mapped[dict] = mapped_column("extension",JSON)
     
     
     

@@ -1,3 +1,4 @@
+from server.core.utils.rogueHandler.common.map import NodeType
 from ....Model.RogueBase import RogueBasicModel
 from server.core.utils.time import time
 from random import shuffle, randint, sample, random
@@ -16,8 +17,30 @@ def getRogueData(rogueClass: RogueBasicModel) -> dict:
 def getRogueExtensionData(rogueClass: RogueBasicModel) -> dict:
     return deepcopy(rogueClass.extension)
 
-def getTheme(rlv2_data: dict):
-    return rlv2_data["current"]["game"]["theme"]
+def getTheme(rogueData: dict):
+    return rogueData["current"]["game"]["theme"]
+def writeExtraResponseData(rogueData: dict, rogueExtension: dict, extraData: dict):
+    responseData = rogueExtension["extraResponse"]
+    if responseData:
+        if responseData.__contains__("items") and extraData.__contains__("items"):
+            responseData["items"] += extraData["items"]
+        if responseData.__contains__("pushMessage") and extraData.__contains__("pushMessage"):
+            responseData["pushMessage"] += extraData["pushMessage"]
+    else:
+        responseData.update(extraData)
+    #rogueExtension["extraResponse"] = {
+    #    "items": items,
+    #    "pushMessage":[
+    #        {
+    #            "path":"rlv2GotRandRelic",
+    #            "payload":{
+    #                "idList":itemsId
+    #            }
+    #        }
+    #    ]
+    #}
+    rogueExtension["isNewExtraResponse"] = True
+
 def clearExtraResponseData(rogueData: dict, rlv2Extension: dict):
     if rlv2Extension["isNewExtraResponse"]:
         rlv2Extension["isNewExtraResponse"] = False
@@ -36,90 +59,93 @@ def clearExtraResponseData(rogueData: dict, rlv2Extension: dict):
         }
           
   
-def addHpLimit(rlv2_data: dict, add: int):
-    rlv2_data["current"]["player"]["property"]["hp"]["current"] += add
-    rlv2_data["current"]["player"]["property"]["hp"]["max"] += add
+def addHpLimit(rogueData: dict, add: int):
+    rogueData["current"]["player"]["property"]["hp"]["current"] += add
+    rogueData["current"]["player"]["property"]["hp"]["max"] += add
     
-def setHpLimit(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["player"]["property"]["hp"]["max"] = sets
+def setHpLimit(rogueData: dict, sets: int):
+    rogueData["current"]["player"]["property"]["hp"]["max"] = sets
     
-def setHp(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["player"]["property"]["hp"]["current"] = sets
+def setHp(rogueData: dict, sets: int):
+    rogueData["current"]["player"]["property"]["hp"]["current"] = sets
     
-def getHp(rlv2_data: dict):
-    return rlv2_data["current"]["player"]["property"]["hp"]["current"]
-def getHpLimit(rlv2_data: dict):
-    return rlv2_data["current"]["player"]["property"]["hp"]["max"]
+def getHp(rogueData: dict):
+    return rogueData["current"]["player"]["property"]["hp"]["current"]
+def getHpLimit(rogueData: dict):
+    return rogueData["current"]["player"]["property"]["hp"]["max"]
     
-def addHp(rlv2_data: dict, add: int):
-    rlv2_data["current"]["player"]["property"]["hp"]["current"] += add
-    return hpChecker(rlv2_data)
+def addHp(rogueData: dict, add: int):
+    rogueData["current"]["player"]["property"]["hp"]["current"] += add
+    return hpChecker(rogueData)
     
-def setExp(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["player"]["property"]["exp"] = sets
+def setExp(rogueData: dict, sets: int):
+    rogueData["current"]["player"]["property"]["exp"] = sets
     
-def getExp(rlv2_data: dict):
-    return rlv2_data["current"]["player"]["property"]["exp"]
+def getExp(rogueData: dict):
+    return rogueData["current"]["player"]["property"]["exp"]
     
-def addExp(rlv2_data: dict, add: int)-> dict:
-    rlv2_data["current"]["player"]["property"]["exp"] += add
-    return expChecker(rlv2_data)
+def addExp(rogueData: dict, add: int)-> dict:
+    rogueData["current"]["player"]["property"]["exp"] += add
+    return expChecker(rogueData)
     
-def setExpLevel(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["player"]["property"]["level"] = sets
+def setExpLevel(rogueData: dict, sets: int):
+    rogueData["current"]["player"]["property"]["level"] = sets
     
-def getExpLevel(rlv2_data: dict):
-    return rlv2_data["current"]["player"]["property"]["level"]
+def getExpLevel(rogueData: dict):
+    return rogueData["current"]["player"]["property"]["level"]
     
-def addExpLevel(rlv2_data: dict, add: int):
-    rlv2_data["current"]["player"]["property"]["level"] += add
+def addExpLevel(rogueData: dict, add: int):
+    rogueData["current"]["player"]["property"]["level"] += add
     
     
-def setShield(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["player"]["property"]["shield"] = sets
+def setShield(rogueData: dict, sets: int):
+    rogueData["current"]["player"]["property"]["shield"] = sets
     
-def getShield(rlv2_data: dict):
-    return rlv2_data["current"]["player"]["property"]["shield"]
+def getShield(rogueData: dict):
+    return rogueData["current"]["player"]["property"]["shield"]
     
-def addShield(rlv2_data: dict, add: int):
-    rlv2_data["current"]["player"]["property"]["shield"] += add
+def addShield(rogueData: dict, add: int):
+    rogueData["current"]["player"]["property"]["shield"] += add
     
-def setGold(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["player"]["property"]["gold"] = sets
+def setGold(rogueData: dict, sets: int):
+    rogueData["current"]["player"]["property"]["gold"] = sets
     
-def addGold(rlv2_data: dict, add: int):
-    rlv2_data["current"]["player"]["property"]["gold"] += add
+def addGold(rogueData: dict, add: int):
+    rogueData["current"]["player"]["property"]["gold"] += add
     
-def getGold(rlv2_data: dict):
-    return rlv2_data["current"]["player"]["property"]["gold"]
+def getGold(rogueData: dict):
+    return rogueData["current"]["player"]["property"]["gold"]
     
 def addCharLimit(extension: dict, add: int):
     extension["extra_char_limit"] += add
     
-def setPopulation(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["player"]["property"]["population"]["max"] = sets
+def setPopulation(rogueData: dict, sets: int):
+    rogueData["current"]["player"]["property"]["population"]["max"] = sets
     
-def addPopulation(rlv2_data: dict, add: int):
-    rlv2_data["current"]["player"]["property"]["population"]["max"] += add
+def addPopulation(rogueData: dict, add: int):
+    rogueData["current"]["player"]["property"]["population"]["max"] += add
     
-def getPopulationCost(rlv2_data: dict):
-    return rlv2_data["current"]["player"]["property"]["population"]["cost"]
+def getPopulationCost(rogueData: dict):
+    return rogueData["current"]["player"]["property"]["population"]["cost"]
 
-def getPopulationMax(rlv2_data: dict):
-    return rlv2_data["current"]["player"]["property"]["population"]["max"]
-    
-def setCapacity(rlv2_data: dict, sets: int):
-    rlv2_data["current"]["player"]["property"]["capacity"] = sets
-    
-def addCapacity(rlv2_data: dict, add: int):
-    rlv2_data["current"]["player"]["property"]["capacity"] += add
-    capacityChecker(rlv2_data)
-    
-def getCurrentState(rlv2_data: dict):
-    return rlv2_data["current"]["player"]["state"]
+def getPopulationMax(rogueData: dict):
+    return rogueData["current"]["player"]["property"]["population"]["max"]
 
-def setCurrentState(rlv2_data: dict, sets: str):
-    rlv2_data["current"]["player"]["state"] = sets
+def getPopulation(rogueData: dict):
+    return getPopulationMax(rogueData) - getPopulationCost(rogueData)
+    
+def setCapacity(rogueData: dict, sets: int):
+    rogueData["current"]["player"]["property"]["capacity"] = sets
+    
+def addCapacity(rogueData: dict, add: int):
+    rogueData["current"]["player"]["property"]["capacity"] += add
+    capacityChecker(rogueData)
+    
+def getCurrentState(rogueData: dict):
+    return rogueData["current"]["player"]["state"]
+
+def setCurrentState(rogueData: dict, sets: str):
+    rogueData["current"]["player"]["state"] = sets
     
 def getCurrentScene(rlv2ExtensionData: dict):
     return rlv2ExtensionData["currentScene"]
@@ -133,38 +159,38 @@ def getCurrentEvent(rlv2ExtensionData: dict):
 def setCurrentEvent(rlv2ExtensionData: dict, sets: str):
     rlv2ExtensionData["currentEvent"] = sets
     
-def getStartTs(rlv2_data: dict):
-    return rlv2_data["current"]["game"]["start"]
+def getStartTs(rogueData: dict):
+    return rogueData["current"]["game"]["start"]
 
-def getToEnding(rlv2_data: dict):
-    return rlv2_data["current"]["player"]["toEnding"]
+def getToEnding(rogueData: dict):
+    return rogueData["current"]["player"]["toEnding"]
 
-def getHardLevel(rlv2_data: dict):
-    return rlv2_data["current"]["game"]["modeGrade"]
+def getHardLevel(rogueData: dict):
+    return rogueData["current"]["game"]["modeGrade"]
 
-def getChaos(rlv2_data: dict):
-    return rlv2_data["current"]["module"]["chaos"]["chaosList"]
-
-def setPending(rlv2_data: dict, pending: list):
-    rlv2_data["current"]["player"]["pending"] = pending
+def setPending(rogueData: dict, pending: list):
+    rogueData["current"]["player"]["pending"] = pending
     
-def addPending(rlv2_data: dict, pending: dict):
-    rlv2_data["current"]["player"]["pending"].append(pending)
+def addPending(rogueData: dict, pending: dict):
+    if rogueData["current"]["player"]["pending"] and rogueData["current"]["player"]["pending"][0]["type"] == "BATTLE" and pending["type"] == "BATTLE" and rogueData["current"]["player"]["pending"][0]["content"]["battle"]["state"] == 0 and pending["content"]["battle"]["state"] == 1:
+        rogueData["current"]["player"]["pending"][0].update(pending)
+    else:
+        rogueData["current"]["player"]["pending"].append(pending)
     
-def popPending(rlv2_data: dict):
-    rlv2_data["current"]["player"]["pending"].pop(0)
+def popPending(rogueData: dict):
+    rogueData["current"]["player"]["pending"].pop(0)
     
-def clearAllPending(rlv2_data: dict):
-    rlv2_data["current"]["player"]["pending"] = []
+def clearAllPending(rogueData: dict):
+    rogueData["current"]["player"]["pending"] = []
     
-def finishNode(rlv2_data: dict):
-    currentNode = rlv2_data["current"]["map"]["zones"]\
-        [str(getCurrentZone(rlv2_data))]["nodes"][str(positionToIndex(getPosition(rlv2_data)))]
+def finishNode(rogueData: dict):
+    currentNode = rogueData["current"]["map"]["zones"]\
+        [str(getCurrentZone(rogueData))]["nodes"][str(positionToIndex(getPosition(rogueData)))]
     currentNode["fts"] = ts
     
-def isZoneEnd(rlv2_data: dict):
-    currentNode = rlv2_data["current"]["map"]["zones"]\
-        [str(getCurrentZone(rlv2_data))]["nodes"][str(positionToIndex(getPosition(rlv2_data)))]
+def isZoneEnd(rogueData: dict):
+    currentNode = rogueData["current"]["map"]["zones"]\
+        [str(getCurrentZone(rogueData))]["nodes"][str(positionToIndex(getPosition(rogueData)))]
     return currentNode["zone_end"]
 
 def hpChecker(rogueData: dict):
@@ -178,9 +204,9 @@ def hpChecker(rogueData: dict):
 def capacityChecker(rogueData: dict):
     currentCapacity = getHp(rogueData)
     if currentCapacity > 13:          #TODO:琥珀伤痕
-        setVision(rogueData, 13)
+        setCapacity(rogueData, 13)
     if currentCapacity < 0:
-        setVision(rogueData, 0)
+        setCapacity(rogueData, 0)
         
         
 def expChecker(rogueData: dict):
@@ -227,12 +253,12 @@ def levelUpgrade(currentLevel: int, modifiedLevel: int, rogueData: dict) -> dict
     }
         
 
-def getBand(rlv2_data: dict):
-    return rlv2_data["current"]['inventory']['relic']['r_0']['id']
+def getBand(rogueData: dict):
+    return rogueData["current"]['inventory']['relic']['r_0']['id']
 
-def addRecruitPending(rlv2_data: dict, choiceTicket: str):
-    pending_index = getNextPendingIndex(rlv2_data)
-    rlv2_data["current"]["player"]["pending"].insert(
+def addRecruitPending(rogueData: dict, choiceTicket: str):
+    pending_index = getNextPendingIndex(rogueData)
+    rogueData["current"]["player"]["pending"].insert(
         0, {
             "index": pending_index,
             "type": "RECRUIT",
@@ -244,10 +270,10 @@ def addRecruitPending(rlv2_data: dict, choiceTicket: str):
         }
     )
 
-def addTotem(rlv2_data: dict, item: str, enchantment: str = None):
-    index = getNextTotemIndex(rlv2_data)
+def addTotem(rogueData: dict, item: str, enchantment: str | None = None):
+    index = getNextTotemIndex(rogueData)
     ts = time()
-    rlv2_data["current"]["module"]["totem"]["totemPiece"].append(
+    rogueData["current"]["module"]["totem"]["totemPiece"].append(
         {
             "id": item,
             "index": index,
@@ -257,34 +283,69 @@ def addTotem(rlv2_data: dict, item: str, enchantment: str = None):
         }
     )
     
-def getTotemList(rlv2_data: dict):
-    return rlv2_data["current"]["module"]["totem"]["totemPiece"]
+def getTotemList(rogueData: dict):
+    return rogueData["current"]["module"]["totem"]["totemPiece"]
     
-def isTotemExist(rlv2_data: dict, totemId: str):
-    for totem in rlv2_data["current"]["module"]["totem"]["totemPiece"]:
+def isTotemExist(rogueData: dict, totemId: str):
+    for totem in rogueData["current"]["module"]["totem"]["totemPiece"]:
         if totem["id"] == totemId:
             return True
     return False
     
-def addRelic(rlv2_data: dict, item: str):
-    index = getNextRelicIndex(rlv2_data)
+def addRelic(rogueData: dict, item: str):
+    index = getNextRelicIndex(rogueData)
     ts = time()
-    rlv2_data["current"]["inventory"]["relic"][index] = {
+    rogueData["current"]["inventory"]["relic"][index] = {
             "id": item,
             "index": index,
             "count": 1,
             "ts": ts
     }
     return index
+
+def removeRelic(rogueData: dict, rogueExtension: dict, index: str):
+    rogueData["current"]["inventory"]["relic"][index]["count"] = 0
     
-def isRelicExist(rlv2_data: dict, relicId: str, rogueExtension: dict, neededLevel: int = 0):
+def getItemCount(rogueData: dict, rogueExtension: dict, itemId: str) -> list:
+    match itemId:
+        case itemId if itemId.find("relic") != -1:
+            result = isRelicExist(rogueData, itemId, rogueExtension)
+            if result:
+                return [result[2], result[1]]
+            else:
+                return [0]
+        case itemId if itemId.find("chaos") != -1:
+            return [rogueData["current"]["module"]["chaos"]["value"]]
+        case itemId if itemId.find("vision") != -1:
+            return [rogueData["current"]["module"]["vision"]["value"]]
+        case itemId if itemId.find("hpmax") != -1:
+            return [getHpLimit(rogueData)]
+        case itemId if itemId.find("hp") != -1:
+            return [getHp(rogueData)]
+        case itemId if itemId.find("population") != -1:
+            return [getPopulation(rogueData)]
+        case itemId if itemId.find("gold") != -1:
+            return [getGold(rogueData)]
+        case itemId if itemId.find("shield") != -1:
+            return [getShield(rogueData)]
+        case itemId if itemId.find("flag") != -1:
+            return [
+                rogueExtension["eventFlag"].count(itemId)
+            ]
+        case _:
+            return []
+
+def getRelicData(rogueData: dict, rogueExtension: dict, itemId: str):
+    return rogueData["current"]["inventory"]["relic"][itemId]
+
+def isRelicExist(rogueData: dict, relicId: str, rogueExtension: dict, neededLevel: int = 0):
     realRelic = relicId
     tmp = relicId.split("_")
     canUpgradeIndex = rogueExtension["canUpgradeIndex"]
     if tmp[3] == "legacy" and int(tmp[4]) in canUpgradeIndex:
         if len(tmp) > 5:
             realRelic = "_".join(tmp[:5])
-    for relic in rlv2_data["current"]["inventory"]["relic"].values():
+    for relic in [x for x in rogueData["current"]["inventory"]["relic"].values() if x["count"] != 0]:
         tmp2 = relic["id"].split("_")
         if tmp2[3] == "legacy" and int(tmp2[4]) in canUpgradeIndex:
             level = tmp2[5] if len(tmp2) > 5 else None
@@ -297,8 +358,10 @@ def isRelicExist(rlv2_data: dict, relicId: str, rogueExtension: dict, neededLeve
                     canLevel = ["b", "c"]
                 case 3:
                     canLevel = ["c"]
+                case _:
+                    canLevel = ["?"]
             if not(level in canLevel):
-                return False
+                return []
             if len(tmp2) > 5:
                 realRelic2 = "_".join(tmp2[:5])
             else:
@@ -306,26 +369,26 @@ def isRelicExist(rlv2_data: dict, relicId: str, rogueExtension: dict, neededLeve
         else:
             realRelic2 = relic["id"]
         if realRelic2 == realRelic:
-            return [True, relic["index"]]
-    return False
+            return [True, relic["index"], relic["count"]]
+    return []
 
-def addRelicLayer(rlv2_data:dict, index:str, add: int):
-    if rlv2_data["current"]["inventory"]["relic"][index].__contains__("layer"):
-        rlv2_data["current"]["inventory"]["relic"][index]["layer"] += add
+def addRelicLayer(rogueData:dict, index:str, add: int):
+    if rogueData["current"]["inventory"]["relic"][index].__contains__("layer"):
+        rogueData["current"]["inventory"]["relic"][index]["layer"] += add
     else:
-        rlv2_data["current"]["inventory"]["relic"][index]["layer"] = 0
-        rlv2_data["current"]["inventory"]["relic"][index]["layer"] += add
+        rogueData["current"]["inventory"]["relic"][index]["layer"] = 0
+        rogueData["current"]["inventory"]["relic"][index]["layer"] += add
         
-def setRelicLayer(rlv2_data:dict, index:str, sets: int):
-    rlv2_data["current"]["inventory"]["relic"][index]["layer"] = sets
+def setRelicLayer(rogueData:dict, index:str, sets: int):
+    rogueData["current"]["inventory"]["relic"][index]["layer"] = sets
     
-def getRelicLayer(rlv2_data: dict, index: str):
-    return rlv2_data["current"]["inventory"]["relic"][index]["layer"] if rlv2_data["current"]["inventory"]["relic"][index].__contains__("layer") else 0
+def getRelicLayer(rogueData: dict, index: str):
+    return rogueData["current"]["inventory"]["relic"][index]["layer"] if rogueData["current"]["inventory"]["relic"][index].__contains__("layer") else 0
     
-def addTicketBattle(rlv2_data: dict, item: str, fromWhere = "battle"):
-    index = getNextTicketIndex(rlv2_data)
+def addTicketBattle(rogueData: dict, item: str, fromWhere = "battle"):
+    index = getNextTicketIndex(rogueData)
     ts = time()
-    rlv2_data["current"]["inventory"]["recruit"][index] = {
+    rogueData["current"]["inventory"]["recruit"][index] = {
             "id": item,
             "index": index,
             "count": 1,
@@ -340,41 +403,41 @@ def addTicketBattle(rlv2_data: dict, item: str, fromWhere = "battle"):
     return index
 
 
-def removeTotem(rlv2_data: dict, index: str):
-    rlv2_data["current"]["module"]["totem"]["totemPiece"][int(index[2:]) - 1]["used"] = True
+def removeTotem(rogueData: dict, index: str):
+    rogueData["current"]["module"]["totem"]["totemPiece"][int(index[2:]) - 1]["used"] = True
 
 
-def getNextTicketIndex(rlv2_data: dict):
+def getNextTicketIndex(rogueData: dict):
     d = set()
-    for e in rlv2_data["current"]["inventory"]["recruit"]:
+    for e in rogueData["current"]["inventory"]["recruit"]:
         d.add(int(e[2:]))
     i = 0
     while i in d:
         i += 1
     return f"t_{i}"
 
-def getNextRelicIndex(rlv2_data: dict):
-    return f"r_{len(rlv2_data['current']['inventory']['relic'])}"
+def getNextRelicIndex(rogueData: dict):
+    return f"r_{len(rogueData['current']['inventory']['relic'])}"
 
-def getNextPendingIndex(rlv2_data: dict):
+def getNextPendingIndex(rogueData: dict):
     d = set()
-    for e in rlv2_data["current"]["player"]["pending"]:
+    for e in rogueData["current"]["player"]["pending"]:
         d.add(int(e["index"][2:]))
     i = 0
     while i in d:
         i += 1
     return f"e_{i}"
 
-def getNextTotemIndex(rlv2_data: dict):
+def getNextTotemIndex(rogueData: dict):
     d = set()
-    for e in rlv2_data["current"]["module"]["totem"]["totemPiece"]:
+    for e in rogueData["current"]["module"]["totem"]["totemPiece"]:
         d.add(int(e["index"][2:]))
     i = 0
     while i in d:
         i += 1
     return f"t_{i}"
 
-def getNextCharId(rlv2, charId: str = None, isUpgrade: bool = False):
+def getNextCharId(rlv2, charId: str | None = None, isUpgrade: bool = False):
     i = 0
     if charId:
         for k, char in rlv2["current"]["troop"]["chars"].items():
@@ -390,23 +453,29 @@ def getNextZoneId(rlv2):
         i += 1
     return int(i)
 
-def getPosition(rlv2_data: dict):
-    return rlv2_data["current"]['player']['cursor']['position']
+def getPosition(rogueData: dict):
+    return rogueData["current"]['player']['cursor']['position']
 
-def getCurrentZone(rlv2_data: dict):
-    return rlv2_data["current"]['player']['cursor']['zone']
+def getNodeType(rogueData: dict) -> NodeType:
+    if getPosition(rogueData):
+        return rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]["type"]
+    else:
+        return NodeType.NONE
 
-def getModeGrade(rlv2_data: dict):
-    return rlv2_data["current"]['game']['modeGrade']
+def getCurrentZone(rogueData: dict):
+    return rogueData["current"]['player']['cursor']['zone']
+
+def getModeGrade(rogueData: dict):
+    return rogueData["current"]['game']['modeGrade']
 
 def positionToIndex(position: dict):
     return f"{position['x']}0{position['y']}" if position["x"] != 0 else f"{position['y']}"
 
 
-def addTicket(rlv2_data: dict, ticket_id: str, init: bool, profession: str = 'all'):
-    theme = rlv2_data["current"]["game"]["theme"]
+def addTicket(rogueData: dict, ticket_id: str, init: bool, profession: str = 'all'):
+    theme = rogueData["current"]["game"]["theme"]
     ticket = f"{theme}_recruit_ticket_{profession}"
-    rlv2_data["current"]["inventory"]["recruit"][ticket_id] = {
+    rogueData["current"]["inventory"]["recruit"][ticket_id] = {
         "index": ticket_id,
         "id": ticket,
         "state": 0,
@@ -417,13 +486,13 @@ def addTicket(rlv2_data: dict, ticket_id: str, init: bool, profession: str = 'al
         "mustExtra": 0,
         "needAssist": init
     }
-    rlv2_data["current"]["player"]["pending"][0]["content"]["initRecruit"]["tickets"].append(
+    rogueData["current"]["player"]["pending"][0]["content"]["initRecruit"]["tickets"].append(
         ticket_id
     )
 
-def getActivateTicketList(rlv2_data: dict):
+def getActivateTicketList(rogueData: dict):
     tmp = []
-    for ticket, detail in rlv2_data["current"]["inventory"]["recruit"].items():
+    for ticket, detail in rogueData["current"]["inventory"]["recruit"].items():
         if detail["state"] != 2:
             tmp.append(ticket)
     return tmp
@@ -450,6 +519,8 @@ def getChars(rogueData: dict, rogueExtension: dict, recruitTicketId: str, userSy
             upgradeBonusProfessionList = ["SNIPER", "MEDIC"]
         case 4:
             upgradeBonusProfessionList = ["CASTER", "SPECIAL"]
+        case _:
+            upgradeBonusProfessionList = []
     isFreeUpgrade: int = rogueExtension["no_upgrade_population"]
     currentChars = rogueData["current"]["troop"]["chars"]
     specialChars = [
@@ -515,17 +586,19 @@ def getChars(rogueData: dict, rogueExtension: dict, recruitTicketId: str, userSy
         charRarity = int(char["rarity"])
         match charRarity:
             case 4:
-                rarity = (0 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 1) + (-1 if charProfession in upgradeBonusProfessionList else 0)
+                rarity = (0 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 1) + (-1 if char["profession"] in upgradeBonusProfessionList else 0)
                 if rarity < 0:
                     rarity = 0
             case 5:
-                rarity = (1 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 2) + (-1 if charProfession in upgradeBonusProfessionList else 0)
+                rarity = (1 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 2) + (-1 if char["profession"] in upgradeBonusProfessionList else 0)
                 if rarity < 0:
                     rarity = 0
             case 6:
-                rarity = (3 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 3) + (-1 if charProfession in upgradeBonusProfessionList else 0)
+                rarity = (3 if NEW_RECRUIT_POPULATION_COST_SYSTEM else 3) + (-1 if char["profession"] in upgradeBonusProfessionList else 0)
                 if rarity < 0:
                     rarity = 0
+            case _:
+                rarity = 0
         char.update(
             {
                 "type": "NORMAL",

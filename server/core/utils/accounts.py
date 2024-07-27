@@ -25,7 +25,7 @@ def decrypt_user_key(key: str, login_time: int) -> str:
         int(format_data[i], 2) + buf[i]) for i in range(len(format_data))])
     decrypt_data = "".join(map(lambda x: chr(int(str(x), 2)), [decrypt_buf[i:i + 8] for i in
                                                                range(0, len(decrypt_buf),
-                                                                     8)])) if login_time else None
+                                                                     8)])) if login_time else ""
     return decrypt_data
     
 def decrypt_battle_data(data: str, login_time: int) -> dict:
@@ -151,7 +151,6 @@ async def generateNewSyncData(uid: str | int) -> dict:
     
     #Stage Unlock
     stage_table = read_json(STAGE_EXCEL_PATH)
-    #print(stage_table["stages"])
     
     for stage in stage_table["stages"].values():
         newSyncData["user"]["dungeon"]["stages"][stage["stageId"]] = \

@@ -33,14 +33,11 @@ relic_12 = []
 relic_16 = []
 relic_special = []
 
-#print(rogueTable.keys())
 for name, details in rogueTable.items():
-    print(name)
     match name:
         case name if name.find("legacy") != -1:
             legacyRelic.append(name)
         case name if name.find("res") != -1:
-            #print(1)
             resRelic.append(name)
         case name if name.find("fight") != -1:
             fightRelic.append(name)

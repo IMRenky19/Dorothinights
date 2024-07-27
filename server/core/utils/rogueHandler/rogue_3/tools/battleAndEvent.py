@@ -1,7 +1,7 @@
 from random import shuffle, random, choice
 from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_MODULE_DATA_PATH, ROGUE_RELIC_POOL_PATH
 from server.core.utils.json import read_json
-from server.core.utils.rogueHandler.rogue_3.tools.totemAndChaos import deepenChaos, increaseChaosValue
+from .totemAndChaos import *
 
 from ... import common
 from ...common import NodeType
@@ -18,7 +18,7 @@ chaosPool = rogueModuleTable["rogue_3"]["chaos"]
 
 
 
-def battleGenerator(mapData: dict, zone: int, pool: list, currentPosition: dict | None, fullyRandom: bool = False, randomNodePosIndexList = None) -> dict:
+def battleGenerator(mapData: dict, zone: int, pool: list, currentPosition: dict | None, fullyRandom: bool, randomNodePosIndexList) -> dict:
     if fullyRandom:
         for pos in randomNodePosIndexList:
             node = mapData[str(zone)]["nodes"][str(pos)]
@@ -42,7 +42,7 @@ def battlePoolGenerator(zone: int, theme: str) -> list:
     return common.battlePoolGenerator(zone, theme)
         
 
-def eventPoolGenerator(zone: int, currentPool: list, theme: str) -> dict:
+def eventPoolGenerator(zone: int, currentPool: list, theme: str) -> list:
     return common.eventPoolGenerator(zone, currentPool, theme)
 
 def getBattleBuffs(rogueData: dict, rogueExtension: dict):
@@ -890,7 +890,18 @@ def getBattleBuffs(rogueData: dict, rogueExtension: dict):
     return [buffs, themeBuffs]
     
     
-def generateBattlePending(rogueData: dict, rogueExtension: dict) -> dict:
+def generateBattlePending(rogueData: dict, rogueExtension: dict, isEventBattle = False) -> dict:
+    if isEventBattle:
+        return {
+            "index":getNextPendingIndex(rogueData),
+            "type":"BATTLE",
+            "content":{
+                "battle":{
+                    "state":0,
+                    "addExcludeList":[]
+                }
+            }
+        }
     boxInfo = {}
     chestCnt = 0
     for i in range(2):
@@ -916,13 +927,14 @@ def generateBattlePending(rogueData: dict, rogueExtension: dict) -> dict:
     buffs = getBattleBuffs(rogueData, rogueExtension)
     return common.generateBattlePending(rogueData, rogueExtension, boxInfo, buffs[0], buffs[1])
 
-def shopDiscount(rogueData: dict, rogueExtension: dict, goods: dict):
+def shopDiscount(rogueData: dict, rogueExtension: dict, goods: list):
     currentNode = rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]
     currentNodeType = currentNode["type"]
     normalGoodsDiscount = 1
     rareGoodsDiscount = 1
     superRareGoodsDiscount = 1
     baseMultiplier = 1
+    modifiedPrice = False
     
     if currentNode["attach"]:
         for buff in currentNode["attach"]:
@@ -977,7 +989,7 @@ def shopDiscount(rogueData: dict, rogueExtension: dict, goods: dict):
             good["priceCount"] = floor((good["origCost"] * superRareGoodsDiscount) + 0.99)
             good["origCost"] = floor(good["origCost"] + 0.99)
 
-def generateNonBattlePending(rogueData: dict, rogueExtension: dict, selectedChoices = None) -> dict:
+def generateNonBattlePending(rogueData: dict, rogueExtension: dict, selectedChoices: str | None, userSyncData) -> dict:
     pendingIndex = getNextPendingIndex(rogueData)
     currentNode = rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]
     currentNodeType = currentNode["type"]
@@ -986,7 +998,7 @@ def generateNonBattlePending(rogueData: dict, rogueExtension: dict, selectedChoi
         for buff in currentNode["attach"]:
             for nodeBuff in rogueTable["details"][getTheme(rogueData)]["relics"][buff]["buffs"]:
                 if nodeBuff["key"] == "totem_effect_reward":
-                    gainItem(rogueData, nodeBuff["blackboard"][0]["valueStr"], nodeBuff["blackboard"][1]["value"], rogueExtension=rogueExtension)
+                    gainItem(rogueData, nodeBuff["blackboard"][0]["valueStr"], nodeBuff["blackboard"][1]["value"], nodeBuff["blackboard"][0]["valueStr"], {}, rogueExtension=rogueExtension)
 
     if isRelicExist(rogueData, "rogue_3_relic_res_11", rogueExtension) and getVision(rogueData) >= 4:
         addGold(rogueData, 2)
@@ -1099,7 +1111,8 @@ def generateShopGoods(shopId: str, rogueData: dict, rogueExtension: dict):
             superRareCount = 0
             valid = False
             for i in range(shopItemCount):
-                
+                relic = ""
+                relicValue = 0 
                 while not valid:
                     relic = relicLevelCheck(pool.pop(0), rogueExtension)
                     relicValue = rogueTable["details"][theme]["items"][relic]["value"]
@@ -1114,7 +1127,7 @@ def generateShopGoods(shopId: str, rogueData: dict, rogueExtension: dict):
                                 valid = True
                         case _:
                             valid = True
-                                
+                          
                 goods.append(
                     {
                         "index": f"{index}",
@@ -1229,7 +1242,8 @@ def generateShopGoods(shopId: str, rogueData: dict, rogueExtension: dict):
             superRareCount = 0
             valid = False
             for i in range(shopItemCount):
-                
+                relic = ""
+                relicValue = 0 
                 while not valid:
                     relic = relicLevelCheck(pool.pop(0), rogueExtension)
                     relicValue = rogueTable["details"][theme]["items"][relic]["value"]
@@ -1278,6 +1292,7 @@ def generateBattleRewardPending(rogueData: dict, rogueExtension: dict, stageName
     normalBoxCount = 0
     rareBoxCount = 0
     superRareBoxCount = 0
+    ticketCount = 0
     if getCurrentZone(rogueData) in [1,3,5]:
         ticketCount = 1
     elif getCurrentZone(rogueData) in [2,4,6]:
@@ -1487,10 +1502,9 @@ def gainItemsAfterBattle(rogueData: dict, index: int, subIndex: int, userData = 
     common.gainItemsAfterBattle(rogueData, index, subIndex, userData, rogueExtension, gainItem)
     
 
-def gainItem(rogueData: dict, itemType: str, amount: int, item: str = None, userSyncData = None, rogueExtension = None):
+def gainItem(rogueData: dict, itemType: str, amount: int, item: str, userSyncData, rogueExtension):
     if not itemType:
         itemType = item
-    print(itemType)
     match itemType:        
         case itemType if itemType.find("totem") != -1:
             addTotem(rogueData, itemType)
@@ -1555,18 +1569,21 @@ def processRelic(rogueData, rogueExtension, index, userSyncData):
                 }
             )
             itemsId.append(relic)
-        rogueExtension["extraResponse"] = {
-            "items": items,
-            "pushMessage":[
-                {
-                    "path":"rlv2GotRandRelic",
-                    "payload":{
-                        "idList":itemsId
+        writeExtraResponseData(
+            rogueData, 
+            rogueExtension, 
+            {
+                "items": items,
+                "pushMessage":[
+                    {
+                        "path":"rlv2GotRandRelic",
+                        "payload":{
+                            "idList":itemsId
+                        }
                     }
-                }
-            ]
-        }
-        rogueExtension["isNewExtraResponse"] = True
+                ]
+            }
+        )
         
         
     
@@ -1576,6 +1593,6 @@ def relicLevelCheck(relicId: str, rogueExtension: dict):
     return common.relicLevelCheck(relicId, rogueExtension)
     
 def generateTickets(ticketBaseObject: dict, upgradeChance: float):
-    common.generateTickets(ticketBaseObject, upgradeChance, theme)
+    common.generateTickets(ticketBaseObject, upgradeChance, "rogue_3")
     
     

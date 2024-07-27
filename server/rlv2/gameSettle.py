@@ -30,6 +30,8 @@ async def gameSettle(request: Request) -> Response:
             zoneScore = 550
         case zoneCnt if zoneCnt >= 7:
             zoneScore = 650
+        case _:
+            zoneScore = 0
     stepCount = endData["record"]["cntArrivedNode"]
     stepScore = stepCount * 1
     recruitRealCount = endData["record"]["recruitRealCount"]

@@ -48,12 +48,10 @@ def battleGenerator(mapData: dict, zone: int, pool: list, currentPosition: dict 
         currentNode = mapData[str(zone)]["nodes"][positionToIndex(currentPosition)]
         nextNode = [mapData[str(zone)]["nodes"][positionToIndex(node)] \
             for node in currentNode["next"]]
-        #print(nextNode)
         for node in nextNode:
             if not node["stage"]:
                 if node["realNodeType"] == NodeType.NORMAL_BATTLE:
                     node["type"] = NodeType.NORMAL_BATTLE
-                    #print(pool)
                     node["stage"] = pool.pop()
                     pool.insert(0, node["stage"])
                 elif node["realNodeType"] == NodeType.ELITE_BATTLE:
@@ -99,9 +97,11 @@ def battlePoolGenerator(zone: int, theme: str) -> list:
             pool = rogueBattlePool[theme]["ZONE_6_NORMAL_BATTLE_POOL"]
             shuffle(pool)
             return pool
+        case _:
+            return []
         
 
-def eventPoolGenerator(zone: int, currentPool: list, theme: str) -> dict:
+def eventPoolGenerator(zone: int, currentPool: list, theme: str) -> list:
     tmpPool = []
     for name, detail in rogueEventTable[theme]["Encounter"]["enterScene"].items():
         if type(detail["zone"]) != list:
@@ -118,7 +118,7 @@ def eventPoolGenerator(zone: int, currentPool: list, theme: str) -> dict:
             newPool.append(name)
     return newPool
 
-def generateBattleBuffs(rogueData: dict, rogueExtension: dict, buffs: list, themeBuffs: list) -> dict:
+def generateBattleBuffs(rogueData: dict, rogueExtension: dict, buffs: list, themeBuffs: list) -> list:
     modeGrade = getModeGrade(rogueData)
     theme = getTheme(rogueData)
     zone = getCurrentZone(rogueData)
@@ -207,17 +207,130 @@ def generateBattlePending(rogueData: dict, rogueExtension: dict, boxInfo: dict, 
                 "diceRoll":[],
                 "boxInfo":boxInfo,
                 "tmpChar":[],
-                "sanity":22222,
-                "unKeepBuff":battleBuffs
+                "sanity":0,
+                "unKeepBuff":battleBuffs,
+                "addExcludeList":[]
             }
         }
     }
     
     return pending
 
-def generateNonBattlePending(pendingIndex: int, currentNodeType: int, rogueData: dict, rogueExtension: dict, selectedChoices = None, goodsList = []) -> dict:
+def pickAvailableChoices(rogueData: dict, rogueExtension: dict, choicesDict: dict):
+    choices = {}
+    choiceAdditional = {}
+    relicItems = []
+    totemItems = []
+    theme = getTheme(rogueData)
+    for eventChoice, eventDetails in choicesDict.items():
+        if eventDetails.__contains__("condition"):
+            for condition in eventDetails["condition"]:
+                haveItem = False
+                itemCount = getItemCount(rogueData, rogueExtension, condition["itemId"])[0]
+                match condition["condition"]:
+                    case "have":
+                        if itemCount > 0:
+                            haveItem = True
+                    case "more":
+                        if itemCount > condition["amount"]:
+                            haveItem = True
+                    case "is":
+                        if itemCount == condition["amount"]:
+                            haveItem = True
+                if condition["appear"] and not haveItem:
+                    choices.update(
+                        {
+                            eventChoice: 0
+                        }
+                    )
+                elif condition["appear"] and haveItem:
+                    choices.update(
+                        {
+                            eventChoice: 1
+                        }
+                    )
+                else:
+                    continue
+        else:
+            choices.update(
+                {
+                    eventChoice: 1
+                }
+            )
+        for item in eventDetails["gain"]:
+            if item["itemId"] == "RANDOM_RELIC":
+                if item["probShow"]:
+                    hasRelicInfo = rogueData["current"]["inventory"]["relic"]
+                    hasRelic = [x["id"] for x in hasRelicInfo.values() if not (x["id"] in relicItems)]
+                    relics = [i for i in roguePoolTable[theme][item["pool"]] if not (i in hasRelic)]
+                    relic = relicLevelCheck(relics.pop(randint(0,len(relics) - 1)), rogueExtension)
+                    relicItems.append(relic)
+                    choiceAdditional.update(
+                        {
+                            eventChoice: {
+                                "rewards": [
+                                    {
+                                        "id": relic,
+                                        "type": "ITEM",
+                                        "count": 1
+                                    }
+                                ]
+                            }
+                        }
+                    )
+                else:
+                    choiceAdditional.update(
+                        {
+                            eventChoice: {
+                                "rewards": []
+                            }
+                        }
+                    )
+            if item["itemId"] == "RANDOM_TOTEM":
+                if item["probShow"]:
+                    totems = [x for x in roguePoolTable[theme][item["pool"]] if not (x in totemItems)]
+                    totem = totems.pop(randint(0,len(totems) - 1))
+                    totemItems.append(totem)
+                    choiceAdditional.update(
+                        {
+                            eventChoice: {
+                                "rewards": [
+                                    {
+                                        "id": totem,
+                                        "type": "TOTEM",
+                                        "count": 1
+                                    }
+                                ]
+                            }
+                        }
+                    )
+                else:
+                    choiceAdditional.update(
+                        {
+                            eventChoice: {
+                                "rewards": []
+                            }
+                        }
+                    )
+            else:
+                choiceAdditional.update(
+                        {
+                            eventChoice: {
+                                "rewards": []
+                            }
+                        }
+                    )
+    return {
+        "choices": choices,
+        "choiceAdditional": choiceAdditional
+    }
+
+
+def generateNonBattlePending(pendingIndex: str, currentNodeType: int, rogueData: dict, rogueExtension: dict, selectedChoices = None, goodsList = []) -> dict:
     pendingIndex = getNextPendingIndex(rogueData)
-    currentNodeType = rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]["type"]
+    currentNodeType = getNodeType(rogueData)
+    if not currentNodeType:
+        return {}
     theme = getTheme(rogueData)
     match currentNodeType:
         case NodeType.ENCOUNTER | NodeType.ENTERTAINMENT | NodeType.LOST_AND_FOUND | NodeType.WISH | NodeType.SCOUT | NodeType.SAFE_HOUSE | NodeType.STORY | NodeType.PASSAGE:
@@ -225,19 +338,9 @@ def generateNonBattlePending(pendingIndex: int, currentNodeType: int, rogueData:
                 eventId = eventGenerator(rogueExtension["realZone"], rogueExtension["eventPool"], theme)
                 choices = {}
                 choiceAdditional = {}
-                for eventChoice, eventDetails in rogueEventTable[theme]["Encounter"]["enterScene"][eventId]["choices"].items():
-                    choices.update(
-                        {
-                            eventChoice: 1
-                        }
-                    ),
-                    choiceAdditional.update(
-                        {
-                            eventChoice: {
-                                "rewards":[]
-                            }
-                        }
-                    )
+                ret = pickAvailableChoices(rogueData, rogueExtension, rogueEventTable[theme]["Encounter"]["enterScene"][eventId]["choices"])
+                choiceAdditional = ret["choiceAdditional"]
+                choices = ret["choices"]
                 pending = {
                     "index":pendingIndex,
                     "type":"SCENE",
@@ -253,7 +356,6 @@ def generateNonBattlePending(pendingIndex: int, currentNodeType: int, rogueData:
                 rogueExtension["currentEvent"] = eventId
                 rogueExtension["currentScene"] = eventId
             elif rogueData["current"]["player"]["pending"] and rogueData["current"]["player"]["pending"][0]["type"] == "SCENE":
-                #print(114514)
                 choices = {}
                 choiceAdditional = {}
                 nextScene = rogueEventTable[theme]["Encounter"]["others"][getCurrentScene(rogueExtension)]
@@ -267,19 +369,9 @@ def generateNonBattlePending(pendingIndex: int, currentNodeType: int, rogueData:
                         }
                     }
                 else:
-                    for eventChoice, eventDetails in nextScene["choices"].items():
-                        choices.update(
-                            {
-                                eventChoice: 1
-                            }
-                        ),
-                        choiceAdditional.update(
-                            {
-                                eventChoice: {
-                                    "rewards":[]
-                                }
-                            }
-                        )
+                    ret = pickAvailableChoices(rogueData, rogueExtension, nextScene["choices"])
+                    choiceAdditional = ret["choiceAdditional"]
+                    choices = ret["choices"]
                 pending = {
                     "index":pendingIndex,
                     "type":"SCENE",
@@ -292,38 +384,10 @@ def generateNonBattlePending(pendingIndex: int, currentNodeType: int, rogueData:
                         }
                     }
                 }
-        case NodeType.SHOP:
-            zone = getCurrentZone(rogueData)
-            if zone == 1:
-                shopId = "zone_1_shop"
             else:
-                shopId = "zone_6_shop"
-            goods = generateShopGoods(shopId, rogueData, rogueExtension, theme)
-            pending = {
-                "index":pendingIndex,
-                "type":"BATTLE_SHOP",
-                "content":{
-                    "battleShop":{
-                        "bank":{
-                            "open":True,
-                            "canPut":rogueExtension["canShopPut"],
-                            "canWithdraw":True,
-                            "withdraw":0,
-                            "cost":rogueExtension["shopCost"]
-                        },
-                        "id":shopId,
-                        "goods":goodsList,
-                        "canBattle":not rogueExtension["shopHaveBattled"],
-                        "hasBoss":not rogueExtension["shopHaveBattled"],
-                        "refreshCnt":rogueExtension["refresh_shop"],
-                        "showRefresh":True if rogueExtension["refresh_shop"]else False,
-                        "withdrawMethod":"fee_add",
-                        "refreshMethod":"direct",
-                        "_done":False
-                    }
-                }
-            }
-    
+                pending = {}
+        case _:
+            pending = {}
     return pending
 
 def generateBattleRewardPending(rogueData: dict, rogueExtension: dict, stageName: str, stageType: int, decryptedBattleData: dict, theme: str, rewards = [], gainExp = 0) -> dict:
@@ -382,9 +446,10 @@ def generateBattleRewardPending(rogueData: dict, rogueExtension: dict, stageName
 
 
 
-def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int, chestInfo: dict, theme: str, chanceInfo: dict, ticketCount = 1, rogueExtension: dict = {}, hasRelicInfo: dict = {}, rogueData = {}, relicExtra = 0, ticketExtra = 0) -> list:
+def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold: int, chestInfo: dict, theme: str, chanceInfo: dict, ticketCount = 1, rogueExtension: dict = {}, hasRelicInfo: dict = {}, rogueData = {}, relicExtra = 0, ticketExtra = 0) -> dict:
     index = 0
     rewards = []
+    relicItems = []
     #TODO:根据是否在树洞更改部分资源掉落概率
     relicChance = chanceInfo["relicChance"]["isElite"] if isElite else chanceInfo["relicChance"]["notElite"]
     if isBoss:
@@ -462,11 +527,11 @@ def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold:
     #TODO 掉落顺序2：藏品
     #TODO 根据难度不同进阶部分藏品，部分藏品的即时效果生效（chooseBattleReward）
     hasRelicInfo = rogueData["current"]["inventory"]["relic"]
-    hasRelic = [x["id"] for x in hasRelicInfo.values()]
+    hasRelic = [x["id"] for x in hasRelicInfo.values() if not (x["id"] in relicItems) and not (x["id"] in rogueData["current"]["player"]["pending"][0]["addExcludeList"])]
     relics = [i for i in roguePoolTable[theme]["battleRelicPool"] if not (i in hasRelic)] if not isBoss else [i for i in roguePoolTable[theme]["bossRelicPool"] if not (i in hasRelic)]
     relicCount = (2 if isBoss else 1) + relicExtra
     sub = 0
-    relicItems = []
+    
     if random() < relicChance:
         for i in range(relicCount):
             relic = relicLevelCheck(relics.pop(randint(0,len(relics) - 1)), rogueExtension)
@@ -519,7 +584,7 @@ def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold:
     }
         
 
-def gainItemsAfterBattle(rogueData: dict, index: int, subIndex: int, userData = None, rogueExtension = None, customGainItem = None):
+def gainItemsAfterBattle(rogueData: dict, index: int, subIndex: int, userData, rogueExtension, customGainItem):
     theme = getTheme(rogueData)
     #TODO 招募券以及典训藏品的激活，部分加携带/生命值/护盾/希望等等的资源增加，部分藏品的特殊效果（密信系列的招募减希望/直升，和坍缩值/指挥经验相关机制，叠层藏品）
     battleRewardsPending = rogueData["current"]["player"]["pending"]
@@ -529,7 +594,7 @@ def gainItemsAfterBattle(rogueData: dict, index: int, subIndex: int, userData = 
     customGainItem(rogueData, itemType, itemCount, itemType, userSyncData = userData, rogueExtension=rogueExtension)
     item["done"] = 1
         
-def gainItem(rogueData: dict, itemType: str, amount: int, item: str = None, userSyncData = None, rogueExtension = None, canUpgradeIndex = None, customProcessRelic = None):
+def gainItem(rogueData: dict, itemType: str, amount: int, item: str, userSyncData, rogueExtension, customProcessRelic):
     theme = getTheme(rogueData)
     if not itemType:
         itemType = item
@@ -539,6 +604,7 @@ def gainItem(rogueData: dict, itemType: str, amount: int, item: str = None, user
         case itemType if itemType.find("gold") != -1:
             addGold(rogueData, amount)
         case itemType if itemType.find("_ticket") != -1:
+            ticketId = ""
             for i in range(int(amount)):
                 ticketId = addTicketBattle(rogueData, item)
             activateTickets(rogueData, item if item else itemType, userSyncData, rogueExtension, ticketId)

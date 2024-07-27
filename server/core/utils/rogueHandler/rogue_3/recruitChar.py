@@ -6,11 +6,11 @@ from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH
 from server.core.utils.time import time
 from random import shuffle, randint
 from copy import deepcopy
+from ....database.function.userData import getAccountBySecret
 
 ts = time()
 
 async def recruitChar(rogueClass: RogueBasicModel, ticketId: str, choice: str, isClose = False):
-    #print(choice)
     rlv2Extension = getRogueExtensionData(rogueClass)
     if isClose:
         rlv2 = getRogueData(rogueClass)
@@ -32,7 +32,6 @@ async def recruitChar(rogueClass: RogueBasicModel, ticketId: str, choice: str, i
         rlv2["current"]["player"]["property"]["population"]["cost"] += char["population"]
     
     ticketList = getActivateTicketList(rlv2)
-    #print(ticketList)
     if ticketList and getCurrentState(rlv2) != "INIT":
         nextTicketId = ticketList.pop(0)
         rogueExtension = getRogueExtensionData(rogueClass)

@@ -3,7 +3,6 @@ from server.core.database.function.userData import getAccountBySecret, writeAcco
 from server.core.database.function.rogueData import getRogueBySecret
 from server.core.utils.accounts import generateNewSyncData
 from server.core.utils.time import time
-from server.core.database.function.userData import show_secret
 from json import loads
 
 
@@ -11,7 +10,6 @@ from json import loads
 async def syncData(request: Request) -> Response:
     secret = request.headers["Secret"]
     account = await getAccountBySecret(secret)
-    #print(account.user)
     if account.user == {}:          #测试用临时改动，记得改回去
         syncdata = await generateNewSyncData(account.uid)
         await writeAccountSyncData(secret, syncdata)

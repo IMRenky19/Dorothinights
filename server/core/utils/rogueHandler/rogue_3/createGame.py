@@ -295,11 +295,11 @@ def getInnerBuffs(rlv2_extension: dict, hardLevel: int):
             "more_goods": 0,                 #文化比较N6buff：诡意行商中会额外出售两个商品
             "safe_house_add_hp": 0,          #文化比较N9buff：进入“安全的角落”节点回复1目标生命
             "add_shield": 0,                 #文化比较N9buff：目标生命高于10时，完美作战后获得1护盾值
-            "difficulty_multiplier": 0,      #敌人数值乘区
-            "score_multiplier": 1,           #分数乘区
+            "difficulty_multiplier": 0.0,    #敌人数值乘区
+            "score_multiplier": 1.0,         #分数乘区
             "band_direct_upgrade":0,         #职业队直升，0禁用，1近锋，2重辅，3狙医，4术特
             "no_upgrade_population":0,       #升级是否不消耗希望
-            "totem_modify": 0,               #密文修饰概率
+            "totem_modify": 0.0,             #密文修饰概率
             "band_13_another_vision_set": 0, #科学主义分队效果：每层+2抗干扰
             "band_12_always_predict_totem": 0,#生活至上分队效果：远见时总是远见密文板
             "band_11_another_chaos_set": 0
@@ -451,9 +451,7 @@ async def createGameExtra(rogueClass: RogueBasicModel, hardLevel: int):
                 "chgEnding": False
             }
     )
-    #print(1)
     if have_init_support:
-        #print(114)
         choiceList = [
             "choice_ro3_startbuff_1",
             "choice_ro3_startbuff_2",
@@ -519,8 +517,9 @@ async def createGameExtra(rogueClass: RogueBasicModel, hardLevel: int):
         },
         
     )
-    clearExtraResponseData(rlv2_data, rlv2_extension)
+    
     rlv2_data["current"] = initial
+    clearExtraResponseData(rlv2_data, rlv2_extension)
     
     rogueClass.rlv2 = rlv2_data
     rogueClass.extension = rlv2_extension

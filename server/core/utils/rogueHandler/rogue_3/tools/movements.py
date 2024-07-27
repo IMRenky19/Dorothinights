@@ -14,7 +14,7 @@ totemList = read_json(ROGUE_RELIC_POOL_PATH)["rogue_3"]["totemAll"]
 ts = time()
 
 
-def moveToNextZone(rlv2_data: dict, rlv2_extension: dict, isHiddenZone = False):
+def moveToNextZone(rlv2_data: dict, rlv2_extension: dict, userSyncData, isHiddenZone = False):
     retval = common.moveToNextZone(rlv2_data, rlv2_extension)
     zone = getCurrentZone(rlv2_data)
     battlePool = retval[0]
@@ -32,7 +32,9 @@ def moveToNextZone(rlv2_data: dict, rlv2_extension: dict, isHiddenZone = False):
         ),
         zone,
         battlePool,
-        getPosition(rlv2_data)
+        getPosition(rlv2_data),
+        False,
+        []
     )
     rlv2_data["current"]["map"]["zones"].update(mapData)
     if rlv2_extension["3_add_vision"] and rlv2_data["current"]["player"]["cursor"]["zone"] == 3:
@@ -54,7 +56,7 @@ def moveToNextZone(rlv2_data: dict, rlv2_extension: dict, isHiddenZone = False):
     #测试密文版
     if zone == 1:
         for totem in totemList:
-            gainItem(rlv2_data, totem, 1, rogueExtension=rlv2_extension)
+            gainItem(rlv2_data, totem, 1, totem, userSyncData, rogueExtension=rlv2_extension)
     if not isHiddenZone:
         chaosList = [0,3,4,5,6,7] if rlv2_extension["15_more_chaos"] else [0,3,3,3,3,3]
         #increaseChaosValue(rlv2_data, rlv2_extension, chaosList[zone - 1], True)
@@ -69,7 +71,7 @@ def moveTo(rlv2_data: dict, rlv2_extension: dict, position: dict, zone: int):
     
     if currentPosition:
         if currentPosition["x"] == position["x"]:
-            if not isRelicExist(rlv2_data, "rogue_3_relic_explore_3"):
+            if not isRelicExist(rlv2_data, "rogue_3_relic_explore_3", rlv2_extension):
                 addVision(rlv2_data, -1, rlv2_extension)
             else:
                 if random() > 0.3:
@@ -115,18 +117,19 @@ def moveTo(rlv2_data: dict, rlv2_extension: dict, position: dict, zone: int):
             ),
             rlv2_data["current"]["player"]["cursor"]["zone"],
             rlv2_extension["battlePool"],
-            rlv2_data["current"]["player"]["cursor"]["position"]
+            rlv2_data["current"]["player"]["cursor"]["position"],
+            False,
+            []
         )
     )
-    print(getReachableNodeDict(rlv2_data))
     
     
-def zoneEndChecker(rogueData: dict, rogueExtensionData: dict):
+def zoneEndChecker(rogueData: dict, rogueExtensionData: dict, userSyncData: dict):
     if isZoneEnd(rogueData):
         if getCurrentZone(rogueData) == 5:
             endGame(rogueData, rogueExtensionData)
             return
-        moveToNextZone(rogueData, rogueExtensionData)
+        moveToNextZone(rogueData, rogueExtensionData, userSyncData)
         
         
 def endGame(rogueData: dict, rogueExtensionData: dict):
@@ -138,13 +141,14 @@ def endGame(rogueData: dict, rogueExtensionData: dict):
     bossCount = 0
     
     zoneCount = len(rogueData["current"]["map"]["zones"].keys())
-    zoneList = [None for i in rogueData["current"]["map"]["zones"].keys()]
+    zoneList = []
     for index, zone in rogueData["current"]["map"]["zones"].items():
         zoneList.append({
-            "index":zone["index"],
-            "zoneId":zone["id"],
-            "variation": []     #TODO
-        })
+                "index":zone["index"],
+                "zoneId":zone["id"],
+                "variation": []     #TODO
+            }
+        )
     
     totemList = []
     for totem in rogueData["current"]["module"]["totem"]["totemPiece"]:
@@ -168,7 +172,7 @@ def endGame(rogueData: dict, rogueExtensionData: dict):
     recruitCount = len([x for x in rogueData["current"]["inventory"]["recruit"].values() if x["from"] != "initial"])
     #upgradeCount = 暂缓.jpg
     
-    troopChars = [None for i in rogueData["current"]["troop"]["chars"].keys()]
+    troopChars = []
     for index, char in rogueData["current"]["troop"]["chars"].items():
         troopChars.append({
             "instId":str(int(index) + 1),
@@ -274,7 +278,6 @@ def endGame(rogueData: dict, rogueExtensionData: dict):
         "detailStr": None,  #TODO
         "popReport": False
     }
-    print(relicList, totemList)
     rogueData["current"]["record"]["brief"] = brief
     clearAllPending(rogueData)
     addPending(rogueData, pending)

@@ -10,9 +10,8 @@ async def shopAction(request: Request) -> Response:
     elif request_data["buy"]:
         choice = int(request_data["buy"][0])
         rogue = await rogueBuyGoods(secret, choice)
-    elif request_data["recycle"]:
-        pass    #TODO:萨卡兹肉鸽出售藏品/思绪功能
-    
+    else:
+        rogue = await rogueLeaveShop(secret)
     content= {
         "playerDataDelta":{
             "modified":{

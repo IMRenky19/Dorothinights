@@ -8,6 +8,7 @@ from .tools.totemAndChaos import increaseChaosValue
 from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_MODULE_DATA_PATH
 from server.core.utils.time import time
 from random import shuffle, randint
+from ....database.function.userData import getAccountBySecret
 import re
 
 ts = time()
@@ -17,6 +18,8 @@ rogueModuleData = read_json(ROGUE_MODULE_DATA_PATH)
 async def useTotem(rogueClass: RogueBasicModel, totemIndex: list, nodeIndex: list):
     rlv2Data = getRogueData(rogueClass)
     rlv2ExtensionData = getRogueExtensionData(rogueClass)
+    user = await getAccountBySecret(rogueClass.secret)
+    userSyncData = user.user
     
     increaseChaosValue(rlv2Data, rlv2ExtensionData, -1, False)
     totemList = getTotemList(rlv2Data)
@@ -50,7 +53,6 @@ async def useTotem(rogueClass: RogueBasicModel, totemIndex: list, nodeIndex: lis
         for ranges in upperTotemData["selector"]:
             match ranges["range"]:
                 case "ALL":
-                    #print(121111, reachableNodeIdDict.items(), ranges["type"])
                     selectedNodeDict.update( {x:y for x,y in reachableNodeIdDict.items() if y["realNodeType"] in ranges["type"]})
                 case "RIGHT":
                     selectedNodeDict.update({x:y for x,y in reachableNodeIdDict.items() if (y["realNodeType"] in ranges["type"]) and y["pos"]["x"] == ((currentPos["x"] if currentPos else -1) + 1)})
@@ -85,8 +87,6 @@ async def useTotem(rogueClass: RogueBasicModel, totemIndex: list, nodeIndex: lis
         )
         selectedNodePos.append(str(nodeIndex[0]))
                     
-    #selectedNodePos = list(selectedNodeDict.keys())
-    print(selectedNodePos)
     
     #下板：生效效果
     attachBuff = []
@@ -117,7 +117,6 @@ async def useTotem(rogueClass: RogueBasicModel, totemIndex: list, nodeIndex: lis
                 changeNode = lowerTotemData["extraEffect"]["nodeType"]
     genBattle = False
     for nodePos in selectedNodePos:
-        print(changeNode, rlv2Data["current"]["map"]["zones"][zone]["nodes"][str(nodePos)]["realNodeType"])
         if changeNode and not (rlv2Data["current"]["map"]["zones"][zone]["nodes"][str(nodePos)]["realNodeType"] in [4,32768,65536]) :
             rlv2Data["current"]["map"]["zones"][zone]["nodes"][str(nodePos)]["type"] = changeNode
             rlv2Data["current"]["map"]["zones"][zone]["nodes"][str(nodePos)]["realNodeType"] = changeNode
@@ -131,7 +130,14 @@ async def useTotem(rogueClass: RogueBasicModel, totemIndex: list, nodeIndex: lis
         battleGenerator(rlv2Data["current"]["map"]["zones"], int(zone), [], None, True, selectedNodePos)
     if rewards:
         for item in rewards:
-            gainItem(rlv2Data, item["item"], len(selectedNodePos)*item["amount"] if item["countByNodeAmount"] else item["amount"], rogueExtension = rlv2ExtensionData)
+            gainItem(
+                rlv2Data, 
+                item["item"], 
+                (len(selectedNodePos)*item["amount"] if item["countByNodeAmount"] else item["amount"]),
+                item["item"],
+                userSyncData,
+                rlv2ExtensionData
+            )
             
     #totemList[int(totemIndex[0][2])-1]["used"] = True
     #totemList[int(totemIndex[1][2])-1]["used"] = True

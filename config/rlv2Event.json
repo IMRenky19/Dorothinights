@@ -693,7 +693,7 @@
                                 },
                                 {
                                     "itemId": "RANDOM_TOTEM",
-                                    "pool": "normalTotem",
+                                    "pool": "totemAll",
                                     "amount": 1,
                                     "probShow": false
                                 }
@@ -1012,7 +1012,8 @@
                                 {
                                     "itemId": "rogue_3_vision",
                                     "condition": "more",
-                                    "amount": 5
+                                    "amount": 5,
+                                    "appear": true
                                 }
                             ]
                         },

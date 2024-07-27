@@ -14,7 +14,7 @@ class Account(Base):
     phone: Mapped[str] = mapped_column(String(255))
     password: Mapped[str] = mapped_column(String(255))
     secret: Mapped[str] = mapped_column(String(255))
-    user: Mapped[str] = mapped_column(JSON)
+    user: Mapped[dict] = mapped_column(JSON)
     mails: Mapped[str] = mapped_column(JSON)
     assist_char_list: Mapped[str] = mapped_column(JSON)
     friend: Mapped[str] = mapped_column(JSON)
@@ -22,9 +22,7 @@ class Account(Base):
     notes: Mapped[str] = mapped_column(String(255))
     currentRogue: Mapped[str] = mapped_column(String(255))
     
-    """def show_secret(self):
-        print(self.user["status"])
-        self.notes = "fk" """
+    
         
 
 #    def get_uid(self):
