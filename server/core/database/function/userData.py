@@ -29,10 +29,20 @@ async def get_sqlalchemy_config() -> SQLAlchemyAsyncConfig:
             )
     return sqlalchemy_config
 
-async def generateUsers(phone: str, password: str) -> Account:
+@asynccontextmanager
+async def get_db_session():
     config = await get_sqlalchemy_config()
-    secret: str = hashlib.md5((phone + decrypt_user_key(USER_TOKEN_KEY, int(time()))).encode()).hexdigest()
     async with config.get_session() as session:
+        try:
+            yield session
+            await session.commit()
+        except:
+            await session.rollback()
+            raise
+
+async def generateUsers(phone: str, password: str) -> Account:
+    secret: str = hashlib.md5((phone + decrypt_user_key(USER_TOKEN_KEY, int(time()))).encode()).hexdigest()
+    async with get_db_session() as session:
         new_user = Account(
             uid=rd(10000000,1000000000),
             phone=phone,
@@ -49,58 +59,43 @@ async def generateUsers(phone: str, password: str) -> Account:
             notes="",
             currentRogue=""
         )
-        print(session)
         session.add(new_user)
-        await session.commit()
     return new_user
 
-
-        
 async def getAccountBySecret(secret: str) -> Account:
-    config = await get_sqlalchemy_config()
-    async with config.get_session() as session:
+    async with get_db_session() as session:
         user_cmd = select(Account).where(Account.secret == secret)
         result = await session.execute(user_cmd)
-    return result.scalar()
+        return result.scalar()
 
 async def getAccountByPhone(phone: str) -> Account:
-    #session: Session
-    config = await get_sqlalchemy_config()
-    async with config.get_session() as session:
+    async with get_db_session() as session:
         user_cmd = select(Account).where(Account.phone == phone)
         result = await session.execute(user_cmd)
-    return result.scalar()
+        return result.scalar()
 
 async def getAccountByUid(uid: str | int) -> Account:
-    #session: Session
-    config = await get_sqlalchemy_config()
-    async with config.get_session() as session:
+    async with get_db_session() as session:
         user_cmd = select(Account).where(Account.uid == int(uid))
         result = await session.execute(user_cmd)
-    return result.scalar()
+        return result.scalar()
 
 async def writeAccountSyncData(secret: str, syncdata: dict) -> None:
-    config = await get_sqlalchemy_config()
-    async with config.get_session() as session:
+    async with get_db_session() as session:
         user_cmd = select(Account).where(Account.secret == secret)
         result = await session.execute(user_cmd)
         account = result.scalar()
         account.user = syncdata["user"]
-        await session.commit()
-    
-#test
+
 async def show_secret(phone: str) -> None:
-    config = await get_sqlalchemy_config()
-    async with config.get_session() as session:
+    async with get_db_session() as session:
         user_cmd = select(Account).where(Account.phone == phone)
         result = await session.execute(user_cmd)
         account = result.scalar()
         account.show_secret()
-        await session.commit()
 
 async def syncRogueData(rogue: RogueBasicModel, secret: str) -> None:
-    config = await get_sqlalchemy_config()
-    async with config.get_session() as session:
+    async with get_db_session() as session:
         user_cmd = select(Account).where(Account.secret == secret)
         result = await session.execute(user_cmd)
         account = result.scalar()
@@ -112,23 +107,17 @@ async def syncRogueData(rogue: RogueBasicModel, secret: str) -> None:
             tmp_1["rlv2"] = rogue.rlv2
             account.currentRogue = rogue.rlv2["current"]["game"]["theme"]
         account.user = tmp_1
-        #print(account.user["rlv2"])
-        #print(account.user["rlv2"]["current"])
-        await session.commit()
-        
+
 async def deleteRogueData(secret: str) -> None:
-    config = await get_sqlalchemy_config()
-    async with config.get_session() as session:
+    async with get_db_session() as session:
         user_cmd = select(Account).where(Account.secret == secret)
         result = await session.scalars(user_cmd)
         account = result.one()
         account.user["rlv2"]["current"] = {}
         account.currentRogue = ""
-        await session.commit()
-        
+
 async def updateAccount(secret: str):
-    config = await get_sqlalchemy_config()
-    async with config.get_session() as session:
+    async with get_db_session() as session:
         user_cmd = select(Account).where(Account.secret == secret)
         result = await session.execute(user_cmd)
         account = result.scalar()
@@ -141,4 +130,3 @@ async def updateAccount(secret: str):
         syncdata["crisis"]["nst"] = ts + 3600
         syncdata["pushFlags"]["status"] = ts
         account.user = syncdata
-        await session.commit()
