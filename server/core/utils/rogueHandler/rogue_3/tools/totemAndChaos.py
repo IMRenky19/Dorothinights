@@ -2,8 +2,6 @@ from random import shuffle, random, choice
 
 from server.core.utils.json import read_json
 
-from ... import common
-from ...common import NodeType
 from server.constants import ROGUE_RELIC_POOL_PATH, ROGUE_MODULE_DATA_PATH
 
 
@@ -116,8 +114,6 @@ def chaosLevelChecker(rogueData: dict, rogueExtension: dict) -> int:
             finalChaosLevel = i
             setChaosMaxValue(rogueData, chaosNumList[i+1])
             return finalChaosLevel - currentChaosLevel
-        else:
-            return 0
     return 0
 
 def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterChaos: int, isNewZone = False):

@@ -1,5 +1,5 @@
 from litestar import Request, Response, post
-from server.core.database.function.rogueData import getRogueBySecret, rogueBuyGoods, rogueLeaveShop
+from server.core.database.function.rogueData import rogueBuyGoods, rogueLeaveShop
 
 @post("/shopAction")
 async def shopAction(request: Request) -> Response:

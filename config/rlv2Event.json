@@ -69,6 +69,14 @@
                                     "itemId": "rogue_3_hpmax",
                                     "amount": 3
                                 }
+                            ],
+                            "condition": [
+                                {
+                                    "itemId": "rogue_3_vision",
+                                    "condition": "more",
+                                    "amount": 3,
+                                    "appear": true
+                                }
                             ]
                         }
                     },

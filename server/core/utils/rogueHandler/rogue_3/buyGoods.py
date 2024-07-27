@@ -1,4 +1,3 @@
-from server.core.database.function import rogueData
 from ....Model.RogueBase import RogueBasicModel
 from ..common.rlv2tools import *
 from server.core.utils.time import time

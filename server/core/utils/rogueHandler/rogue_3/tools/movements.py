@@ -6,9 +6,11 @@ from .map import mapGenerator
 from .battleAndEvent import battleGenerator, gainItem
 from .totemAndChaos import *
 from .visionProcessor import *
-from server.constants import ROGUE_RELIC_POOL_PATH
+from server.constants import ROGUE_RELIC_POOL_PATH, ROGUE_SETTING_PATH
+from random import random
 
 totemList = read_json(ROGUE_RELIC_POOL_PATH)["rogue_3"]["totemAll"]
+setting = read_json(ROGUE_SETTING_PATH)
 
 
 ts = time()
@@ -27,7 +29,7 @@ def moveToNextZone(rlv2_data: dict, rlv2_extension: dict, userSyncData, isHidden
             mapGenerator(
                 zone, 
                 getNextZoneId(rlv2_data), 
-                alternativeBoss=True,
+                alternativeBoss=(True if random() < 0.05 else False)if zone == 3 else (True if zone in [5,6,7] and rlv2_extension["12_alter_boss"] and random() < 0.35 else False),
             )
         ),
         zone,
@@ -54,23 +56,28 @@ def moveToNextZone(rlv2_data: dict, rlv2_extension: dict, userSyncData, isHidden
         generatePredictPending(rlv2_data, rlv2_extension)
         
     #测试密文版
-    if zone == 1:
+    if zone == 1 and setting["totemTest"]:
         for totem in totemList:
             gainItem(rlv2_data, totem, 1, totem, userSyncData, rogueExtension=rlv2_extension)
     if not isHiddenZone:
         chaosList = [0,3,4,5,6,7] if rlv2_extension["15_more_chaos"] else [0,3,3,3,3,3]
-        #increaseChaosValue(rlv2_data, rlv2_extension, chaosList[zone - 1], True)
-        increaseChaosValue(rlv2_data, rlv2_extension, 15, True)
+        if setting["chaosTest"]:
+            increaseChaosValue(rlv2_data, rlv2_extension, 15, True)
+        else:
+            increaseChaosValue(rlv2_data, rlv2_extension, chaosList[zone - 1], True)
+        
     
     
 def moveTo(rlv2_data: dict, rlv2_extension: dict, position: dict, zone: int):
     currentPosition = getPosition(rlv2_data)
-    common.moveTo(rlv2_data, rlv2_extension, position, zone) 
+    common.moveTo(rlv2_data, rlv2_extension, position, zone)
+    afterPosition = getPosition(rlv2_data)
+    #print(afterPosition)
     currentVision = getVision(rlv2_data)
     gainRandomItems = False
     
     if currentPosition:
-        if currentPosition["x"] == position["x"]:
+        if currentPosition["x"] == afterPosition["x"] and ((afterPosition["y"] == currentPosition["y"] + 1) or (afterPosition["y"] == currentPosition["y"] - 1)):
             if not isRelicExist(rlv2_data, "rogue_3_relic_explore_3", rlv2_extension):
                 addVision(rlv2_data, -1, rlv2_extension)
             else:

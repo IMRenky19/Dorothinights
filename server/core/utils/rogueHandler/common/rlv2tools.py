@@ -1,7 +1,7 @@
 from server.core.utils.rogueHandler.common.map import NodeType
 from ....Model.RogueBase import RogueBasicModel
 from server.core.utils.time import time
-from random import shuffle, randint, sample, random
+from random import sample, random
 from copy import deepcopy
 from server.core.utils.json import read_json
 from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH
@@ -462,14 +462,14 @@ def getNodeType(rogueData: dict) -> NodeType:
     else:
         return NodeType.NONE
 
-def getCurrentZone(rogueData: dict):
+def getCurrentZone(rogueData: dict) -> int:
     return rogueData["current"]['player']['cursor']['zone']
 
 def getModeGrade(rogueData: dict):
     return rogueData["current"]['game']['modeGrade']
 
 def positionToIndex(position: dict):
-    return f"{position['x']}0{position['y']}" if position["x"] != 0 else f"{position['y']}"
+    return f"{position['x']}0{position['y']}" if position["x"] > 0 else f"{position['y']}"
 
 
 def addTicket(rogueData: dict, ticket_id: str, init: bool, profession: str = 'all'):

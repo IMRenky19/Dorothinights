@@ -1,7 +1,4 @@
-from server.core.utils.rogueHandler.rogue_3.tools.movements import moveTo
 from ....Model.RogueBase import RogueBasicModel
-from ....utils.json import read_json
-from ....utils.accounts import decrypt_battle_data
 from server.core.database.function.userData import getAccountBySecret
 from ..common.rlv2tools import *
 from server.core.utils.time import time

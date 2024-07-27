@@ -1,6 +1,5 @@
 from litestar import Request, Response, post
 from server.core.database.function.rogueData import giveUpRogue
-from server.core.database.function.userData import deleteRogueData
 
 
 @post("/giveUpGame")

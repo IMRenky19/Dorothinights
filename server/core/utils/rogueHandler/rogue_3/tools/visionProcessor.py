@@ -1,9 +1,5 @@
-from random import shuffle, random, choice
-
 from server.core.utils.json import read_json
-from server.core.utils.rogueHandler.common.battleAndEvent import relicLevelCheck
 
-from ... import common
 from ...common import NodeType
 from server.constants import ROGUE_RELIC_POOL_PATH, ROGUE_MODULE_DATA_PATH
 

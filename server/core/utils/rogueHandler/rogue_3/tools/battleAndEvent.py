@@ -6,6 +6,7 @@ from .totemAndChaos import *
 from ... import common
 from ...common import NodeType
 from math import floor
+from random import randint
 
 
 from ...common.rlv2tools import *

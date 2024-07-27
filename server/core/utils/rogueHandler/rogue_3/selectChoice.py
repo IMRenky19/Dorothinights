@@ -6,7 +6,7 @@ from .tools.movements import *
 from server.constants import ROGUE_BATTLE_POOL_PATH, ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_EVENT_DETAILS_PATH
 from server.core.utils.time import time
 from ....database.function.userData import getAccountBySecret
-from random import shuffle, randint
+from random import shuffle
 from random import choice as randomPick
 
 import re
@@ -25,6 +25,7 @@ async def selectChoice(rogueClass: RogueBasicModel, choice: str):
     userData = await getAccountBySecret(rogueClass.secret)
     userSyncData = userData.user
     gain = []
+    nextScene = ""
     
     if state == "INIT":   #开局事件
         choice_info = rogue_excel["details"]["rogue_3"]["choices"][choice]
@@ -93,6 +94,8 @@ async def selectChoice(rogueClass: RogueBasicModel, choice: str):
             gain = choiceInfo["gain"]
             nextScene = choiceInfo["nextScene"]
             setCurrentScene(rogueExtension, nextScene)
+        else:
+            return
         
         pending = rogueData["current"]["player"]["pending"][0]
         
@@ -175,27 +178,26 @@ async def selectChoice(rogueClass: RogueBasicModel, choice: str):
                     )
                 case "RELIC":
                     gainItem(rogueData, gainDetail["relicId"], itemCount, itemType,userSyncData = userSyncData, rogueExtension = rogueExtension)
-                case itemType if itemType.find("BATTLE") != -1:
-                    currentNode = rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]
-                    if type(gainDetail["battlePool"]) == str:
-                        currentNode["stage"] = gainDetail["battlePool"]
-                    else:
-                        currentNode["stage"] = randomPick(rogueBattlePool["rogue_3"][f"ZONE_{gainDetail["battlePool"]}_{'EMERGENCY' if itemType.find("ELITE") else 'NORMAL'}_BATTLE_POOL"])
-                        pending = generateBattlePending(rogueData, rogueExtension, isEventBattle = True)
-                        addPending(rogueData, pending)
+                    return
                 case "flag":
                     rogueExtension["eventFlag"].append(gainDetail["flagId"])
                 case _: 
                     gainItem(rogueData, itemType, itemCount, itemType,userSyncData = userSyncData, rogueExtension = rogueExtension)
-        pending = generateNonBattlePending(rogueData, rogueExtension, choice, userSyncData)
+        if nextScene.find("BATTLE") != -1:
+            currentNode = rogueData["current"]["map"]["zones"][str(getCurrentZone(rogueData))]["nodes"][positionToIndex(getPosition(rogueData))]
+            if type(choiceInfo["battlePool"]) == str:
+                currentNode["stage"] = choiceInfo["battlePool"]
+            else:
+                currentNode["stage"] = randomPick(rogueBattlePool["rogue_3"][f"ZONE_{choiceInfo["battlePool"]}_{'EMERGENCY' if nextScene.find("ELITE") else 'NORMAL'}_BATTLE_POOL"])
+            pending = generateBattlePending(rogueData, rogueExtension, isEventBattle = True)
+            clearAllPending(rogueData)
+            addPending(rogueData, pending)
+            clearExtraResponseData(rogueData, rogueExtension)
+            rogueClass.rlv2 = rogueData
+            rogueClass.extension = rogueExtension
+        pend = generateNonBattlePending(rogueData, rogueExtension, choice, userSyncData)
         clearAllPending(rogueData)
-        addPending(rogueData, pending)
-        index = 0
-        #for itemType, itemCount in zip([x["itemId"] for x in gain], [x["amount"] for x in gain]):
-        #    pass
-        
-
-                
+        addPending(rogueData, pending)      
     clearExtraResponseData(rogueData, rogueExtension)
     
     rogueClass.rlv2 = rogueData

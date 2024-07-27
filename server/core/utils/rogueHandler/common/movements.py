@@ -1,9 +1,5 @@
-from server.core.database.function.userData import getAccountBySecret
-from server.core.utils.rogueHandler.common.rlv2tools import getCurrentZone, getPosition, getTheme
+from server.core.utils.rogueHandler.common.rlv2tools import getCurrentZone, getTheme
 from server.core.utils.time import time
-from random import shuffle, randint, sample
-from copy import deepcopy
-from server.core.utils.json import read_json
 from .rlv2tools import *
 from .battleAndEvent import battlePoolGenerator, eventPoolGenerator
 

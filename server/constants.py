@@ -9,6 +9,7 @@ ROGUE_RELIC_POOL_PATH = PATH + "\\config\\rlv2RelicPools.json"
 ROGUE_EVENT_DETAILS_PATH = PATH + "\\config\\rlv2Event.json"
 ROGUE_BATTLE_POOL_PATH = PATH + "\\config\\rlv2BattlePool.json"
 ROGUE_MODULE_DATA_PATH = PATH + "\\config\\rlv2ModuleData.json"
+ROGUE_SETTING_PATH = PATH + "\\config\\rlv2Settings.json"
 
 RLV2_INITIAL_PATH = PATH + "\\config\\rlv2initial.json"
 NETWORK_CONFIG_PATH = PATH + "\\config\\networkConfig.json"

@@ -1,15 +1,12 @@
 from ....Model.RogueBase import RogueBasicModel
 from ....utils.json import read_json
 from ..common.rlv2tools import *
-from .. import common
 from .tools.battleAndEvent import *
 from .tools.movements import *
 from .tools.totemAndChaos import increaseChaosValue
 from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_MODULE_DATA_PATH
 from server.core.utils.time import time
-from random import shuffle, randint
 from ....database.function.userData import getAccountBySecret
-import re
 
 ts = time()
 rogueExcel = read_json(ROGUELIKE_TOPIC_EXCEL_PATH)

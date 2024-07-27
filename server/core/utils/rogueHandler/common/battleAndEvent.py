@@ -1,7 +1,5 @@
-from sqlalchemy.pool import Pool
-from sqlalchemy.util.langhelpers import NoneType
 from server.constants import ROGUE_RELIC_POOL_PATH, ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_ROUTE_PATH, ROGUE_EVENT_DETAILS_PATH, ROGUE_BATTLE_POOL_PATH
-from random import shuffle, randint, sample, random, choice
+from random import shuffle, randint, random, choice
 from server.core.utils.json import read_json
 
 
@@ -527,7 +525,7 @@ def generateBaseBattleRewards(stage: str, isElite: bool, isBoss: bool, gainGold:
     #TODO 掉落顺序2：藏品
     #TODO 根据难度不同进阶部分藏品，部分藏品的即时效果生效（chooseBattleReward）
     hasRelicInfo = rogueData["current"]["inventory"]["relic"]
-    hasRelic = [x["id"] for x in hasRelicInfo.values() if not (x["id"] in relicItems) and not (x["id"] in rogueData["current"]["player"]["pending"][0]["addExcludeList"])]
+    hasRelic = [x["id"] for x in hasRelicInfo.values() if not (x["id"] in relicItems) and not (x["id"] in rogueData["current"]["player"]["pending"][0]["content"]["battle"]["addExcludeList"])]
     relics = [i for i in roguePoolTable[theme]["battleRelicPool"] if not (i in hasRelic)] if not isBoss else [i for i in roguePoolTable[theme]["bossRelicPool"] if not (i in hasRelic)]
     relicCount = (2 if isBoss else 1) + relicExtra
     sub = 0
