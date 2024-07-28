@@ -11,8 +11,8 @@ async def rlv2FinishEvent(rogueData: RogueBasicModel):
     rlv2_extension = getRogueExtensionData(rogueData)
     user = await getAccountBySecret(rogueData.secret)
     userSyncData = user.user
+    clearAllPending(rlv2)
     moveToNextZone(rlv2, rlv2_extension, userSyncData)
-    popPending(rlv2)
     clearExtraResponseData(rlv2, rlv2_extension)
     rogueData.rlv2 = rlv2
     rogueData.extension = rlv2_extension

@@ -1,5 +1,5 @@
 {
-    "chaosTest": false,
-    "totemTest": false,
+    "chaosTest": true,
+    "totemTest": true,
     "shopRefreshTest": false
 }

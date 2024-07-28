@@ -4,13 +4,14 @@ from ..common.rlv2tools import *
 from .tools.battleAndEvent import *
 from .tools.movements import *
 from .tools.totemAndChaos import increaseChaosValue
-from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_MODULE_DATA_PATH
+from server.constants import ROGUELIKE_TOPIC_EXCEL_PATH, ROGUE_MODULE_DATA_PATH, ROGUE_SETTING_PATH
 from server.core.utils.time import time
 from ....database.function.userData import getAccountBySecret
 
 ts = time()
 rogueExcel = read_json(ROGUELIKE_TOPIC_EXCEL_PATH)
 rogueModuleData = read_json(ROGUE_MODULE_DATA_PATH)
+settings = read_json(ROGUE_SETTING_PATH)
 
 async def useTotem(rogueClass: RogueBasicModel, totemIndex: list, nodeIndex: list):
     rlv2Data = getRogueData(rogueClass)
@@ -135,9 +136,9 @@ async def useTotem(rogueClass: RogueBasicModel, totemIndex: list, nodeIndex: lis
                 userSyncData,
                 rlv2ExtensionData
             )
-            
-    #totemList[int(totemIndex[0][2])-1]["used"] = True
-    #totemList[int(totemIndex[1][2])-1]["used"] = True
+    if not settings["totemTest"]:
+        totemList[int(totemIndex[0][2])-1]["used"] = True
+        totemList[int(totemIndex[1][2])-1]["used"] = True
     clearExtraResponseData(rlv2Data, rlv2ExtensionData)
     rogueClass.rlv2 = rlv2Data
     rogueClass.extension = rlv2ExtensionData

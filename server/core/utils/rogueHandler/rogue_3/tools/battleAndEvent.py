@@ -1220,6 +1220,7 @@ def generateShopGoods(shopId: str, rogueData: dict, rogueExtension: dict):
             for i in range(2):
                 shuffle(recruitTicketPool)
                 ticket = recruitTicketPool.pop()
+                recruitTicketPool = [x for x in recruitTicketPool if x != ticket]
                 goods.append(
                     {
                         "index": f"{index}",

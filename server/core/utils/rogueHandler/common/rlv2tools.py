@@ -175,7 +175,7 @@ def addPending(rogueData: dict, pending: dict):
     if rogueData["current"]["player"]["pending"] and rogueData["current"]["player"]["pending"][0]["type"] == "BATTLE" and pending["type"] == "BATTLE" and rogueData["current"]["player"]["pending"][0]["content"]["battle"]["state"] == 0 and pending["content"]["battle"]["state"] == 1:
         rogueData["current"]["player"]["pending"][0].update(pending)
     else:
-        rogueData["current"]["player"]["pending"].append(pending)
+        rogueData["current"]["player"]["pending"].insert(0, pending)
     
 def popPending(rogueData: dict):
     rogueData["current"]["player"]["pending"].pop(0)
@@ -420,13 +420,13 @@ def getNextRelicIndex(rogueData: dict):
     return f"r_{len(rogueData['current']['inventory']['relic'])}"
 
 def getNextPendingIndex(rogueData: dict):
-    d = set()
-    for e in rogueData["current"]["player"]["pending"]:
-        d.add(int(e["index"][2:]))
-    i = 0
-    while i in d:
-        i += 1
-    return f"e_{i}"
+   # d = set()
+   # for e in rogueData["current"]["player"]["pending"]:
+   #     d.add(int(e["index"][2:]))
+   # i = 0
+   # while i in d:
+   #     i += 1
+    return f"e_{len(rogueData["current"]["player"]["pending"])}"
 
 def getNextTotemIndex(rogueData: dict):
     d = set()

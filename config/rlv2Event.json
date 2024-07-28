@@ -539,10 +539,6 @@
                                 }
                             ]
                         },
-                        "choice_ro3_pick1_2": {
-                            "nextScene": "scene_ro3_pick1_4",
-                            "gain": []
-                        },
                         "choice_ro3_pick1_3": {
                             "nextScene": "scene_ro3_pick1_2",
                             "gain": [
@@ -570,6 +566,10 @@
                                     "appear": true
                                 }
                             ]
+                        },
+                        "choice_ro3_pick1_2": {
+                            "nextScene": "scene_ro3_pick1_4",
+                            "gain": []
                         }
                     },
                     "zone": 3,
@@ -884,7 +884,8 @@
                                 {
                                     "itemId": "RANDOM_TOTEM",
                                     "pool": "rareTotem",
-                                    "amount": 1
+                                    "amount": 1,
+                                    "probShow": false
                                 },
                                 {
                                     "itemId": "rogue_3_gold",

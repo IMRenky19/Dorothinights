@@ -178,7 +178,6 @@ async def selectChoice(rogueClass: RogueBasicModel, choice: str):
                     )
                 case "RELIC":
                     gainItem(rogueData, gainDetail["relicId"], itemCount, itemType,userSyncData = userSyncData, rogueExtension = rogueExtension)
-                    return
                 case "flag":
                     rogueExtension["eventFlag"].append(gainDetail["flagId"])
                 case _: 
@@ -195,7 +194,8 @@ async def selectChoice(rogueClass: RogueBasicModel, choice: str):
             clearExtraResponseData(rogueData, rogueExtension)
             rogueClass.rlv2 = rogueData
             rogueClass.extension = rogueExtension
-        pend = generateNonBattlePending(rogueData, rogueExtension, choice, userSyncData)
+            return
+        pending = generateNonBattlePending(rogueData, rogueExtension, choice, userSyncData)
         clearAllPending(rogueData)
         addPending(rogueData, pending)      
     clearExtraResponseData(rogueData, rogueExtension)

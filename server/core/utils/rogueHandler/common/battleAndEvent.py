@@ -285,7 +285,7 @@ def pickAvailableChoices(rogueData: dict, rogueExtension: dict, choicesDict: dic
                         }
                     )
             if item["itemId"] == "RANDOM_TOTEM":
-                if item["probShow"]:
+                if item["probShow"]: 
                     totems = [x for x in roguePoolTable[theme][item["pool"]] if not (x in totemItems)]
                     totem = totems.pop(randint(0,len(totems) - 1))
                     totemItems.append(totem)
@@ -586,9 +586,9 @@ def gainItemsAfterBattle(rogueData: dict, index: int, subIndex: int, userData, r
     theme = getTheme(rogueData)
     #TODO 招募券以及典训藏品的激活，部分加携带/生命值/护盾/希望等等的资源增加，部分藏品的特殊效果（密信系列的招募减希望/直升，和坍缩值/指挥经验相关机制，叠层藏品）
     battleRewardsPending = rogueData["current"]["player"]["pending"]
-    itemType: str = battleRewardsPending[-1]["content"]["battleReward"]["rewards"][index]["items"][subIndex]["id"]
-    itemCount = battleRewardsPending[-1]["content"]["battleReward"]["rewards"][index]["items"][subIndex]["count"]
-    item = battleRewardsPending[-1]["content"]["battleReward"]["rewards"][index]
+    itemType: str = battleRewardsPending[0]["content"]["battleReward"]["rewards"][index]["items"][subIndex]["id"]
+    itemCount = battleRewardsPending[0]["content"]["battleReward"]["rewards"][index]["items"][subIndex]["count"]
+    item = battleRewardsPending[0]["content"]["battleReward"]["rewards"][index]
     customGainItem(rogueData, itemType, itemCount, itemType, userSyncData = userData, rogueExtension=rogueExtension)
     item["done"] = 1
         
@@ -607,7 +607,7 @@ def gainItem(rogueData: dict, itemType: str, amount: int, item: str, userSyncDat
                 ticketId = addTicketBattle(rogueData, item)
             activateTickets(rogueData, item if item else itemType, userSyncData, rogueExtension, ticketId)
         case itemType if itemType.find("relic") != -1:
-            realRelic = relicLevelCheck(item, rogueExtension)
+            realRelic = relicLevelCheck(itemType, rogueExtension)
             index = addRelic(rogueData, realRelic)
             customProcessRelic(rogueData, rogueExtension, index, userSyncData)
         case itemType if itemType.find("shield") != -1:
@@ -653,6 +653,7 @@ def processRelic(rogueData, rogueExtension, index, userSyncData, customGainItem)
 def relicLevelCheck(relicId: str, rogueExtension: dict):
     canUpgradeIndex = rogueExtension["canUpgradeIndex"]
     realRelic = relicId
+    print(relicId)
     tmp = relicId.split("_")
     if tmp[3] == "legacy" and int(tmp[4]) in canUpgradeIndex:
         match rogueExtension["stronger_relics"]:
@@ -720,25 +721,25 @@ def generateTickets(ticketBaseObject: dict, upgradeChance: float, theme: str):
                 if random() < upgradeChance and pioneer_and_warrior_pool:
                     item["id"] = pioneer_and_warrior_pool.pop()
                     if allProfession and random() < 0.3:
-                        item["id"] = choice([upgradePool])
+                        item["id"] = choice(upgradePool)
                         allProfession = False
             case "tank" | "support":
                 if random() < upgradeChance and tank_and_support_pool:
                     item["id"] = tank_and_support_pool.pop()
                     if allProfession and random() < 0.3:
-                        item["id"] = choice([upgradePool])
+                        item["id"] = choice(upgradePool)
                         allProfession = False
             case "sniper" | "medic":
                 if random() < upgradeChance and sniper_and_medic_pool:
                     item["id"] = sniper_and_medic_pool.pop()
                     if allProfession and random() < 0.3:
-                        item["id"] = choice([upgradePool])
+                        item["id"] = choice(upgradePool)
                         allProfession = False
             case "caster" | "special":
                 if random() < upgradeChance and caster_and_special_pool:
                     item["id"] = caster_and_special_pool.pop()
                     if allProfession and random() < 0.3:
-                        item["id"] = choice([upgradePool])
+                        item["id"] = choice(upgradePool)
                         allProfession = False
     
     

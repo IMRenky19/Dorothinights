@@ -116,6 +116,11 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
                 if random() <= 0.6:
                     battleNodeTotal += 1
             for i in range(total_node - battleNodeTotal):
+                if scout_gen:
+                    nonBattlePool.append(choice([common.NodeType.SCOUT]))
+                    scout_gen = False
+                    continue
+                scout_gen = False
                 if random() <= 0.15 and safe_house_gen:
                     nonBattlePool.append(choice([common.NodeType.SAFE_HOUSE]))
                     safe_house_gen = False
@@ -141,11 +146,6 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
                     lost_and_found_gen = False
                     continue
                 lost_and_found_gen = False
-                if scout_gen:
-                    nonBattlePool.append(choice([common.NodeType.SCOUT]))
-                    scout_gen = False
-                    continue
-                scout_gen = False
                 if random() <= 0.25 and passage_gen:
                     nonBattlePool.append(choice([common.NodeType.PASSAGE]))
                     passage_gen = False
@@ -222,6 +222,11 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
                 if random() <= 0.5:
                     battleNodeTotal += 1
             for i in range(total_node - battleNodeTotal):
+                if lost_and_found_gen:
+                    nonBattlePool.append(choice([common.NodeType.LOST_AND_FOUND]))
+                    lost_and_found_gen = False
+                    continue
+                lost_and_found_gen = False
                 if random() <= 0.35 and safe_house_gen:
                     nonBattlePool.append(choice([common.NodeType.SAFE_HOUSE]))
                     safe_house_gen = False
@@ -242,11 +247,6 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
                     shop_gen = False
                     continue
                 shop_gen = False
-                if lost_and_found_gen:
-                    nonBattlePool.append(choice([common.NodeType.LOST_AND_FOUND]))
-                    lost_and_found_gen = False
-                    continue
-                lost_and_found_gen = False
                 if random() <= 0.50 and scout_gen:
                     nonBattlePool.append(choice([common.NodeType.SCOUT]))
                     scout_gen = False
@@ -329,6 +329,11 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
                 if random() <= 0.6:
                     battleNodeTotal += 1
             for i in range(total_node - battleNodeTotal):
+                if scout_gen:
+                    nonBattlePool.append(choice([common.NodeType.SCOUT]))
+                    scout_gen = False
+                    continue
+                scout_gen = False
                 if random() <= 0.40 and safe_house_gen:
                     nonBattlePool.append(choice([common.NodeType.SAFE_HOUSE]))
                     safe_house_gen = False
@@ -354,11 +359,6 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
                     lost_and_found_gen = False
                     continue
                 lost_and_found_gen = False
-                if scout_gen:
-                    nonBattlePool.append(choice([common.NodeType.SCOUT]))
-                    scout_gen = False
-                    continue
-                scout_gen = False
                 if random() <= 0.25 and passage_gen:
                     nonBattlePool.append(choice([common.NodeType.PASSAGE]))
                     passage_gen = False
@@ -444,6 +444,11 @@ def mapGenerator(zone: int, index: int, alternativeBoss: bool = False, end_3: bo
                 if random() <= 0.5:
                     battleNodeTotal += 1
             for i in range(total_node - battleNodeTotal):
+                if lost_and_found_gen:
+                    nonBattlePool.append(choice([common.NodeType.LOST_AND_FOUND]))
+                    lost_and_found_gen = False
+                    continue
+                lost_and_found_gen = False
                 if random() <= 0.6 and safe_house_gen:
                     nonBattlePool.append(choice([common.NodeType.SAFE_HOUSE]))
                     safe_house_gen = False

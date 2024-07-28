@@ -50,10 +50,7 @@ def moveToNextZone(rlv2_data: dict, rlv2_extension: dict, userSyncData, isHidden
         addVision(rlv2_data, 2, rlv2_extension)
     if rlv2_extension["12_less_vision"] and rlv2_data["current"]["player"]["cursor"]["zone"] in (1,3,5):
         addVision(rlv2_data, -1, rlv2_extension)
-    if not isHiddenZone:
-        if rlv2_data["current"]["module"]["totem"]["predictTotemId"]:
-            addTotem(rlv2_data, rlv2_data["current"]["module"]["totem"]["predictTotemId"])
-        generatePredictPending(rlv2_data, rlv2_extension)
+        
         
     #测试密文版
     if zone == 1 and setting["totemTest"]:
@@ -65,6 +62,9 @@ def moveToNextZone(rlv2_data: dict, rlv2_extension: dict, userSyncData, isHidden
             increaseChaosValue(rlv2_data, rlv2_extension, 15, True)
         else:
             increaseChaosValue(rlv2_data, rlv2_extension, chaosList[zone - 1], True)
+        if rlv2_data["current"]["module"]["totem"]["predictTotemId"]:
+            addTotem(rlv2_data, rlv2_data["current"]["module"]["totem"]["predictTotemId"])
+        generatePredictPending(rlv2_data, rlv2_extension)
         
     
     

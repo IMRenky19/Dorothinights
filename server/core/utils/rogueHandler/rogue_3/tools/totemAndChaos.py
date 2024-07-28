@@ -54,7 +54,8 @@ def generatePredictPending(rogueData: dict, rogueExtension: dict):
     if rogueExtension["band_12_always_predict_totem"] or getChaosLevel(rogueData) < 3:
         rogueData["current"]["module"]["totem"]["predictTotemId"] = choice(totemPool)
     elif getChaosLevel(rogueData) >= 3:       #TODO:坍缩远见
-        rogueData["current"]["module"]["totem"]["predictTotemId"] = choice(totemPool)
+        rogueData["current"]["module"]["totem"].pop("predictTotemId")
+        deepenChaos(rogueData, rogueExtension, 0, 1, False, True)
         
 
             
@@ -116,7 +117,7 @@ def chaosLevelChecker(rogueData: dict, rogueExtension: dict) -> int:
             return finalChaosLevel - currentChaosLevel
     return 0
 
-def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterChaos: int, isNewZone = False):
+def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterChaos: int, isNewZone = False, onlyPredict: bool = False):
     currentChaosList = deepcopy(rogueData["current"]["module"]["chaos"]["chaosList"])
     deltaChaosValue = afterChaos - beforeChaos
     canUpgradeChaos = []
@@ -135,6 +136,8 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
         preLevel = getChaosLevel(rogueData)
         chaosNum = chaosLevelChecker(rogueData, rogueExtension)
         afterLevel = getChaosLevel(rogueData)
+        if onlyPredict:
+            chaosNum = 1
         for chaos in currentChaosList:
             if len(chaos.split("_")) == 4:
                 currentNormalChaos.append(chaos)
@@ -145,7 +148,20 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
             rdNum = random()
             if rdNum == 0:
                 rdNum = 1
-            if rdNum < ((len(currentNormalChaos) / maxChaosSlot) + (len(currentDeeperChaos) / maxChaosSlot)) and currentNormalChaos:
+            if rogueData["current"]["module"]["chaos"].__contains__("predict"):
+                if len(rogueData["current"]["module"]["chaos"]["predict"].split("_")) == 4:
+                    waitToProcess.append({
+                        "operation": "DEEPEN",
+                        "chaosId": rogueData["current"]["module"]["chaos"]["predict"]
+                    })
+                    rogueData["current"]["module"]["chaos"].pop("predict")
+                if len(rogueData["current"]["module"]["chaos"]["predict"].split("_")) == 5:
+                    waitToProcess.append({
+                        "operation": "UPGRADE",
+                        "chaosId": rogueData["current"]["module"]["chaos"]["predict"]
+                    })
+                    rogueData["current"]["module"]["chaos"].pop("predict")
+            elif rdNum < ((len(currentNormalChaos) / maxChaosSlot) + (len(currentDeeperChaos) / maxChaosSlot)) and currentNormalChaos:
                 rd = choice(currentNormalChaos)
                 for operation in waitToProcess:
                     if operation["chaosId"] == rd:
@@ -200,11 +216,18 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
     for operation in waitToProcess:
         match operation["operation"]:
             case "DEEPEN":
-                rogueData["current"]["module"]["chaos"]["chaosList"].append(operation["chaosId"])
-                deepenChangeList.append(operation["chaosId"])
+                if onlyPredict:
+                    rogueData["current"]["module"]["chaos"]["predict"] = operation["chaosId"]
+                    return
+                else:
+                    rogueData["current"]["module"]["chaos"]["chaosList"].append(operation["chaosId"])
+                    deepenChangeList.append(operation["chaosId"])
                 
             case "UPGRADE":
-                if chaosPool["deeperChaos"][operation["chaosId"]]["normalChaosId"] in rogueData["current"]["module"]["chaos"]["chaosList"]:
+                if onlyPredict:
+                    rogueData["current"]["module"]["chaos"]["predict"] = operation["chaosId"]
+                    return
+                elif chaosPool["deeperChaos"][operation["chaosId"]]["normalChaosId"] in rogueData["current"]["module"]["chaos"]["chaosList"]:
                     index = rogueData["current"]["module"]["chaos"]["chaosList"].index(chaosPool["deeperChaos"][operation["chaosId"]]["normalChaosId"])
                     rogueData["current"]["module"]["chaos"]["chaosList"][index] = operation["chaosId"]
                 else:
