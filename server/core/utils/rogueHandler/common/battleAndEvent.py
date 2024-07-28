@@ -353,7 +353,7 @@ def generateNonBattlePending(pendingIndex: str, currentNodeType: int, rogueData:
                 }
                 rogueExtension["currentEvent"] = eventId
                 rogueExtension["currentScene"] = eventId
-            elif rogueData["current"]["player"]["pending"] and rogueData["current"]["player"]["pending"][0]["type"] == "SCENE":
+            elif rogueData["current"]["player"]["pending"] and rogueData["current"]["player"]["pending"][-1]["type"] == "SCENE":
                 choices = {}
                 choiceAdditional = {}
                 nextScene = rogueEventTable[theme]["Encounter"]["others"][getCurrentScene(rogueExtension)]

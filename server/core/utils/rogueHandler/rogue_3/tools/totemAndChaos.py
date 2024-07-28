@@ -41,6 +41,12 @@ def getChaosLevel(rlv2_data: dict):
 
 def generatePredictPending(rogueData: dict, rogueExtension: dict):
     index = getNextPendingIndex(rogueData)
+    if rogueExtension["band_12_always_predict_totem"] or getChaosLevel(rogueData) < 3:
+        rogueData["current"]["module"]["totem"]["predictTotemId"] = choice(totemPool)
+    elif getChaosLevel(rogueData) >= 3:       #TODO:坍缩远见
+        if getChaosLevel(rogueData) >= 8:
+            return
+        deepenChaos(rogueData, rogueExtension, 0, 1, False, True)
     setCurrentState(rogueData, "PENDING")
     pending = {
         "index": index,
@@ -51,11 +57,6 @@ def generatePredictPending(rogueData: dict, rogueExtension: dict):
         }
     }
     addPending(rogueData, pending)
-    if rogueExtension["band_12_always_predict_totem"] or getChaosLevel(rogueData) < 3:
-        rogueData["current"]["module"]["totem"]["predictTotemId"] = choice(totemPool)
-    elif getChaosLevel(rogueData) >= 3:       #TODO:坍缩远见
-        rogueData["current"]["module"]["totem"].pop("predictTotemId")
-        deepenChaos(rogueData, rogueExtension, 0, 1, False, True)
         
 
             
@@ -154,13 +155,17 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
                         "operation": "DEEPEN",
                         "chaosId": rogueData["current"]["module"]["chaos"]["predict"]
                     })
+                    currentNormalChaos.append(rogueData["current"]["module"]["chaos"]["predict"])
                     rogueData["current"]["module"]["chaos"].pop("predict")
-                if len(rogueData["current"]["module"]["chaos"]["predict"].split("_")) == 5:
+                elif len(rogueData["current"]["module"]["chaos"]["predict"].split("_")) == 5:
                     waitToProcess.append({
                         "operation": "UPGRADE",
                         "chaosId": rogueData["current"]["module"]["chaos"]["predict"]
                     })
+                    currentNormalChaos.remove(chaosPool["deeperChaos"][rogueData["current"]["module"]["chaos"]["predict"]]["normalChaosId"])
+                    currentDeeperChaos.append(rogueData["current"]["module"]["chaos"]["predict"])
                     rogueData["current"]["module"]["chaos"].pop("predict")
+                    
             elif rdNum < ((len(currentNormalChaos) / maxChaosSlot) + (len(currentDeeperChaos) / maxChaosSlot)) and currentNormalChaos:
                 rd = choice(currentNormalChaos)
                 for operation in waitToProcess:
@@ -171,7 +176,7 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
                     "chaosId": chaosPool["normalChaos"][rd]["deeperChaosId"]
                 })
                 currentNormalChaos.remove(rd)
-                currentDeeperChaos.append(rd)
+                currentDeeperChaos.append(chaosPool["normalChaos"][rd]["deeperChaosId"])
                 
             else:
                 shuffle(normalChaosList)
@@ -198,6 +203,10 @@ def deepenChaos(rogueData: dict, rogueExtension: dict, beforeChaos: int, afterCh
             shuffle(currentChaosList)
             luckyChaos = currentChaosList.pop()
             if len(luckyChaos.split("_")) == 4:
+                if rogueData["current"]["module"]["chaos"].__contains__("predict"):
+                    if chaosPool["deeperChaos"][rogueData["current"]["module"]["chaos"]["predict"]]["normalChaosId"] == luckyChaos:
+                        rogueData["current"]["module"]["chaos"].pop("predict")
+                        rogueData["current"]["module"]["chaos"]["predict"] = luckyChaos
                 waitToProcess.append(
                 {
                         "operation": "DELETE",

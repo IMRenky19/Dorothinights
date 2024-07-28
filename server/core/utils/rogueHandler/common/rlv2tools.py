@@ -176,6 +176,9 @@ def addPending(rogueData: dict, pending: dict):
         rogueData["current"]["player"]["pending"][0].update(pending)
     else:
         rogueData["current"]["player"]["pending"].insert(0, pending)
+        
+def appendPending(rogueData: dict, pending: dict):
+    rogueData["current"]["player"]["pending"].append(pending)
     
 def popPending(rogueData: dict):
     rogueData["current"]["player"]["pending"].pop(0)

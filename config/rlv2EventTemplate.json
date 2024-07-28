@@ -93,6 +93,12 @@
                 "scene_ro3_template1_2_comment":"如果接下来的scene只有choice_leave的话接下来可以直接空着，服务端会贴心地给你补上choice_leave的选项:)",
                 "scene_ro3_template1_2":{}
             }
+        },
+        "Sacrifice":{
+            "enterScene": {
+                "comment": "所有事件的入口scene都放在这里！"
+                
+            }
         }
     },
     "rogue_4":{}

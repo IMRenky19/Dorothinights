@@ -280,7 +280,7 @@
                                     "amount": -2
                                 },
                                 {
-                                    "itemId": "randomRecruitTicketTeam",
+                                    "itemId": "RANDOM_PROFESSION_TICKET",
                                     "amount": 1
                                 }
                             ]
@@ -293,7 +293,7 @@
                                     "amount": -4
                                 },
                                 {
-                                    "itemId": "randomRecruitTicketAll",
+                                    "itemId": "rogue_3_recruit_ticket_all",
                                     "amount": 1
                                 }
                             ],
@@ -324,7 +324,7 @@
                             "nextScene": "scene_ro3_rec2_2",
                             "gain": [
                                 {
-                                    "itemId": "randomRecruitTicketAll",
+                                    "itemId": "rogue_3_recruit_ticket_all",
                                     "amount": 1
                                 }
                             ]
@@ -333,7 +333,7 @@
                             "nextScene": "scene_ro3_rec2_3",
                             "gain": [
                                 {
-                                    "itemId": "randomRecruitTicketAll",
+                                    "itemId": "rogue_3_recruit_ticket_all",
                                     "amount": 1
                                 },
                                 {

@@ -506,8 +506,7 @@ async def createGameExtra(rogueClass: RogueBasicModel, hardLevel: int):
                     "lastBattleGain": 0
                 },
                 "totem": {
-                    "totemPiece": [],
-                    "predictTotemId": None
+                    "totemPiece": []
                 },
                 "vision": {
                     "value": 0,

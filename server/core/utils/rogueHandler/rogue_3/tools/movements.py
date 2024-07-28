@@ -62,8 +62,11 @@ def moveToNextZone(rlv2_data: dict, rlv2_extension: dict, userSyncData, isHidden
             increaseChaosValue(rlv2_data, rlv2_extension, 15, True)
         else:
             increaseChaosValue(rlv2_data, rlv2_extension, chaosList[zone - 1], True)
-        if rlv2_data["current"]["module"]["totem"]["predictTotemId"]:
+        if rlv2_data["current"]["module"]["totem"].__contains__("predictTotemId"):
             addTotem(rlv2_data, rlv2_data["current"]["module"]["totem"]["predictTotemId"])
+            rlv2_data["current"]["module"]["totem"].pop("predictTotemId")
+        if rlv2_data["current"]["module"]["chaos"].__contains__("predict"):
+            rlv2_data["current"]["module"]["chaos"].pop("predict")
         generatePredictPending(rlv2_data, rlv2_extension)
         
     
